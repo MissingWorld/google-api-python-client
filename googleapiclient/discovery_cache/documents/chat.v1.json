@@ -3,7 +3,7 @@
   "baseUrl": "https://chat.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Hangouts Chat",
-  "description": "Enables bots to fetch information and perform actions in Google Chat. Authentication using a service account is a prerequisite for using the Google Chat REST API.",
+  "description": "Enables apps to fetch information and perform actions in Google Chat. Authentication using a service account is a prerequisite for using the Google Chat REST API.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/hangouts/chat",
   "fullyEncodeReservedExpansion": true,
@@ -108,14 +108,19 @@
           ],
           "parameters": {
             "parent": {
-              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
               "location": "path",
               "pattern": "^dms/[^/]+$",
               "required": true,
               "type": "string"
             },
+            "requestId": {
+              "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+              "location": "query",
+              "type": "string"
+            },
             "threadKey": {
-              "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+              "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
               "location": "query",
               "type": "string"
             }
@@ -138,14 +143,19 @@
           ],
           "parameters": {
             "parent": {
-              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
               "location": "path",
               "pattern": "^dms/[^/]+$",
               "required": true,
               "type": "string"
             },
+            "requestId": {
+              "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+              "location": "query",
+              "type": "string"
+            },
             "threadKey": {
-              "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+              "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
               "location": "query",
               "type": "string"
             }
@@ -172,14 +182,19 @@
               ],
               "parameters": {
                 "parent": {
-                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
                   "location": "path",
                   "pattern": "^dms/[^/]+/conversations/[^/]+$",
                   "required": true,
                   "type": "string"
                 },
+                "requestId": {
+                  "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "threadKey": {
-                  "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+                  "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
                   "location": "query",
                   "type": "string"
                 }
@@ -235,14 +250,19 @@
           ],
           "parameters": {
             "parent": {
-              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
               "location": "path",
               "pattern": "^rooms/[^/]+$",
               "required": true,
               "type": "string"
             },
+            "requestId": {
+              "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+              "location": "query",
+              "type": "string"
+            },
             "threadKey": {
-              "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+              "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
               "location": "query",
               "type": "string"
             }
@@ -265,14 +285,19 @@
           ],
           "parameters": {
             "parent": {
-              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
               "location": "path",
               "pattern": "^rooms/[^/]+$",
               "required": true,
               "type": "string"
             },
+            "requestId": {
+              "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+              "location": "query",
+              "type": "string"
+            },
             "threadKey": {
-              "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+              "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
               "location": "query",
               "type": "string"
             }
@@ -299,14 +324,19 @@
               ],
               "parameters": {
                 "parent": {
-                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
                   "location": "path",
                   "pattern": "^rooms/[^/]+/conversations/[^/]+$",
                   "required": true,
                   "type": "string"
                 },
+                "requestId": {
+                  "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "threadKey": {
-                  "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+                  "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
                   "location": "query",
                   "type": "string"
                 }
@@ -326,7 +356,7 @@
     "spaces": {
       "methods": {
         "get": {
-          "description": "Returns a space.",
+          "description": "Returns a space. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
           "flatPath": "v1/spaces/{spacesId}",
           "httpMethod": "GET",
           "id": "chat.spaces.get",
@@ -335,7 +365,7 @@
           ],
           "parameters": {
             "name": {
-              "description": "Required. Resource name of the space, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Resource name of the space, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAAA",
               "location": "path",
               "pattern": "^spaces/[^/]+$",
               "required": true,
@@ -348,7 +378,7 @@
           }
         },
         "list": {
-          "description": "Lists spaces the caller is a member of.",
+          "description": "Lists spaces the caller is a member of. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
           "flatPath": "v1/spaces",
           "httpMethod": "GET",
           "id": "chat.spaces.list",
@@ -381,14 +411,19 @@
           ],
           "parameters": {
             "parent": {
-              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+              "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
               "location": "path",
               "pattern": "^spaces/[^/]+$",
               "required": true,
               "type": "string"
             },
+            "requestId": {
+              "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+              "location": "query",
+              "type": "string"
+            },
             "threadKey": {
-              "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+              "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
               "location": "query",
               "type": "string"
             }
@@ -406,7 +441,7 @@
         "members": {
           "methods": {
             "get": {
-              "description": "Returns a membership.",
+              "description": "Returns a membership. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/members/{membersId}",
               "httpMethod": "GET",
               "id": "chat.spaces.members.get",
@@ -415,7 +450,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required. Resource name of the membership to be retrieved, in the form \"spaces/*/members/*\". Example: spaces/AAAAMpdlehY/members/105115627578887013105",
+                  "description": "Required. Resource name of the membership to be retrieved, in the form \"spaces/*/members/*\". Example: spaces/AAAAAAAAAAAA/members/111111111111111111111",
                   "location": "path",
                   "pattern": "^spaces/[^/]+/members/[^/]+$",
                   "required": true,
@@ -428,7 +463,7 @@
               }
             },
             "list": {
-              "description": "Lists human memberships in a space.",
+              "description": "Lists human memberships in a space. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/members",
               "httpMethod": "GET",
               "id": "chat.spaces.members.list",
@@ -448,7 +483,7 @@
                   "type": "string"
                 },
                 "parent": {
-                  "description": "Required. The resource name of the space for which membership list is to be fetched, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+                  "description": "Required. The resource name of the space for which membership list is to be fetched, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAAA",
                   "location": "path",
                   "pattern": "^spaces/[^/]+$",
                   "required": true,
@@ -465,7 +500,7 @@
         "messages": {
           "methods": {
             "create": {
-              "description": "Creates a message.",
+              "description": "Creates a message. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/messages",
               "httpMethod": "POST",
               "id": "chat.spaces.messages.create",
@@ -474,14 +509,19 @@
               ],
               "parameters": {
                 "parent": {
-                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAMpdlehY",
+                  "description": "Required. Space resource name, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAA",
                   "location": "path",
                   "pattern": "^spaces/[^/]+$",
                   "required": true,
                   "type": "string"
                 },
+                "requestId": {
+                  "description": "Optional. A unique request ID for this message. Specifying an existing request ID returns the message created with that ID instead of creating a new message.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "threadKey": {
-                  "description": "Opaque thread identifier string that can be specified to group messages into a single thread. If this is the first message with a given thread identifier, a new thread is created. Subsequent messages with the same thread identifier will be posted into the same thread. This relieves bots and webhooks from having to store the Hangouts Chat thread ID of a thread (created earlier by them) to post further updates to it. Has no effect if thread field, corresponding to an existing thread, is set in message.",
+                  "description": "Optional. Opaque thread identifier. To start or add to a thread, create a message and specify a `threadKey` instead of thread.name. (Setting thread.name has no effect.) The first message with a given `threadKey` starts a new thread. Subsequent messages with the same `threadKey` post into the same thread.",
                   "location": "query",
                   "type": "string"
                 }
@@ -495,7 +535,7 @@
               }
             },
             "delete": {
-              "description": "Deletes a message.",
+              "description": "Deletes a message. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/messages/{messagesId}",
               "httpMethod": "DELETE",
               "id": "chat.spaces.messages.delete",
@@ -504,7 +544,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required. Resource name of the message to be deleted, in the form \"spaces/*/messages/*\" Example: spaces/AAAAMpdlehY/messages/UMxbHmzDlr4.UMxbHmzDlr4",
+                  "description": "Required. Resource name of the message to be deleted, in the form \"spaces/*/messages/*\" Example: spaces/AAAAAAAAAAA/messages/BBBBBBBBBBB.BBBBBBBBBBB",
                   "location": "path",
                   "pattern": "^spaces/[^/]+/messages/[^/]+$",
                   "required": true,
@@ -517,7 +557,7 @@
               }
             },
             "get": {
-              "description": "Returns a message.",
+              "description": "Returns a message. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/messages/{messagesId}",
               "httpMethod": "GET",
               "id": "chat.spaces.messages.get",
@@ -526,7 +566,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required. Resource name of the message to be retrieved, in the form \"spaces/*/messages/*\". Example: spaces/AAAAMpdlehY/messages/UMxbHmzDlr4.UMxbHmzDlr4",
+                  "description": "Required. Resource name of the message to be retrieved, in the form \"spaces/*/messages/*\". Example: spaces/AAAAAAAAAAA/messages/BBBBBBBBBBB.BBBBBBBBBBB",
                   "location": "path",
                   "pattern": "^spaces/[^/]+/messages/[^/]+$",
                   "required": true,
@@ -539,7 +579,7 @@
               }
             },
             "update": {
-              "description": "Updates a message.",
+              "description": "Updates a message. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
               "flatPath": "v1/spaces/{spacesId}/messages/{messagesId}",
               "httpMethod": "PUT",
               "id": "chat.spaces.messages.update",
@@ -548,13 +588,14 @@
               ],
               "parameters": {
                 "name": {
+                  "description": "Resource name in the form `spaces/*/messages/*`. Example: `spaces/AAAAAAAAAAA/messages/BBBBBBBBBBB.BBBBBBBBBBB`",
                   "location": "path",
                   "pattern": "^spaces/[^/]+/messages/[^/]+$",
                   "required": true,
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Required. The field paths to be updated, comma separated if there are multiple. Currently supported field paths: * text * cards",
+                  "description": "Required. The field paths to be updated, comma separated if there are multiple. Currently supported field paths: * text * cards * attachment",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -573,7 +614,7 @@
             "attachments": {
               "methods": {
                 "get": {
-                  "description": "Gets the metadata of a message attachment. The attachment data is fetched using the media API.",
+                  "description": "Gets the metadata of a message attachment. The attachment data is fetched using the media API. Requires [service account authentication](https://developers.google.com/chat/api/guides/auth/service-accounts).",
                   "flatPath": "v1/spaces/{spacesId}/messages/{messagesId}/attachments/{attachmentsId}",
                   "httpMethod": "GET",
                   "id": "chat.spaces.messages.attachments.get",
@@ -582,7 +623,7 @@
                   ],
                   "parameters": {
                     "name": {
-                      "description": "Resource name of the attachment, in the form \"spaces/*/messages/*/attachments/*\".",
+                      "description": "Required. Resource name of the attachment, in the form \"spaces/*/messages/*/attachments/*\".",
                       "location": "path",
                       "pattern": "^spaces/[^/]+/messages/[^/]+/attachments/[^/]+$",
                       "required": true,
@@ -601,7 +642,7 @@
       }
     }
   },
-  "revision": "20210609",
+  "revision": "20220422",
   "rootUrl": "https://chat.googleapis.com/",
   "schemas": {
     "ActionParameter": {
@@ -620,27 +661,88 @@
       "type": "object"
     },
     "ActionResponse": {
-      "description": "Parameters that a bot can use to configure how it's response is posted.",
+      "description": "Parameters that a Chat app can use to configure how it's response is posted.",
       "id": "ActionResponse",
       "properties": {
+        "dialogAction": {
+          "$ref": "DialogAction",
+          "description": "Input only. A response to an event related to a [dialog](https://developers.google.com/chat/how-tos/dialogs). Must be accompanied by `ResponseType.Dialog`."
+        },
         "type": {
-          "description": "The type of bot response.",
+          "description": "Input only. The type of Chat app response.",
           "enum": [
             "TYPE_UNSPECIFIED",
             "NEW_MESSAGE",
             "UPDATE_MESSAGE",
-            "REQUEST_CONFIG"
+            "UPDATE_USER_MESSAGE_CARDS",
+            "REQUEST_CONFIG",
+            "DIALOG"
           ],
           "enumDescriptions": [
             "Default type; will be handled as NEW_MESSAGE.",
             "Post as a new message in the topic.",
-            "Update the bot's message. This is only permitted on a CARD_CLICKED event where the message sender type is BOT.",
-            "Update a message, with cards only. (Only after a MESSAGE event with a matched url, or a CARD_CLICKED event on a human created message)."
+            "Update the Chat app's message. This is only permitted on a CARD_CLICKED event where the message sender type is BOT.",
+            "Update the cards on a user's message. This is only permitted as a response to a MESSAGE event with a matched url, or a CARD_CLICKED event where the message sender type is HUMAN. Text will be ignored.",
+            "Privately ask the user for additional auth or config.",
+            "Presents a [dialog](https://developers.google.com/chat/how-tos/dialogs)."
           ],
           "type": "string"
         },
         "url": {
-          "description": "URL for users to auth or config. (Only for REQUEST_CONFIG response types.)",
+          "description": "Input only. URL for users to auth or config. (Only for REQUEST_CONFIG response types.)",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ActionStatus": {
+      "description": "Represents the status for a request to either invoke or submit a [dialog](https://developers.google.com/chat/how-tos/dialogs).",
+      "id": "ActionStatus",
+      "properties": {
+        "statusCode": {
+          "description": "The status code.",
+          "enum": [
+            "OK",
+            "CANCELLED",
+            "UNKNOWN",
+            "INVALID_ARGUMENT",
+            "DEADLINE_EXCEEDED",
+            "NOT_FOUND",
+            "ALREADY_EXISTS",
+            "PERMISSION_DENIED",
+            "UNAUTHENTICATED",
+            "RESOURCE_EXHAUSTED",
+            "FAILED_PRECONDITION",
+            "ABORTED",
+            "OUT_OF_RANGE",
+            "UNIMPLEMENTED",
+            "INTERNAL",
+            "UNAVAILABLE",
+            "DATA_LOSS"
+          ],
+          "enumDescriptions": [
+            "Not an error; returned on success HTTP Mapping: 200 OK",
+            "The operation was cancelled, typically by the caller. HTTP Mapping: 499 Client Closed Request",
+            "Unknown error. For example, this error may be returned when a `Status` value received from another address space belongs to an error space that is not known in this address space. Also errors raised by APIs that do not return enough error information may be converted to this error. HTTP Mapping: 500 Internal Server Error",
+            "The client specified an invalid argument. Note that this differs from `FAILED_PRECONDITION`. `INVALID_ARGUMENT` indicates arguments that are problematic regardless of the state of the system (e.g., a malformed file name). HTTP Mapping: 400 Bad Request",
+            "The deadline expired before the operation could complete. For operations that change the state of the system, this error may be returned even if the operation has completed successfully. For example, a successful response from a server could have been delayed long enough for the deadline to expire. HTTP Mapping: 504 Gateway Timeout",
+            "Some requested entity (e.g., file or directory) was not found. Note to server developers: if a request is denied for an entire class of users, such as gradual feature rollout or undocumented allowlist, `NOT_FOUND` may be used. If a request is denied for some users within a class of users, such as user-based access control, `PERMISSION_DENIED` must be used. HTTP Mapping: 404 Not Found",
+            "The entity that a client attempted to create (e.g., file or directory) already exists. HTTP Mapping: 409 Conflict",
+            "The caller does not have permission to execute the specified operation. `PERMISSION_DENIED` must not be used for rejections caused by exhausting some resource (use `RESOURCE_EXHAUSTED` instead for those errors). `PERMISSION_DENIED` must not be used if the caller can not be identified (use `UNAUTHENTICATED` instead for those errors). This error code does not imply the request is valid or the requested entity exists or satisfies other pre-conditions. HTTP Mapping: 403 Forbidden",
+            "The request does not have valid authentication credentials for the operation. HTTP Mapping: 401 Unauthorized",
+            "Some resource has been exhausted, perhaps a per-user quota, or perhaps the entire file system is out of space. HTTP Mapping: 429 Too Many Requests",
+            "The operation was rejected because the system is not in a state required for the operation's execution. For example, the directory to be deleted is non-empty, an rmdir operation is applied to a non-directory, etc. Service implementors can use the following guidelines to decide between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`: (a) Use `UNAVAILABLE` if the client can retry just the failing call. (b) Use `ABORTED` if the client should retry at a higher level. For example, when a client-specified test-and-set fails, indicating the client should restart a read-modify-write sequence. (c) Use `FAILED_PRECONDITION` if the client should not retry until the system state has been explicitly fixed. For example, if an \"rmdir\" fails because the directory is non-empty, `FAILED_PRECONDITION` should be returned since the client should not retry unless the files are deleted from the directory. HTTP Mapping: 400 Bad Request",
+            "The operation was aborted, typically due to a concurrency issue such as a sequencer check failure or transaction abort. See the guidelines above for deciding between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`. HTTP Mapping: 409 Conflict",
+            "The operation was attempted past the valid range. E.g., seeking or reading past end-of-file. Unlike `INVALID_ARGUMENT`, this error indicates a problem that may be fixed if the system state changes. For example, a 32-bit file system will generate `INVALID_ARGUMENT` if asked to read at an offset that is not in the range [0,2^32-1], but it will generate `OUT_OF_RANGE` if asked to read from an offset past the current file size. There is a fair bit of overlap between `FAILED_PRECONDITION` and `OUT_OF_RANGE`. We recommend using `OUT_OF_RANGE` (the more specific error) when it applies so that callers who are iterating through a space can easily look for an `OUT_OF_RANGE` error to detect when they are done. HTTP Mapping: 400 Bad Request",
+            "The operation is not implemented or is not supported/enabled in this service. HTTP Mapping: 501 Not Implemented",
+            "Internal errors. This means that some invariants expected by the underlying system have been broken. This error code is reserved for serious errors. HTTP Mapping: 500 Internal Server Error",
+            "The service is currently unavailable. This is most likely a transient condition, which can be corrected by retrying with a backoff. Note that it is not always safe to retry non-idempotent operations. See the guidelines above for deciding between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`. HTTP Mapping: 503 Service Unavailable",
+            "Unrecoverable data loss or corruption. HTTP Mapping: 500 Internal Server Error"
+          ],
+          "type": "string"
+        },
+        "userFacingMessage": {
+          "description": "The message to send users about the status of their request. If unset, a generic message based on the `status_code` is sent.",
           "type": "string"
         }
       },
@@ -686,7 +788,7 @@
       "type": "object"
     },
     "Attachment": {
-      "description": "An attachment in Hangouts Chat.",
+      "description": "An attachment in Google Chat.",
       "id": "Attachment",
       "properties": {
         "attachmentDataRef": {
@@ -702,7 +804,8 @@
           "type": "string"
         },
         "downloadUri": {
-          "description": "Output only. The download URL which should be used to allow a human user to download the attachment. Bots should not use this URL to download attachment content.",
+          "description": "Output only. The download URL which should be used to allow a human user to download the attachment. Chat apps should not use this URL to download attachment content.",
+          "readOnly": true,
           "type": "string"
         },
         "driveDataRef": {
@@ -728,7 +831,8 @@
           "type": "string"
         },
         "thumbnailUri": {
-          "description": "Output only. The thumbnail URL which should be used to preview the attachment to a human user. Bots should not use this URL to download attachment content.",
+          "description": "Output only. The thumbnail URL which should be used to preview the attachment to a human user. Chat apps should not use this URL to download attachment content.",
+          "readOnly": true,
           "type": "string"
         }
       },
@@ -836,17 +940,21 @@
       },
       "type": "object"
     },
-    "CardWithId": {
-      "description": "Widgets for chatbots to specify.",
-      "id": "CardWithId",
+    "ChatAppLogEntry": {
+      "description": "JSON payload of error messages. If the Cloud Logging API is enabled, these error messages are logged to [Google Cloud Logging](https://cloud.google.com/logging/docs).",
+      "id": "ChatAppLogEntry",
       "properties": {
-        "card": {
-          "$ref": "GoogleAppsCardV1Card",
-          "description": "Card proto that allows chatbots to specify UI elements and editable widgets."
-        },
-        "cardId": {
-          "description": "Chatbot-specified identifier for this widget. Scoped within a message.",
+        "deployment": {
+          "description": "The deployment that caused the error. For Chat bots built in Apps Script, this is the deployment ID defined by Apps Script.",
           "type": "string"
+        },
+        "deploymentFunction": {
+          "description": "The unencrypted `callback_method` name that was running when the error was encountered.",
+          "type": "string"
+        },
+        "error": {
+          "$ref": "Status",
+          "description": "The error code and message."
         }
       },
       "type": "object"
@@ -878,6 +986,115 @@
       },
       "type": "object"
     },
+    "CommonEventObject": {
+      "description": "Represents information about the user's client, such as locale, host app, and platform. For Chat apps, `CommonEventObject` includes data submitted by users interacting with cards, like data entered in [dialogs](https://developers.google.com/chat/how-tos/dialogs).",
+      "id": "CommonEventObject",
+      "properties": {
+        "formInputs": {
+          "additionalProperties": {
+            "$ref": "Inputs"
+          },
+          "description": "A map containing the current values of the widgets in a card. The map keys are the string IDs assigned to each widget, and the values represent inputs to the widget. Depending on the input data type, a different object represents each input: For single-value widgets, `StringInput`. For multi-value widgets, an array of `StringInput` objects. For a date-time picker, a `DateTimeInput`. For a date-only picker, a `DateInput`. For a time-only picker, a `TimeInput`. Corresponds with the data entered by a user on a card in a [dialog](https://developers.google.com/chat/how-tos/dialogs).",
+          "type": "object"
+        },
+        "hostApp": {
+          "description": "The hostApp enum which indicates the app the add-on is invoked from. Always `CHAT` for Chat apps.",
+          "enum": [
+            "UNSPECIFIED_HOST_APP",
+            "GMAIL",
+            "CALENDAR",
+            "DRIVE",
+            "DEMO",
+            "DOCS",
+            "SHEETS",
+            "SLIDES",
+            "DRAWINGS",
+            "CHAT"
+          ],
+          "enumDescriptions": [
+            "Google can't identify a host app.",
+            "The add-on launches from Gmail.",
+            "The add-on launches from Google Calendar.",
+            "The add-on launches from Google Drive.",
+            "Not used.",
+            "The add-on launches from Google Docs.",
+            "The add-on launches from Google Sheets.",
+            "The add-on launches from Google Slides.",
+            "The add-on launches from Google Drawings.",
+            "A Google Chat app. Not used for Google Workspace Add-ons."
+          ],
+          "type": "string"
+        },
+        "invokedFunction": {
+          "description": "Name of the invoked function associated with the widget. Only set for Chat apps.",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Custom [parameters](/chat/api/reference/rest/v1/cards#ActionParameter) passed to the invoked function. Both keys and values must be strings.",
+          "type": "object"
+        },
+        "platform": {
+          "description": "The platform enum which indicates the platform where the event originates (`WEB`, `IOS`, or `ANDROID`). Not supported by Chat apps.",
+          "enum": [
+            "UNKNOWN_PLATFORM",
+            "WEB",
+            "IOS",
+            "ANDROID"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "timeZone": {
+          "$ref": "TimeZone",
+          "description": "The timezone ID and offset from Coordinated Universal Time (UTC)."
+        },
+        "userLocale": {
+          "description": "The full `locale.displayName` in the format of [ISO 639 language code]-[ISO 3166 country/region code] such as \"en-US\". Not supported by Chat apps.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DateInput": {
+      "description": "Date input values. Not supported by Chat apps.",
+      "id": "DateInput",
+      "properties": {
+        "msSinceEpoch": {
+          "description": "Time since epoch time, in milliseconds.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DateTimeInput": {
+      "description": "Date and time input values. Not supported by Chat apps.",
+      "id": "DateTimeInput",
+      "properties": {
+        "hasDate": {
+          "description": "Whether the `datetime` input includes a calendar date.",
+          "type": "boolean"
+        },
+        "hasTime": {
+          "description": "Whether the `datetime` input includes a timestamp.",
+          "type": "boolean"
+        },
+        "msSinceEpoch": {
+          "description": "Time since epoch time, in milliseconds.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "DeprecatedEvent": {
       "description": "Google Chat events.",
       "id": "DeprecatedEvent",
@@ -886,14 +1103,38 @@
           "$ref": "FormAction",
           "description": "The form action data associated with an interactive card that was clicked. Only populated for CARD_CLICKED events. See the [Interactive Cards guide](/chat/how-tos/cards-onclick) for more information."
         },
+        "common": {
+          "$ref": "CommonEventObject",
+          "description": "Represents information about the user's client, such as locale, host app, and platform. For Chat apps, `CommonEventObject` includes information submitted by users interacting with [dialogs](https://developers.google.com/chat/how-tos/dialogs), like data entered on a card."
+        },
         "configCompleteRedirectUrl": {
-          "description": "The URL the bot should redirect the user to after they have completed an authorization or configuration flow outside of Google Chat. See the [Authorizing access to 3p services guide](/chat/how-tos/auth-3p) for more information.",
+          "description": "The URL the Chat app should redirect the user to after they have completed an authorization or configuration flow outside of Google Chat. See the [Authorizing access to 3p services guide](/chat/how-tos/auth-3p) for more information.",
+          "type": "string"
+        },
+        "dialogEventType": {
+          "description": "The type of [dialog](https://developers.google.com/chat/how-tos/dialogs) event received.",
+          "enum": [
+            "TYPE_UNSPECIFIED",
+            "REQUEST_DIALOG",
+            "SUBMIT_DIALOG",
+            "CANCEL_DIALOG"
+          ],
+          "enumDescriptions": [
+            "This could be used when the corresponding event is not dialog related. For example an @mention.",
+            "Any user action that opens a [dialog](https://developers.google.com/chat/how-tos/dialogs).",
+            "A card click event from a [dialog](https://developers.google.com/chat/how-tos/dialogs).",
+            "The [dialog](https://developers.google.com/chat/how-tos/dialogs) was cancelled."
+          ],
           "type": "string"
         },
         "eventTime": {
-          "description": "The timestamp indicating when the event was dispatched.",
+          "description": "The timestamp indicating when the event occurred.",
           "format": "google-datetime",
           "type": "string"
+        },
+        "isDialogEvent": {
+          "description": "True when the event is related to [dialogs](https://developers.google.com/chat/how-tos/dialogs).",
+          "type": "boolean"
         },
         "message": {
           "$ref": "Message",
@@ -901,14 +1142,14 @@
         },
         "space": {
           "$ref": "Space",
-          "description": "The room or DM in which the event occurred."
+          "description": "The space in which the event occurred."
         },
         "threadKey": {
-          "description": "The bot-defined key for the thread related to the event. See the thread_key field of the `spaces.message.create` request for more information.",
+          "description": "The Chat app-defined key for the thread related to the event. See the thread_key field of the `spaces.message.create` request for more information.",
           "type": "string"
         },
         "token": {
-          "description": "A secret value that bots can use to verify if a request is from Google. The token is randomly generated by Google, remains static, and can be obtained from the Google Chat API configuration page in the Cloud Console. Developers can revoke/regenerate it if needed from the same page.",
+          "description": "A secret value that legacy Chat apps can use to verify if a request is from Google. Google randomly generates the token, and its value remains static. You can obtain, revoke, or regenerate the token from the [Chat API configuration page](https://console.cloud.google.com/apis/api/chat.googleapis.com/hangouts-chat) in the Google Cloud Console. Modern Chat apps don't use this field. It is absent from API responses and the [Chat API configuration page](https://console.cloud.google.com/apis/api/chat.googleapis.com/hangouts-chat).",
           "type": "string"
         },
         "type": {
@@ -922,16 +1163,42 @@
           ],
           "enumDescriptions": [
             "Default value for the enum. DO NOT USE.",
-            "A message was sent in a room or direct message.",
-            "The bot was added to a room or DM.",
-            "The bot was removed from a room or DM.",
-            "The bot's interactive card was clicked."
+            "A message was sent in a space.",
+            "The Chat app was added to a space.",
+            "The Chat app was removed from a space.",
+            "The Chat app's interactive card was clicked."
           ],
           "type": "string"
         },
         "user": {
           "$ref": "User",
           "description": "The user that triggered the event."
+        }
+      },
+      "type": "object"
+    },
+    "Dialog": {
+      "description": "Wrapper around the card body of the dialog.",
+      "id": "Dialog",
+      "properties": {
+        "body": {
+          "$ref": "GoogleAppsCardV1Card",
+          "description": "Input only. Body of the dialog, which is rendered in a modal. Google Chat apps do not support the following card entities: `DateTimePicker`, `OnChangeAction`."
+        }
+      },
+      "type": "object"
+    },
+    "DialogAction": {
+      "description": "Contains a [dialog](https://developers.google.com/chat/how-tos/dialogs) and request status code.",
+      "id": "DialogAction",
+      "properties": {
+        "actionStatus": {
+          "$ref": "ActionStatus",
+          "description": "Input only. Status for a request to either invoke or submit a [dialog](https://developers.google.com/chat/how-tos/dialogs). Displays a status and message to users, if necessary. For example, in case of an error or success."
+        },
+        "dialog": {
+          "$ref": "Dialog",
+          "description": "Input only. [Dialog](https://developers.google.com/chat/how-tos/dialogs) for the request."
         }
       },
       "type": "object"
@@ -948,7 +1215,7 @@
       "type": "object"
     },
     "Empty": {
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
       "id": "Empty",
       "properties": {},
       "type": "object"
@@ -958,7 +1225,7 @@
       "id": "FormAction",
       "properties": {
         "actionMethodName": {
-          "description": "The method name is used to identify which part of the form triggered the form submission. This information is echoed back to the bot as part of the card click event. The same method name can be used for several elements that trigger a common behavior if desired.",
+          "description": "The method name is used to identify which part of the form triggered the form submission. This information is echoed back to the Chat app as part of the card click event. The same method name can be used for several elements that trigger a common behavior if desired.",
           "type": "string"
         },
         "parameters": {
@@ -980,6 +1247,7 @@
           "type": "string"
         },
         "loadIndicator": {
+          "description": "Specifies the loading indicator that the action displays while making the call to the action.",
           "enum": [
             "SPINNER",
             "NONE"
@@ -1062,7 +1330,7 @@
           "description": "If set, the button is filled with a solid background."
         },
         "disabled": {
-          "description": "If true, the button is displayed in a disabled state and doesn't respond to user actions.",
+          "description": "If `true`, the button is displayed in a disabled state and doesn't respond to user actions.",
           "type": "boolean"
         },
         "icon": {
@@ -1085,6 +1353,7 @@
       "id": "GoogleAppsCardV1ButtonList",
       "properties": {
         "buttons": {
+          "description": "An array of buttons.",
           "items": {
             "$ref": "GoogleAppsCardV1Button"
           },
@@ -1094,25 +1363,25 @@
       "type": "object"
     },
     "GoogleAppsCardV1Card": {
-      "description": "A card is a UI element that can contain UI widgets such as text and images. For more information, see Cards . For example, the following JSON creates a card that has a header with the name, position, icons, and link for a contact, followed by a section with contact information like email and phone number. ``` { \"header\": { \"title\": \"Heba Salam\", \"subtitle\": \"Software Engineer\", \"imageStyle\": \"ImageStyle.AVATAR\", \"imageUrl\": \"https://example.com/heba_salam.png\", \"imageAltText\": \"Avatar for Heba Salam\" }, \"sections\" : [ { \"header\": \"Contact Info\", \"widgets\": [ { \"decorated_text\": { \"icon\": { \"knownIcon\": \"EMAIL\" }, \"content\": \"heba.salam@example.com\" } }, { \"decoratedText\": { \"icon\": { \"knownIcon\": \"PERSON\" }, \"content\": \"Online\" } }, { \"decoratedText\": { \"icon\": { \"knownIcon\": \"PHONE\" }, \"content\": \"+1 (555) 555-1234\" } }, { \"buttons\": [ { \"textButton\": { \"text\": \"Share\", }, \"onClick\": { \"openLink\": { \"url\": \"https://example.com/share\" } } }, { \"textButton\": { \"text\": \"Edit\", }, \"onClick\": { \"action\": { \"function\": \"goToView\", \"parameters\": [ { \"key\": \"viewType\", \"value\": \"EDIT\" } ], \"loadIndicator\": \"LoadIndicator.SPINNER\" } } } ] } ], \"collapsible\": true, \"uncollapsibleWidgetsCount\": 3 } ], \"cardActions\": [ { \"actionLabel\": \"Send Feedback\", \"onClick\": { \"openLink\": { \"url\": \"https://example.com/feedback\" } } } ], \"name\": \"contact-card-K3wB6arF2H9L\" } ```",
+      "description": "A card is a UI element that can contain UI widgets such as text and images. For more information, see Cards . For example, the following JSON creates a card that has a header with the name, position, icons, and link for a contact, followed by a section with contact information like email and phone number. ``` { \"header\": { \"title\": \"Sasha\", \"subtitle\": \"Software Engineer\", \"imageStyle\": \"ImageStyle.AVATAR\", \"imageUrl\": \"https://example.com/sasha.png\", \"imageAltText\": \"Avatar for Sasha\" }, \"sections\" : [ { \"header\": \"Contact Info\", \"widgets\": [ { \"decorated_text\": { \"icon\": { \"knownIcon\": \"EMAIL\" }, \"content\": \"sasha@example.com\" } }, { \"decoratedText\": { \"icon\": { \"knownIcon\": \"PERSON\" }, \"content\": \"Online\" } }, { \"decoratedText\": { \"icon\": { \"knownIcon\": \"PHONE\" }, \"content\": \"+1 (555) 555-1234\" } }, { \"buttons\": [ { \"textButton\": { \"text\": \"Share\", }, \"onClick\": { \"openLink\": { \"url\": \"https://example.com/share\" } } }, { \"textButton\": { \"text\": \"Edit\", }, \"onClick\": { \"action\": { \"function\": \"goToView\", \"parameters\": [ { \"key\": \"viewType\", \"value\": \"EDIT\" } ], \"loadIndicator\": \"LoadIndicator.SPINNER\" } } } ] } ], \"collapsible\": true, \"uncollapsibleWidgetsCount\": 3 } ], \"cardActions\": [ { \"actionLabel\": \"Send Feedback\", \"onClick\": { \"openLink\": { \"url\": \"https://example.com/feedback\" } } } ], \"name\": \"contact-card-K3wB6arF2H9L\" } ```",
       "id": "GoogleAppsCardV1Card",
       "properties": {
         "cardActions": {
-          "description": "The actions of this card. They are added to a card's generated toolbar menu. For example, the following JSON constructs a card action menu with Settings and Send Feedback options: ``` \"card_actions\": [ { \"actionLabel\": \"Setting\", \"onClick\": { \"action\": { \"functionName\": \"goToView\", \"parameters\": [ { \"key\": \"viewType\", \"value\": \"SETTING\" } ], \"loadIndicator\": \"LoadIndicator.SPINNER\" } } }, { \"actionLabel\": \"Send Feedback\", \"onClick\": { \"openLink\": { \"url\": \"https://example.com/feedback\" } } } ] ```",
+          "description": "The card's actions. Actions are added to the card's generated toolbar menu. For example, the following JSON constructs a card action menu with Settings and Send Feedback options: ``` \"card_actions\": [ { \"actionLabel\": \"Settings\", \"onClick\": { \"action\": { \"functionName\": \"goToView\", \"parameters\": [ { \"key\": \"viewType\", \"value\": \"SETTING\" } ], \"loadIndicator\": \"LoadIndicator.SPINNER\" } } }, { \"actionLabel\": \"Send Feedback\", \"onClick\": { \"openLink\": { \"url\": \"https://example.com/feedback\" } } } ] ```",
           "items": {
             "$ref": "GoogleAppsCardV1CardAction"
           },
           "type": "array"
         },
         "displayStyle": {
-          "description": "The display style for peekCardHeader.",
+          "description": "The display style for `peekCardHeader`.",
           "enum": [
             "DISPLAY_STYLE_UNSPECIFIED",
             "PEEK",
             "REPLACE"
           ],
           "enumDescriptions": [
-            "",
+            "Default value. Do not use.",
             "The header of the card appears at the bottom of the sidebar, partially covering the current top card of the stack. Clicking the header pops the card into the card stack. If the card has no header, a generated header is used instead.",
             "The card is shown by replacing the view of the top card in the card stack."
           ],
@@ -1127,7 +1396,7 @@
           "description": "The header of the card. A header usually contains a title and an image."
         },
         "name": {
-          "description": "Name of the card, which is used as a identifier for the card in card navigation.",
+          "description": "Name of the card. Used as a card identifier in card navigation.",
           "type": "string"
         },
         "peekCardHeader": {
@@ -1154,7 +1423,7 @@
         },
         "onClick": {
           "$ref": "GoogleAppsCardV1OnClick",
-          "description": "The onclick action for this action item."
+          "description": "The `onClick` action for this action item."
         }
       },
       "type": "object"
@@ -1175,6 +1444,7 @@
       "type": "object"
     },
     "GoogleAppsCardV1CardHeader": {
+      "description": "Represents a card header.",
       "id": "GoogleAppsCardV1CardHeader",
       "properties": {
         "imageAltText": {
@@ -1202,14 +1472,14 @@
           "type": "string"
         },
         "title": {
-          "description": "The title of the card header. The title must be specified. The header has a fixed height: if both a title and subtitle are specified, each takes up one line. If only the title is specified, it takes up both lines.",
+          "description": "Required. The title of the card header. The header has a fixed height: if both a title and subtitle are specified, each takes up one line. If only the title is specified, it takes up both lines.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "GoogleAppsCardV1DateTimePicker": {
-      "description": "The widget that lets users to specify a date and time.",
+      "description": "The widget that lets users to specify a date and time. Not supported by Google Chat apps.",
       "id": "GoogleAppsCardV1DateTimePicker",
       "properties": {
         "label": {
@@ -1217,7 +1487,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of the text input that's used in formInput, and uniquely identifies this input.",
+          "description": "The name of the text input that's used in `formInput`, and uniquely identifies this input.",
           "type": "string"
         },
         "onChangeAction": {
@@ -1412,14 +1682,14 @@
           "type": "string"
         },
         "knownIcon": {
-          "description": "The icon specified by the string name of a list of known icons",
+          "description": "The icon specified by the string name of a list of known icons.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "GoogleAppsCardV1Image": {
-      "description": "An image that is specified by a URL and can have an onClick action.",
+      "description": "An image that is specified by a URL and can have an `onClick` action.",
       "id": "GoogleAppsCardV1Image",
       "properties": {
         "altText": {
@@ -1431,12 +1701,14 @@
           "type": "string"
         },
         "onClick": {
-          "$ref": "GoogleAppsCardV1OnClick"
+          "$ref": "GoogleAppsCardV1OnClick",
+          "description": "The action triggered by an `onClick` event."
         }
       },
       "type": "object"
     },
     "GoogleAppsCardV1ImageComponent": {
+      "description": "Represents an image.",
       "id": "GoogleAppsCardV1ImageComponent",
       "properties": {
         "altText": {
@@ -1489,11 +1761,12 @@
       "type": "object"
     },
     "GoogleAppsCardV1OnClick": {
+      "description": "Represents the response to an `onClick` event.",
       "id": "GoogleAppsCardV1OnClick",
       "properties": {
         "action": {
           "$ref": "GoogleAppsCardV1Action",
-          "description": "If specified, an action is triggered by this onClick."
+          "description": "If specified, an action is triggered by this `onClick`."
         },
         "card": {
           "$ref": "GoogleAppsCardV1Card",
@@ -1501,30 +1774,33 @@
         },
         "openDynamicLinkAction": {
           "$ref": "GoogleAppsCardV1Action",
-          "description": "An add-on triggers this action when the action needs to open a link. This differs from the open_link above in that this needs to talk to server to get the link. Thus some preparation work is required for web client to do before the open link action response comes back."
+          "description": "An add-on triggers this action when the action needs to open a link. This differs from the `open_link` above in that this needs to talk to server to get the link. Thus some preparation work is required for web client to do before the open link action response comes back."
         },
         "openLink": {
           "$ref": "GoogleAppsCardV1OpenLink",
-          "description": "If specified, this onClick triggers an open link action."
+          "description": "If specified, this `onClick` triggers an open link action."
         }
       },
       "type": "object"
     },
     "GoogleAppsCardV1OpenLink": {
+      "description": "Represents an `onClick` event that opens a hyperlink.",
       "id": "GoogleAppsCardV1OpenLink",
       "properties": {
         "onClose": {
+          "description": "Whether the client forgets about a link after opening it, or observes it until the window closes. Not supported by Chat apps.",
           "enum": [
             "NOTHING",
             "RELOAD"
           ],
           "enumDescriptions": [
-            "Doesn\u2019t reload the card after the child window closes. Reloads the card after the child window closes. If used in conjunction with [OpenAs.OVERLAY](/workspace/add-ons/reference/rpc/google.apps.card.v1#openas), the child window acts as a modal dialog and the main card is blocked until the child window closes.",
-            ""
+            "Doesn\u2019t reload the card after the child window closes.",
+            "Reloads the card after the child window closes. If used in conjunction with [OpenAs.OVERLAY](/workspace/add-ons/reference/rpc/google.apps.card.v1#openas), the child window acts as a modal dialog and the main card is blocked until the child window closes."
           ],
           "type": "string"
         },
         "openAs": {
+          "description": "How to open a link. Not supported by Chat apps.",
           "enum": [
             "FULL_SIZE",
             "OVERLAY"
@@ -1555,7 +1831,7 @@
           "type": "string"
         },
         "uncollapsibleWidgetsCount": {
-          "description": "The number of uncollapsible widgets. For example, when a section contains five widgets and the `numUncollapsibleWidget` is set to `2`, the first two widgets are always shown and the last three are collapsed as default. The `numUncollapsibleWidget` is taken into account only when collapsible is set to `true`.",
+          "description": "The number of uncollapsible widgets. For example, when a section contains five widgets and the `uncollapsibleWidgetsCount` is set to `2`, the first two widgets are always shown and the last three are collapsed as default. The `uncollapsibleWidgetsCount` is taken into account only when `collapsible` is `true`.",
           "format": "int32",
           "type": "integer"
         },
@@ -1570,10 +1846,11 @@
       "type": "object"
     },
     "GoogleAppsCardV1SelectionInput": {
-      "description": "A widget that creates a UI item (for example, a drop-down list) with options for users to select.",
+      "description": "A widget that creates a UI item with options for users to select. For example, a dropdown menu.",
       "id": "GoogleAppsCardV1SelectionInput",
       "properties": {
         "items": {
+          "description": "An array of the selected items.",
           "items": {
             "$ref": "GoogleAppsCardV1SelectionItem"
           },
@@ -1584,7 +1861,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of the text input which is used in formInput.",
+          "description": "The name of the text input which is used in `formInput`.",
           "type": "string"
         },
         "onChangeAction": {
@@ -1592,6 +1869,7 @@
           "description": "If specified, the form is submitted when the selection changes. If not specified, you must specify a separate button."
         },
         "type": {
+          "description": "The type of the selection.",
           "enum": [
             "CHECK_BOX",
             "RADIO_BUTTON",
@@ -1599,10 +1877,10 @@
             "DROPDOWN"
           ],
           "enumDescriptions": [
-            "The selection type is a checkbox.",
-            "The selection type is a radio button.",
-            "The selection type is a switch.",
-            "The selection type is a dropdown."
+            "A checkbox.",
+            "A radio button.",
+            "A switch.",
+            "A dropdown menu."
           ],
           "type": "string"
         }
@@ -1610,7 +1888,7 @@
       "type": "object"
     },
     "GoogleAppsCardV1SelectionItem": {
-      "description": "The item in the switch control. A radio button, at most one of the items is selected.",
+      "description": "A selectable item in the switch control.",
       "id": "GoogleAppsCardV1SelectionItem",
       "properties": {
         "selected": {
@@ -1629,10 +1907,11 @@
       "type": "object"
     },
     "GoogleAppsCardV1SuggestionItem": {
-      "description": "A suggestion item. Only supports text for now.",
+      "description": "A suggestion item.",
       "id": "GoogleAppsCardV1SuggestionItem",
       "properties": {
         "text": {
+          "description": "The suggested autocomplete result.",
           "type": "string"
         }
       },
@@ -1643,7 +1922,7 @@
       "id": "GoogleAppsCardV1Suggestions",
       "properties": {
         "items": {
-          "description": "A list of suggestions items which will be used in are used in autocomplete.",
+          "description": "A list of suggestions used for autocomplete recommendations.",
           "items": {
             "$ref": "GoogleAppsCardV1SuggestionItem"
           },
@@ -1653,6 +1932,7 @@
       "type": "object"
     },
     "GoogleAppsCardV1SwitchControl": {
+      "description": "Either a toggle-style switch or a checkbox.",
       "id": "GoogleAppsCardV1SwitchControl",
       "properties": {
         "controlType": {
@@ -1663,14 +1943,14 @@
             "CHECK_BOX"
           ],
           "enumDescriptions": [
-            "",
+            "A toggle-style switch.",
             "Deprecated in favor of `CHECK_BOX`.",
-            ""
+            "A checkbox."
           ],
           "type": "string"
         },
         "name": {
-          "description": "The name of the switch widget that's used in formInput.",
+          "description": "The name of the switch widget that's used in `formInput`.",
           "type": "string"
         },
         "onChangeAction": {
@@ -1709,7 +1989,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of the text input which is used in formInput.",
+          "description": "The name of the text input which is used in `formInput`.",
           "type": "string"
         },
         "onChangeAction": {
@@ -1760,7 +2040,7 @@
         },
         "decoratedText": {
           "$ref": "GoogleAppsCardV1DecoratedText",
-          "description": "Displays a decorated text item in this widget. For example, the following JSON creates a decorated text widget showing email address: ``` \"decoratedText\": { \"icon\": { \"knownIcon\": \"EMAIL\" }, \"topLabel\": \"Email Address\", \"content\": \"heba.salam@example.com\", \"bottomLabel\": \"This is a new Email address!\", \"switchWidget\": { \"name\": \"has_send_welcome_email_to_heba_salam\", \"selected\": false, \"controlType\": \"ControlType.CHECKBOX\" } } ```"
+          "description": "Displays a decorated text item in this widget. For example, the following JSON creates a decorated text widget showing email address: ``` \"decoratedText\": { \"icon\": { \"knownIcon\": \"EMAIL\" }, \"topLabel\": \"Email Address\", \"content\": \"sasha@example.com\", \"bottomLabel\": \"This is a new Email address!\", \"switchWidget\": { \"name\": \"has_send_welcome_email_to_sasha\", \"selected\": false, \"controlType\": \"ControlType.CHECKBOX\" } } ```"
         },
         "divider": {
           "$ref": "GoogleAppsCardV1Divider",
@@ -1788,7 +2068,7 @@
         },
         "image": {
           "$ref": "GoogleAppsCardV1Image",
-          "description": "Displays an image in this widget. For example, the following JSON creates an image with alternative text: ``` \"image\": { \"imageUrl\": \"https://example.com/heba_salam.png\" \"altText\": \"Avatar for Heba Salam\" } ```"
+          "description": "Displays an image in this widget. For example, the following JSON creates an image with alternative text: ``` \"image\": { \"imageUrl\": \"https://example.com/sasha.png\" \"altText\": \"Avatar for Sasha\" } ```"
         },
         "selectionInput": {
           "$ref": "GoogleAppsCardV1SelectionInput",
@@ -1910,6 +2190,29 @@
         "onClick": {
           "$ref": "OnClick",
           "description": "The onclick action."
+        }
+      },
+      "type": "object"
+    },
+    "Inputs": {
+      "description": "Types of data inputs for widgets. Users enter data with these inputs.",
+      "id": "Inputs",
+      "properties": {
+        "dateInput": {
+          "$ref": "DateInput",
+          "description": "Date input values. Not supported by Chat apps."
+        },
+        "dateTimeInput": {
+          "$ref": "DateTimeInput",
+          "description": "Date and time input values. Not supported by Chat apps."
+        },
+        "stringInputs": {
+          "$ref": "StringInputs",
+          "description": "Input parameter for regular widgets. For single-valued widgets, it is a single value list. For multi-valued widgets, such as checkbox, all the values are presented."
+        },
+        "timeInput": {
+          "$ref": "TimeInput",
+          "description": "Time input values. Not supported by Chat apps."
         }
       },
       "type": "object"
@@ -2053,6 +2356,18 @@
       },
       "type": "object"
     },
+    "MatchedUrl": {
+      "description": "A matched url in a Chat message. Chat apps can unfurl matched URLs. For more information, refer to [Unfurl links](https://developers.google.com/chat/how-tos/link-unfurling).",
+      "id": "MatchedUrl",
+      "properties": {
+        "url": {
+          "description": "Output only. The url that was matched.",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Media": {
       "description": "Media resource.",
       "id": "Media",
@@ -2065,23 +2380,24 @@
       "type": "object"
     },
     "Membership": {
-      "description": "Represents a membership relation in Hangouts Chat.",
+      "description": "Represents a membership relation in Google Chat.",
       "id": "Membership",
       "properties": {
         "createTime": {
-          "description": "The creation time of the membership a.k.a the time at which the member joined the space, if applicable.",
+          "description": "Output only. The creation time of the membership a.k.a. the time at which the member joined the space, if applicable.",
           "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         },
         "member": {
           "$ref": "User",
-          "description": "A User in Hangout Chat"
+          "description": "A Google Chat user or app. Format: `users/{person}` or `users/app` When `users/{person}`, represents a [person](https://developers.google.com/people/api/rest/v1/people) in the People API or a [user](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users) in the Admin SDK Directory API. Format: `users/{user}` When `users/app`, represents a Chat app creating membership for itself. Creating membership is available as a [developer preview](https://developers.google.com/workspace/preview)."
         },
         "name": {
           "type": "string"
         },
         "state": {
-          "description": "State of the membership.",
+          "description": "Output only. State of the membership.",
           "enum": [
             "MEMBERSHIP_STATE_UNSPECIFIED",
             "JOINED",
@@ -2094,28 +2410,30 @@
             "The user has been invited, is able to join the space, but currently has not joined.",
             "The user is not a member of the space, has not been invited and is not able to join the space."
           ],
+          "readOnly": true,
           "type": "string"
         }
       },
       "type": "object"
     },
     "Message": {
-      "description": "A message in Hangouts Chat.",
+      "description": "A message in Google Chat.",
       "id": "Message",
       "properties": {
         "actionResponse": {
           "$ref": "ActionResponse",
-          "description": "Input only. Parameters that a bot can use to configure how its response is posted."
+          "description": "Input only. Parameters that a Chat app can use to configure how its response is posted."
         },
         "annotations": {
           "description": "Output only. Annotations associated with the text in this message.",
           "items": {
             "$ref": "Annotation"
           },
+          "readOnly": true,
           "type": "array"
         },
         "argumentText": {
-          "description": "Plain-text body of the message with all bot mentions stripped out.",
+          "description": "Plain-text body of the message with all Chat app mentions stripped out.",
           "type": "string"
         },
         "attachment": {
@@ -2132,43 +2450,47 @@
           },
           "type": "array"
         },
-        "cardsV2": {
-          "description": "Rich, formatted and interactive cards that can be used to display UI elements and editable widgets, such as: formatted text, buttons, clickable images, checkboxes, radio buttons. Cards are normally displayed below the plain-text body of the message. This v2 allows input widgets. The string key is a unique identifier among cards in the same message for identifying inputs.",
-          "items": {
-            "$ref": "CardWithId"
-          },
-          "type": "array"
-        },
         "createTime": {
-          "description": "Output only. The time at which the message was created in Hangouts Chat server.",
+          "description": "Output only. The time at which the message was created in Google Chat server.",
           "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         },
         "fallbackText": {
           "description": "A plain-text description of the message's cards, used when the actual cards cannot be displayed (e.g. mobile notifications).",
           "type": "string"
         },
-        "name": {
+        "lastUpdateTime": {
+          "description": "Output only. The time at which the message was last updated in Google Chat server. If the message was never updated, this field will be same as create_time.",
+          "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         },
-        "previewText": {
-          "description": "Text for generating preview chips. This text will not be displayed to the user, but any links to images, web pages, videos, etc. included here will generate preview chips.",
+        "matchedUrl": {
+          "$ref": "MatchedUrl",
+          "description": "Output only. A URL in `spaces.messages.text` that matches a link unfurling pattern. For more information, refer to [Unfurl links](https://developers.google.com/chat/how-tos/link-unfurling).",
+          "readOnly": true
+        },
+        "name": {
+          "description": "Resource name in the form `spaces/*/messages/*`. Example: `spaces/AAAAAAAAAAA/messages/BBBBBBBBBBB.BBBBBBBBBBB`",
           "type": "string"
         },
         "sender": {
           "$ref": "User",
-          "description": "The user who created the message."
+          "description": "Output only. The user who created the message.",
+          "readOnly": true
         },
         "slashCommand": {
           "$ref": "SlashCommand",
-          "description": "Slash command information, if applicable."
+          "description": "Output only. Slash command information, if applicable.",
+          "readOnly": true
         },
         "space": {
           "$ref": "Space",
           "description": "The space the message belongs to."
         },
         "text": {
-          "description": "Plain-text body of the message.",
+          "description": "Plain-text body of the message. The first link to an image, video, web page, or other preview-able item generates a preview chip.",
           "type": "string"
         },
         "thread": {
@@ -2223,7 +2545,7 @@
       "type": "object"
     },
     "SlashCommand": {
-      "description": "A Slash Command in Chat.",
+      "description": "A [slash command](https://developers.google.com/chat/how-tos/slash-commands) in Google Chat.",
       "id": "SlashCommand",
       "properties": {
         "commandId": {
@@ -2240,7 +2562,7 @@
       "properties": {
         "bot": {
           "$ref": "User",
-          "description": "The bot whose command was invoked."
+          "description": "The Chat app whose command was invoked."
         },
         "commandId": {
           "description": "The command id of the invoked slash command.",
@@ -2264,7 +2586,7 @@
           ],
           "enumDescriptions": [
             "Default value for the enum. DO NOT USE.",
-            "Add bot to space.",
+            "Add Chat app to space.",
             "Invoke slash command in space."
           ],
           "type": "string"
@@ -2273,27 +2595,29 @@
       "type": "object"
     },
     "Space": {
-      "description": "A room or DM in Hangouts Chat.",
+      "description": "A space in Google Chat. Spaces are conversations between two or more users or 1:1 messages between a user and a Chat app.",
       "id": "Space",
       "properties": {
         "displayName": {
-          "description": "Output only. The display name (only if the space is a room). Please note that this field might not be populated in direct messages between humans.",
+          "description": "The space's display name. For direct messages between humans, this field might be empty.",
           "type": "string"
         },
         "name": {
-          "description": "Resource name of the space, in the form \"spaces/*\". Example: spaces/AAAAMpdlehYs",
+          "description": "Resource name of the space, in the form \"spaces/*\". Example: spaces/AAAAAAAAAAAA",
           "type": "string"
         },
         "singleUserBotDm": {
-          "description": "Whether the space is a DM between a bot and a single human.",
+          "description": "Output only. Whether the space is a DM between a Chat app and a single human.",
+          "readOnly": true,
           "type": "boolean"
         },
         "threaded": {
-          "description": "Whether the messages are threaded in this space.",
+          "description": "Output only. Output only. Whether the messages are threaded in this space.",
+          "readOnly": true,
           "type": "boolean"
         },
         "type": {
-          "description": "Output only. The type of a space. This is deprecated. Use `single_user_bot_dm` instead.",
+          "description": "Output only. Deprecated: Use `single_user_bot_dm` instead. Output only. The type of a space.",
           "enum": [
             "TYPE_UNSPECIFIED",
             "ROOM",
@@ -2301,10 +2625,52 @@
           ],
           "enumDescriptions": [
             "",
-            "Multi-user spaces such as rooms and DMs between humans.",
-            "1:1 Direct Message between a human and a bot, where all messages are flat."
+            "Conversations between two or more humans.",
+            "1:1 Direct Message between a human and a Chat app, where all messages are flat. Note that this does not include direct messages between two humans."
           ],
+          "readOnly": true,
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Status": {
+      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).",
+      "id": "Status",
+      "properties": {
+        "code": {
+          "description": "The status code, which should be an enum value of google.rpc.Code.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "details": {
+          "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
+          "items": {
+            "additionalProperties": {
+              "description": "Properties of the object. Contains field @type with type URL.",
+              "type": "any"
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "message": {
+          "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "StringInputs": {
+      "description": "Input parameter for regular widgets. For single-valued widgets, it is a single value list. For multi-valued widgets, such as checkbox, all the values are presented.",
+      "id": "StringInputs",
+      "properties": {
+        "value": {
+          "description": "An array of strings entered by the user.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2335,12 +2701,45 @@
       "type": "object"
     },
     "Thread": {
-      "description": "A thread in Hangouts Chat.",
+      "description": "A thread in Google Chat.",
       "id": "Thread",
       "properties": {
         "name": {
-          "description": "Resource name, in the form \"spaces/*/threads/*\". Example: spaces/AAAAMpdlehY/threads/UMxbHmzDlr4",
+          "description": "Resource name, in the form \"spaces/*/threads/*\". Example: spaces/AAAAAAAAAAA/threads/TTTTTTTTTTT",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TimeInput": {
+      "description": "Time input values. Not supported by Chat apps.",
+      "id": "TimeInput",
+      "properties": {
+        "hours": {
+          "description": "The hour on a 24-hour clock.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "minutes": {
+          "description": "The number of minutes past the hour. Valid values are 0 to 59.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "TimeZone": {
+      "description": "The timezone ID and offset from Coordinated Universal Time (UTC). Not supported by Chat apps.",
+      "id": "TimeZone",
+      "properties": {
+        "id": {
+          "description": "The [IANA TZ](https://www.iana.org/time-zones) time zone database code, such as \"America/Toronto\".",
+          "type": "string"
+        },
+        "offset": {
+          "description": "The user timezone offset, in milliseconds, from Coordinated Universal Time (UTC).",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -2350,19 +2749,21 @@
       "id": "User",
       "properties": {
         "displayName": {
-          "description": "The user's display name.",
+          "description": "Output only. The user's display name.",
+          "readOnly": true,
           "type": "string"
         },
         "domainId": {
-          "description": "Obfuscated domain information.",
+          "description": "Unique identifier of the user's Google Workspace domain.",
           "type": "string"
         },
         "isAnonymous": {
-          "description": "True when the user is deleted or the user's profile is not visible.",
+          "description": "Output only. When `true`, the user is deleted or their profile is not visible.",
+          "readOnly": true,
           "type": "boolean"
         },
         "name": {
-          "description": "Resource name, in the format \"users/*\".",
+          "description": "Resource name for a Google Chat user. Represents a [person](https://developers.google.com/people/api/rest/v1/people#Person) in the People API or a [user](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users) in the Admin SDK Directory API. Formatted as: `users/{user}`",
           "type": "string"
         },
         "type": {
@@ -2375,7 +2776,7 @@
           "enumDescriptions": [
             "Default value for the enum. DO NOT USE.",
             "Human user.",
-            "Bot user."
+            "Chat app user."
           ],
           "type": "string"
         }

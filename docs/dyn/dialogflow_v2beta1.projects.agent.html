@@ -109,7 +109,7 @@ h1, h2, h3 {
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
   <code><a href="#export">export(parent, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Exports the specified agent to a ZIP file. Operation </p>
+<p class="firstline">Exports the specified agent to a ZIP file. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: ExportAgentResponse</p>
 <p class="toc_element">
   <code><a href="#getFulfillment">getFulfillment(name, x__xgafv=None)</a></code></p>
 <p class="firstline">Retrieves the fulfillment.</p>
@@ -118,10 +118,10 @@ h1, h2, h3 {
 <p class="firstline">Gets agent validation result. Agent validation is performed during training time and is updated automatically when training is completed.</p>
 <p class="toc_element">
   <code><a href="#import_">import_(parent, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Imports the specified agent from a ZIP file. Uploads new intents and entity types without deleting the existing ones. Intents and entity types with the same name are replaced with the new versions from ImportAgentRequest. After the import, the imported draft agent will be trained automatically (unless disabled in agent settings). However, once the import is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. Operation An operation which tracks when importing is complete. It only tracks when the draft agent is updated not when it is done training.</p>
+<p class="firstline">Imports the specified agent from a ZIP file. Uploads new intents and entity types without deleting the existing ones. Intents and entity types with the same name are replaced with the new versions from ImportAgentRequest. After the import, the imported draft agent will be trained automatically (unless disabled in agent settings). However, once the import is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) The operation only tracks when importing is complete, not when it is done training. Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).</p>
 <p class="toc_element">
   <code><a href="#restore">restore(parent, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Restores the specified agent from a ZIP file. Replaces the current agent version with a new one. All the intents and entity types in the older version are deleted. After the restore, the restored draft agent will be trained automatically (unless disabled in agent settings). However, once the restore is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. Operation An operation which tracks when restoring is complete. It only tracks when the draft agent is updated not when it is done training.</p>
+<p class="firstline">Restores the specified agent from a ZIP file. Replaces the current agent version with a new one. All the intents and entity types in the older version are deleted. After the restore, the restored draft agent will be trained automatically (unless disabled in agent settings). However, once the restore is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) The operation only tracks when restoring is complete, not when it is done training. Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).</p>
 <p class="toc_element">
   <code><a href="#search">search(parent, pageSize=None, pageToken=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Returns the list of agents. Since there is at most one conversational agent per project, this method is useful primarily for listing all agents across projects the caller has access to. One can achieve that with a wildcard project collection id "-". Refer to [List Sub-Collections](https://cloud.google.com/apis/design/design_patterns#list_sub-collections).</p>
@@ -130,7 +130,7 @@ h1, h2, h3 {
 <p class="firstline">Retrieves the next page of results.</p>
 <p class="toc_element">
   <code><a href="#train">train(parent, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Trains the specified agent. Operation </p>
+<p class="firstline">Trains the specified agent. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).</p>
 <p class="toc_element">
   <code><a href="#updateFulfillment">updateFulfillment(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Updates the fulfillment.</p>
@@ -142,7 +142,7 @@ h1, h2, h3 {
 
 <div class="method">
     <code class="details" id="export">export(parent, body=None, x__xgafv=None)</code>
-  <pre>Exports the specified agent to a ZIP file. Operation 
+  <pre>Exports the specified agent to a ZIP file. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: ExportAgentResponse
 
 Args:
   parent: string, Required. The project that the agent to export is associated with. Format: `projects/` or `projects//locations/`. (required)
@@ -150,7 +150,7 @@ Args:
     The object takes the form of:
 
 { # The request message for Agents.ExportAgent.
-  &quot;agentUri&quot;: &quot;A String&quot;, # Optional. The [Google Cloud Storage](https://cloud.google.com/storage/docs/) URI to export the agent to. The format of this URI must be `gs:///`. If left unspecified, the serialized agent is returned inline.
+  &quot;agentUri&quot;: &quot;A String&quot;, # Optional. The [Google Cloud Storage](https://cloud.google.com/storage/docs/) URI to export the agent to. The format of this URI must be `gs:///`. If left unspecified, the serialized agent is returned inline. Dialogflow performs a write operation for the Cloud Storage object on the caller&#x27;s behalf, so your request authentication must have write permissions for the object. For more information, see [Dialogflow access control](https://cloud.google.com/dialogflow/cx/docs/concept/access-control#storage).
 }
 
   x__xgafv: string, V1 error format.
@@ -238,7 +238,7 @@ Returns:
       &quot;entries&quot;: [ # The names of the entries that the error is associated with. Format: - &quot;projects//agent&quot;, if the error is associated with the entire agent. - &quot;projects//agent/intents/&quot;, if the error is associated with certain intents. - &quot;projects//agent/intents//trainingPhrases/&quot;, if the error is associated with certain intent training phrases. - &quot;projects//agent/intents//parameters/&quot;, if the error is associated with certain intent parameters. - &quot;projects//agent/entities/&quot;, if the error is associated with certain entities.
         &quot;A String&quot;,
       ],
-      &quot;errorMessage&quot;: &quot;A String&quot;, # The detailed error messsage.
+      &quot;errorMessage&quot;: &quot;A String&quot;, # The detailed error message.
       &quot;severity&quot;: &quot;A String&quot;, # The severity of the error.
     },
   ],
@@ -247,7 +247,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="import_">import_(parent, body=None, x__xgafv=None)</code>
-  <pre>Imports the specified agent from a ZIP file. Uploads new intents and entity types without deleting the existing ones. Intents and entity types with the same name are replaced with the new versions from ImportAgentRequest. After the import, the imported draft agent will be trained automatically (unless disabled in agent settings). However, once the import is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. Operation An operation which tracks when importing is complete. It only tracks when the draft agent is updated not when it is done training.
+  <pre>Imports the specified agent from a ZIP file. Uploads new intents and entity types without deleting the existing ones. Intents and entity types with the same name are replaced with the new versions from ImportAgentRequest. After the import, the imported draft agent will be trained automatically (unless disabled in agent settings). However, once the import is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) The operation only tracks when importing is complete, not when it is done training. Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).
 
 Args:
   parent: string, Required. The project that the agent to import is associated with. Format: `projects/` or `projects//locations/`. (required)
@@ -256,7 +256,7 @@ Args:
 
 { # The request message for Agents.ImportAgent.
   &quot;agentContent&quot;: &quot;A String&quot;, # Zip compressed raw byte content for agent.
-  &quot;agentUri&quot;: &quot;A String&quot;, # The URI to a Google Cloud Storage file containing the agent to import. Note: The URI must start with &quot;gs://&quot;.
+  &quot;agentUri&quot;: &quot;A String&quot;, # The URI to a Google Cloud Storage file containing the agent to import. Note: The URI must start with &quot;gs://&quot;. Dialogflow performs a read operation for the Cloud Storage object on the caller&#x27;s behalf, so your request authentication must have read permissions for the object. For more information, see [Dialogflow access control](https://cloud.google.com/dialogflow/cx/docs/concept/access-control#storage).
 }
 
   x__xgafv: string, V1 error format.
@@ -290,7 +290,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="restore">restore(parent, body=None, x__xgafv=None)</code>
-  <pre>Restores the specified agent from a ZIP file. Replaces the current agent version with a new one. All the intents and entity types in the older version are deleted. After the restore, the restored draft agent will be trained automatically (unless disabled in agent settings). However, once the restore is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. Operation An operation which tracks when restoring is complete. It only tracks when the draft agent is updated not when it is done training.
+  <pre>Restores the specified agent from a ZIP file. Replaces the current agent version with a new one. All the intents and entity types in the older version are deleted. After the restore, the restored draft agent will be trained automatically (unless disabled in agent settings). However, once the restore is done, training may not be completed yet. Please call TrainAgent and wait for the operation it returns in order to train explicitly. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) The operation only tracks when restoring is complete, not when it is done training. Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).
 
 Args:
   parent: string, Required. The project that the agent to restore is associated with. Format: `projects/` or `projects//locations/`. (required)
@@ -299,7 +299,7 @@ Args:
 
 { # The request message for Agents.RestoreAgent.
   &quot;agentContent&quot;: &quot;A String&quot;, # Zip compressed raw byte content for agent.
-  &quot;agentUri&quot;: &quot;A String&quot;, # The URI to a Google Cloud Storage file containing the agent to restore. Note: The URI must start with &quot;gs://&quot;.
+  &quot;agentUri&quot;: &quot;A String&quot;, # The URI to a Google Cloud Storage file containing the agent to restore. Note: The URI must start with &quot;gs://&quot;. Dialogflow performs a read operation for the Cloud Storage object on the caller&#x27;s behalf, so your request authentication must have read permissions for the object. For more information, see [Dialogflow access control](https://cloud.google.com/dialogflow/cx/docs/concept/access-control#storage).
 }
 
   x__xgafv: string, V1 error format.
@@ -386,7 +386,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="train">train(parent, body=None, x__xgafv=None)</code>
-  <pre>Trains the specified agent. Operation 
+  <pre>Trains the specified agent. This method is a [long-running operation](https://cloud.google.com/dialogflow/es/docs/how/long-running-operations). The returned `Operation` type has the following method-specific fields: - `metadata`: An empty [Struct message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#struct) - `response`: An [Empty message](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#empty) Note: You should always train an agent prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/es/docs/training).
 
 Args:
   parent: string, Required. The project that the agent to train is associated with. Format: `projects/` or `projects//locations/`. (required)

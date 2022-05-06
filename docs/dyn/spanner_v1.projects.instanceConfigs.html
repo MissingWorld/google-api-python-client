@@ -75,6 +75,11 @@ h1, h2, h3 {
 <h1><a href="spanner_v1.html">Cloud Spanner API</a> . <a href="spanner_v1.projects.html">projects</a> . <a href="spanner_v1.projects.instanceConfigs.html">instanceConfigs</a></h1>
 <h2>Instance Methods</h2>
 <p class="toc_element">
+  <code><a href="spanner_v1.projects.instanceConfigs.operations.html">operations()</a></code>
+</p>
+<p class="firstline">Returns the operations Resource.</p>
+
+<p class="toc_element">
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
@@ -108,7 +113,10 @@ Returns:
 
     { # A possible configuration for a Cloud Spanner instance. Configurations define the geographic placement of nodes and their replication.
   &quot;displayName&quot;: &quot;A String&quot;, # The name of this instance configuration as it appears in UIs.
-  &quot;name&quot;: &quot;A String&quot;, # A unique identifier for the instance configuration. Values are of the form `projects//instanceConfigs/a-z*`
+  &quot;leaderOptions&quot;: [ # Allowed values of the &quot;default_leader&quot; schema option for databases in instances that use this instance configuration.
+    &quot;A String&quot;,
+  ],
+  &quot;name&quot;: &quot;A String&quot;, # A unique identifier for the instance configuration. Values are of the form `projects//instanceConfigs/a-z*`.
   &quot;replicas&quot;: [ # The geographic placement of nodes in this instance configuration and their replication properties.
     {
       &quot;defaultLeaderLocation&quot;: True or False, # If true, this location is designated as the default leader location where leader replicas are placed. See the [region types documentation](https://cloud.google.com/spanner/docs/instances#region_types) for more details.
@@ -139,7 +147,10 @@ Returns:
   &quot;instanceConfigs&quot;: [ # The list of requested instance configurations.
     { # A possible configuration for a Cloud Spanner instance. Configurations define the geographic placement of nodes and their replication.
       &quot;displayName&quot;: &quot;A String&quot;, # The name of this instance configuration as it appears in UIs.
-      &quot;name&quot;: &quot;A String&quot;, # A unique identifier for the instance configuration. Values are of the form `projects//instanceConfigs/a-z*`
+      &quot;leaderOptions&quot;: [ # Allowed values of the &quot;default_leader&quot; schema option for databases in instances that use this instance configuration.
+        &quot;A String&quot;,
+      ],
+      &quot;name&quot;: &quot;A String&quot;, # A unique identifier for the instance configuration. Values are of the form `projects//instanceConfigs/a-z*`.
       &quot;replicas&quot;: [ # The geographic placement of nodes in this instance configuration and their replication properties.
         {
           &quot;defaultLeaderLocation&quot;: True or False, # If true, this location is designated as the default leader location where leader replicas are placed. See the [region types documentation](https://cloud.google.com/spanner/docs/instances#region_types) for more details.

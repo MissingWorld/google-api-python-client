@@ -75,11 +75,6 @@ h1, h2, h3 {
 <h1><a href="dns_v1beta2.html">Cloud DNS API</a> . <a href="dns_v1beta2.projects.html">projects</a></h1>
 <h2>Instance Methods</h2>
 <p class="toc_element">
-  <code><a href="dns_v1beta2.projects.managedZones.html">managedZones()</a></code>
-</p>
-<p class="firstline">Returns the managedZones Resource.</p>
-
-<p class="toc_element">
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
@@ -114,12 +109,14 @@ Returns:
     &quot;dnsKeysPerManagedZone&quot;: 42, # Maximum allowed number of DnsKeys per ManagedZone.
     &quot;gkeClustersPerManagedZone&quot;: 42, # Maximum allowed number of GKE clusters to which a privately scoped zone can be attached.
     &quot;gkeClustersPerResponsePolicy&quot;: 42, # Maximum allowed number of GKE clusters per response policy.
+    &quot;itemsPerRoutingPolicy&quot;: 42, # Maximum allowed number of items per routing policy.
     &quot;kind&quot;: &quot;dns#quota&quot;,
     &quot;managedZones&quot;: 42, # Maximum allowed number of managed zones in the project.
     &quot;managedZonesPerGkeCluster&quot;: 42, # Maximum allowed number of managed zones which can be attached to a GKE cluster.
     &quot;managedZonesPerNetwork&quot;: 42, # Maximum allowed number of managed zones which can be attached to a network.
     &quot;networksPerManagedZone&quot;: 42, # Maximum allowed number of networks to which a privately scoped zone can be attached.
     &quot;networksPerPolicy&quot;: 42, # Maximum allowed number of networks per policy.
+    &quot;peeringZonesPerTargetNetwork&quot;: 42, # Maximum allowed number of consumer peering zones per target network owned by this producer project
     &quot;policies&quot;: 42, # Maximum allowed number of policies per project.
     &quot;resourceRecordsPerRrset&quot;: 42, # Maximum allowed number of ResourceRecords per ResourceRecordSet.
     &quot;responsePolicyRulesPerResponsePolicy&quot;: 42, # Maximum allowed number of rules per response policy.

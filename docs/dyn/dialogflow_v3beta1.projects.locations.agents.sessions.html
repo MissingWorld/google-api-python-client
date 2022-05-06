@@ -157,11 +157,14 @@ Args:
     &quot;analyzeQueryTextSentiment&quot;: True or False, # Configures whether sentiment analysis should be performed. If not provided, sentiment analysis is not performed.
     &quot;currentPage&quot;: &quot;A String&quot;, # The unique identifier of the page to override the current page in the session. Format: `projects//locations//agents//flows//pages/`. If `current_page` is specified, the previous state of the session will be ignored by Dialogflow, including the previous page and the previous session parameters. In most cases, current_page and parameters should be configured together to direct a session to a specific state.
     &quot;disableWebhook&quot;: True or False, # Whether to disable webhook calls for this request.
+    &quot;flowVersions&quot;: [ # A list of flow versions to override for the request. Format: `projects//locations//agents//flows//versions/`. If version 1 of flow X is included in this list, the traffic of flow X will go through version 1 regardless of the version configuration in the environment. Each flow can have at most one version specified in this list.
+      &quot;A String&quot;,
+    ],
     &quot;geoLocation&quot;: { # An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges. # The geo location of this conversational query.
       &quot;latitude&quot;: 3.14, # The latitude in degrees. It must be in the range [-90.0, +90.0].
       &quot;longitude&quot;: 3.14, # The longitude in degrees. It must be in the range [-180.0, +180.0].
     },
-    &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+    &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
     },
     &quot;payload&quot;: { # This field can be used to pass custom data into the webhook associated with the agent. Arbitrary JSON objects are supported. Some integrations that query a Dialogflow agent may provide additional information in the payload. In particular, for the Dialogflow Phone Gateway integration, this field has the form: ``` { &quot;telephony&quot;: { &quot;caller_id&quot;: &quot;+18558363987&quot; } } ```
@@ -217,7 +220,7 @@ Returns:
   },
   &quot;queryResult&quot;: { # Represents the result of a conversational query. # The result of the conversational query.
     &quot;currentPage&quot;: { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page). # The current Page. Some, not all fields are filled in this message, including but not limited to `name` and `display_name`.
-      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
       &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
         &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
           { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -259,6 +262,9 @@ Returns:
                       &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                      },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                       },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -309,6 +315,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -324,7 +333,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
       &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -375,6 +384,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -424,6 +436,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -439,7 +454,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -493,6 +508,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -542,6 +560,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -557,7 +578,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
               &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -608,6 +629,9 @@ Returns:
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                                   },
+                                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                                  },
                                   &quot;text&quot;: { # The text response message. # Returns a text response.
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;text&quot;: [ # Required. A collection of text responses.
@@ -657,6 +681,9 @@ Returns:
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                         },
+                        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                        },
                         &quot;text&quot;: { # The text response message. # Returns a text response.
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -672,7 +699,7 @@ Returns:
                         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                       },
                     ],
-                    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
                   },
                 },
@@ -737,6 +764,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -786,6 +816,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -801,7 +834,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -809,6 +842,10 @@ Returns:
     },
     &quot;diagnosticInfo&quot;: { # The free-form diagnostic info. For example, this field could contain webhook call latency. The string keys of the Struct&#x27;s fields map can change without notice.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
+    },
+    &quot;dtmf&quot;: { # Represents the input for dtmf event. # If a DTMF was provided as input, this field will contain a copy of the DTMFInput.
+      &quot;digits&quot;: &quot;A String&quot;, # The dtmf digits.
+      &quot;finishDigit&quot;: &quot;A String&quot;, # The finish digit (if any).
     },
     &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the conversational query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. This field is deprecated, please use QueryResult.match instead.
       &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
@@ -844,7 +881,7 @@ Returns:
     &quot;languageCode&quot;: &quot;A String&quot;, # The language that was triggered during intent detection. See [Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
     &quot;match&quot;: { # Represents one match result of MatchIntent. # Intent match result, could be an intent or an event.
       &quot;confidence&quot;: 3.14, # The confidence of this match. Values range from 0.0 (completely uncertain) to 1.0 (completely certain). This value is for informational purpose only and is only used to help match the best intent within the classification threshold. This value may change for the same end-user expression at any time due to a model retraining or change in implementation.
-      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Only filled for `EVENT` match type.
+      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Filled for `EVENT`, `NO_MATCH` and `NO_INPUT` match types.
       &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. Only filled for `INTENT` match type.
         &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
         &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the intent, unique within the agent.
@@ -876,12 +913,12 @@ Returns:
         ],
       },
       &quot;matchType&quot;: &quot;A String&quot;, # Type of this Match.
-      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
         &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
       },
       &quot;resolvedInput&quot;: &quot;A String&quot;, # Final text input which was matched during MatchIntent. This value can be different from original input sent in request because of spelling correction or other processing.
     },
-    &quot;parameters&quot;: { # The collected session parameters. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+    &quot;parameters&quot;: { # The collected session parameters. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
     },
     &quot;responseMessages&quot;: [ # The list of rich messages returned to the client. Responses vary from simple text messages to more sophisticated, structured payloads used to drive complex logic.
@@ -918,6 +955,9 @@ Returns:
         &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+        },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
         },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -969,7 +1009,7 @@ Args:
 { # Request of FulfillIntent
   &quot;match&quot;: { # Represents one match result of MatchIntent. # The matched intent/event to fulfill.
     &quot;confidence&quot;: 3.14, # The confidence of this match. Values range from 0.0 (completely uncertain) to 1.0 (completely certain). This value is for informational purpose only and is only used to help match the best intent within the classification threshold. This value may change for the same end-user expression at any time due to a model retraining or change in implementation.
-    &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Only filled for `EVENT` match type.
+    &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Filled for `EVENT`, `NO_MATCH` and `NO_INPUT` match types.
     &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. Only filled for `INTENT` match type.
       &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
       &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the intent, unique within the agent.
@@ -1001,7 +1041,7 @@ Args:
       ],
     },
     &quot;matchType&quot;: &quot;A String&quot;, # Type of this Match.
-    &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+    &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
     },
     &quot;resolvedInput&quot;: &quot;A String&quot;, # Final text input which was matched during MatchIntent. This value can be different from original input sent in request because of spelling correction or other processing.
@@ -1041,11 +1081,14 @@ Args:
       &quot;analyzeQueryTextSentiment&quot;: True or False, # Configures whether sentiment analysis should be performed. If not provided, sentiment analysis is not performed.
       &quot;currentPage&quot;: &quot;A String&quot;, # The unique identifier of the page to override the current page in the session. Format: `projects//locations//agents//flows//pages/`. If `current_page` is specified, the previous state of the session will be ignored by Dialogflow, including the previous page and the previous session parameters. In most cases, current_page and parameters should be configured together to direct a session to a specific state.
       &quot;disableWebhook&quot;: True or False, # Whether to disable webhook calls for this request.
+      &quot;flowVersions&quot;: [ # A list of flow versions to override for the request. Format: `projects//locations//agents//flows//versions/`. If version 1 of flow X is included in this list, the traffic of flow X will go through version 1 regardless of the version configuration in the environment. Each flow can have at most one version specified in this list.
+        &quot;A String&quot;,
+      ],
       &quot;geoLocation&quot;: { # An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges. # The geo location of this conversational query.
         &quot;latitude&quot;: 3.14, # The latitude in degrees. It must be in the range [-90.0, +90.0].
         &quot;longitude&quot;: 3.14, # The longitude in degrees. It must be in the range [-180.0, +180.0].
       },
-      &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+      &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
         &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
       },
       &quot;payload&quot;: { # This field can be used to pass custom data into the webhook associated with the agent. Arbitrary JSON objects are supported. Some integrations that query a Dialogflow agent may provide additional information in the payload. In particular, for the Dialogflow Phone Gateway integration, this field has the form: ``` { &quot;telephony&quot;: { &quot;caller_id&quot;: &quot;+18558363987&quot; } } ```
@@ -1117,7 +1160,7 @@ Returns:
   },
   &quot;queryResult&quot;: { # Represents the result of a conversational query. # The result of the conversational query.
     &quot;currentPage&quot;: { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page). # The current Page. Some, not all fields are filled in this message, including but not limited to `name` and `display_name`.
-      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
       &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
         &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
           { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -1159,6 +1202,9 @@ Returns:
                       &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                      },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                       },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -1209,6 +1255,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1224,7 +1273,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
       &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -1275,6 +1324,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1324,6 +1376,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1339,7 +1394,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -1393,6 +1448,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1442,6 +1500,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1457,7 +1518,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
               &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -1508,6 +1569,9 @@ Returns:
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                                   },
+                                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                                  },
                                   &quot;text&quot;: { # The text response message. # Returns a text response.
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1557,6 +1621,9 @@ Returns:
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                         },
+                        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                        },
                         &quot;text&quot;: { # The text response message. # Returns a text response.
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1572,7 +1639,7 @@ Returns:
                         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                       },
                     ],
-                    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
                   },
                 },
@@ -1637,6 +1704,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1686,6 +1756,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1701,7 +1774,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -1709,6 +1782,10 @@ Returns:
     },
     &quot;diagnosticInfo&quot;: { # The free-form diagnostic info. For example, this field could contain webhook call latency. The string keys of the Struct&#x27;s fields map can change without notice.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
+    },
+    &quot;dtmf&quot;: { # Represents the input for dtmf event. # If a DTMF was provided as input, this field will contain a copy of the DTMFInput.
+      &quot;digits&quot;: &quot;A String&quot;, # The dtmf digits.
+      &quot;finishDigit&quot;: &quot;A String&quot;, # The finish digit (if any).
     },
     &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the conversational query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. This field is deprecated, please use QueryResult.match instead.
       &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
@@ -1744,7 +1821,7 @@ Returns:
     &quot;languageCode&quot;: &quot;A String&quot;, # The language that was triggered during intent detection. See [Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language) for a list of the currently supported language codes.
     &quot;match&quot;: { # Represents one match result of MatchIntent. # Intent match result, could be an intent or an event.
       &quot;confidence&quot;: 3.14, # The confidence of this match. Values range from 0.0 (completely uncertain) to 1.0 (completely certain). This value is for informational purpose only and is only used to help match the best intent within the classification threshold. This value may change for the same end-user expression at any time due to a model retraining or change in implementation.
-      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Only filled for `EVENT` match type.
+      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Filled for `EVENT`, `NO_MATCH` and `NO_INPUT` match types.
       &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. Only filled for `INTENT` match type.
         &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
         &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the intent, unique within the agent.
@@ -1776,12 +1853,12 @@ Returns:
         ],
       },
       &quot;matchType&quot;: &quot;A String&quot;, # Type of this Match.
-      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
         &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
       },
       &quot;resolvedInput&quot;: &quot;A String&quot;, # Final text input which was matched during MatchIntent. This value can be different from original input sent in request because of spelling correction or other processing.
     },
-    &quot;parameters&quot;: { # The collected session parameters. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+    &quot;parameters&quot;: { # The collected session parameters. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
     },
     &quot;responseMessages&quot;: [ # The list of rich messages returned to the client. Responses vary from simple text messages to more sophisticated, structured payloads used to drive complex logic.
@@ -1818,6 +1895,9 @@ Returns:
         &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+        },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
         },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -1900,11 +1980,14 @@ Args:
     &quot;analyzeQueryTextSentiment&quot;: True or False, # Configures whether sentiment analysis should be performed. If not provided, sentiment analysis is not performed.
     &quot;currentPage&quot;: &quot;A String&quot;, # The unique identifier of the page to override the current page in the session. Format: `projects//locations//agents//flows//pages/`. If `current_page` is specified, the previous state of the session will be ignored by Dialogflow, including the previous page and the previous session parameters. In most cases, current_page and parameters should be configured together to direct a session to a specific state.
     &quot;disableWebhook&quot;: True or False, # Whether to disable webhook calls for this request.
+    &quot;flowVersions&quot;: [ # A list of flow versions to override for the request. Format: `projects//locations//agents//flows//versions/`. If version 1 of flow X is included in this list, the traffic of flow X will go through version 1 regardless of the version configuration in the environment. Each flow can have at most one version specified in this list.
+      &quot;A String&quot;,
+    ],
     &quot;geoLocation&quot;: { # An object that represents a latitude/longitude pair. This is expressed as a pair of doubles to represent degrees latitude and degrees longitude. Unless specified otherwise, this object must conform to the WGS84 standard. Values must be within normalized ranges. # The geo location of this conversational query.
       &quot;latitude&quot;: 3.14, # The latitude in degrees. It must be in the range [-90.0, +90.0].
       &quot;longitude&quot;: 3.14, # The longitude in degrees. It must be in the range [-180.0, +180.0].
     },
-    &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+    &quot;parameters&quot;: { # Additional parameters to be put into session parameters. To remove a parameter from the session, clients should explicitly set the parameter value to null. You can reference the session parameters in the agent with the following format: $session.params.parameter-id. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
       &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
     },
     &quot;payload&quot;: { # This field can be used to pass custom data into the webhook associated with the agent. Arbitrary JSON objects are supported. Some integrations that query a Dialogflow agent may provide additional information in the payload. In particular, for the Dialogflow Phone Gateway integration, this field has the form: ``` { &quot;telephony&quot;: { &quot;caller_id&quot;: &quot;+18558363987&quot; } } ```
@@ -1941,7 +2024,7 @@ Returns:
 
     { # Response of MatchIntent.
   &quot;currentPage&quot;: { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page). # The current Page. Some, not all fields are filled in this message, including but not limited to `name` and `display_name`.
-    &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+    &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
     &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
       &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
         { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -1983,6 +2066,9 @@ Returns:
                     &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                    },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                     },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -2033,6 +2119,9 @@ Returns:
             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
           },
+          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+          },
           &quot;text&quot;: { # The text response message. # Returns a text response.
             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2048,7 +2137,7 @@ Returns:
           &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
         },
       ],
-      &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+      &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
       &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
     },
     &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -2099,6 +2188,9 @@ Returns:
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                         },
+                        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                        },
                         &quot;text&quot;: { # The text response message. # Returns a text response.
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2148,6 +2240,9 @@ Returns:
                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
               },
+              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+              },
               &quot;text&quot;: { # The text response message. # Returns a text response.
                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2163,7 +2258,7 @@ Returns:
               &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
             },
           ],
-          &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+          &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
           &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
         },
       },
@@ -2217,6 +2312,9 @@ Returns:
                               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                             },
+                            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                            },
                             &quot;text&quot;: { # The text response message. # Returns a text response.
                               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2266,6 +2364,9 @@ Returns:
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                   },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                  },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2281,7 +2382,7 @@ Returns:
                   &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                 },
               ],
-              &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+              &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
               &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
             },
             &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -2332,6 +2433,9 @@ Returns:
                                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                                 },
+                                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                                },
                                 &quot;text&quot;: { # The text response message. # Returns a text response.
                                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2381,6 +2485,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2396,7 +2503,7 @@ Returns:
                       &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                     },
                   ],
-                  &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                  &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                   &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
                 },
               },
@@ -2461,6 +2568,9 @@ Returns:
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                         },
+                        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                        },
                         &quot;text&quot;: { # The text response message. # Returns a text response.
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2510,6 +2620,9 @@ Returns:
                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
               },
+              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+              },
               &quot;text&quot;: { # The text response message. # Returns a text response.
                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2525,7 +2638,7 @@ Returns:
               &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
             },
           ],
-          &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+          &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
           &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
         },
       },
@@ -2534,7 +2647,7 @@ Returns:
   &quot;matches&quot;: [ # Match results, if more than one, ordered descendingly by the confidence we have that the particular intent matches the query.
     { # Represents one match result of MatchIntent.
       &quot;confidence&quot;: 3.14, # The confidence of this match. Values range from 0.0 (completely uncertain) to 1.0 (completely certain). This value is for informational purpose only and is only used to help match the best intent within the classification threshold. This value may change for the same end-user expression at any time due to a model retraining or change in implementation.
-      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Only filled for `EVENT` match type.
+      &quot;event&quot;: &quot;A String&quot;, # The event that matched the query. Filled for `EVENT`, `NO_MATCH` and `NO_INPUT` match types.
       &quot;intent&quot;: { # An intent represents a user&#x27;s intent to interact with a conversational agent. You can provide information for the Dialogflow API to use to match user input to an intent by adding training phrases (i.e., examples of user input) to your intent. # The Intent that matched the query. Some, not all fields are filled in this message, including but not limited to: `name` and `display_name`. Only filled for `INTENT` match type.
         &quot;description&quot;: &quot;A String&quot;, # Human readable description for better understanding an intent like its scope, content, result etc. Maximum character limit: 140 characters.
         &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the intent, unique within the agent.
@@ -2566,7 +2679,7 @@ Returns:
         ],
       },
       &quot;matchType&quot;: &quot;A String&quot;, # Type of this Match.
-      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: - MapKey type: string - MapKey value: parameter name - MapValue type: - If parameter&#x27;s entity type is a composite entity: map - Else: depending on parameter value type, could be one of string, number, boolean, null, list or map - MapValue value: - If parameter&#x27;s entity type is a composite entity: map from composite entity property names to property values - Else: parameter value
+      &quot;parameters&quot;: { # The collection of parameters extracted from the query. Depending on your protocol or client library language, this is a map, associative array, symbol table, dictionary, or JSON object composed of a collection of (MapKey, MapValue) pairs: * MapKey type: string * MapKey value: parameter name * MapValue type: If parameter&#x27;s entity type is a composite entity then use map, otherwise, depending on the parameter value type, it could be one of string, number, boolean, null, list or map. * MapValue value: If parameter&#x27;s entity type is a composite entity then use map from composite entity property names to property values, otherwise, use parameter value.
         &quot;a_key&quot;: &quot;&quot;, # Properties of the object.
       },
       &quot;resolvedInput&quot;: &quot;A String&quot;, # Final text input which was matched during MatchIntent. This value can be different from original input sent in request because of spelling correction or other processing.

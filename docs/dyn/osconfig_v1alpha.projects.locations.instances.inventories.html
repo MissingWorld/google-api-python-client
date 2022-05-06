@@ -136,6 +136,17 @@ Returns:
           &quot;hotFixId&quot;: &quot;A String&quot;, # Unique identifier associated with a particular QFE update.
           &quot;installTime&quot;: &quot;A String&quot;, # Date that the QFE update was installed. Mapped from installed_on field.
         },
+        &quot;windowsApplication&quot;: { # Contains information about a Windows application that is retrieved from the Windows Registry. For more information about these fields, see: https://docs.microsoft.com/en-us/windows/win32/msi/uninstall-registry-key # Details of Windows Application.
+          &quot;displayName&quot;: &quot;A String&quot;, # The name of the application or product.
+          &quot;displayVersion&quot;: &quot;A String&quot;, # The version of the product or application in string format.
+          &quot;helpLink&quot;: &quot;A String&quot;, # The internet address for technical support.
+          &quot;installDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # The last time this product received service. The value of this property is replaced each time a patch is applied or removed from the product or the command-line option is used to repair the product.
+            &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
+            &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
+            &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
+          },
+          &quot;publisher&quot;: &quot;A String&quot;, # The name of the manufacturer for the product or application.
+        },
         &quot;wuaPackage&quot;: { # Details related to a Windows Update package. Field data and names are taken from Windows Update API IUpdate Interface: https://docs.microsoft.com/en-us/windows/win32/api/_wua/ Descriptive fields like title, and description are localized based on the locale of the VM being updated. # Details of a Windows Update package. See https://docs.microsoft.com/en-us/windows/win32/api/_wua/ for information about Windows Update.
           &quot;categories&quot;: [ # The categories that are associated with this update package.
             { # Categories specified by the Windows Update.
@@ -196,6 +207,17 @@ Returns:
           &quot;description&quot;: &quot;A String&quot;, # A textual description of the QFE update.
           &quot;hotFixId&quot;: &quot;A String&quot;, # Unique identifier associated with a particular QFE update.
           &quot;installTime&quot;: &quot;A String&quot;, # Date that the QFE update was installed. Mapped from installed_on field.
+        },
+        &quot;windowsApplication&quot;: { # Contains information about a Windows application that is retrieved from the Windows Registry. For more information about these fields, see: https://docs.microsoft.com/en-us/windows/win32/msi/uninstall-registry-key # Details of Windows Application.
+          &quot;displayName&quot;: &quot;A String&quot;, # The name of the application or product.
+          &quot;displayVersion&quot;: &quot;A String&quot;, # The version of the product or application in string format.
+          &quot;helpLink&quot;: &quot;A String&quot;, # The internet address for technical support.
+          &quot;installDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # The last time this product received service. The value of this property is replaced each time a patch is applied or removed from the product or the command-line option is used to repair the product.
+            &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
+            &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
+            &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
+          },
+          &quot;publisher&quot;: &quot;A String&quot;, # The name of the manufacturer for the product or application.
         },
         &quot;wuaPackage&quot;: { # Details related to a Windows Update package. Field data and names are taken from Windows Update API IUpdate Interface: https://docs.microsoft.com/en-us/windows/win32/api/_wua/ Descriptive fields like title, and description are localized based on the locale of the VM being updated. # Details of a Windows Update package. See https://docs.microsoft.com/en-us/windows/win32/api/_wua/ for information about Windows Update.
           &quot;categories&quot;: [ # The categories that are associated with this update package.
@@ -259,7 +281,7 @@ Returns:
   <pre>List inventory data for all VM instances in the specified zone.
 
 Args:
-  parent: string, Required. The parent resource name. Format: `projects/{project}/locations/{location}/instances/{instance}` For `{project}`, either `project-number` or `project-id` can be provided. For `{instance}`, only hyphen or dash character is supported to list inventories across VMs. (required)
+  parent: string, Required. The parent resource name. Format: `projects/{project}/locations/{location}/instances/-` For `{project}`, either `project-number` or `project-id` can be provided. (required)
   filter: string, If provided, this field specifies the criteria that must be met by a `Inventory` API resource to be included in the response.
   pageSize: integer, The maximum number of results to return.
   pageToken: string, A pagination token returned from a previous call to `ListInventories` that indicates where this listing should continue from.
@@ -302,6 +324,17 @@ Returns:
               &quot;description&quot;: &quot;A String&quot;, # A textual description of the QFE update.
               &quot;hotFixId&quot;: &quot;A String&quot;, # Unique identifier associated with a particular QFE update.
               &quot;installTime&quot;: &quot;A String&quot;, # Date that the QFE update was installed. Mapped from installed_on field.
+            },
+            &quot;windowsApplication&quot;: { # Contains information about a Windows application that is retrieved from the Windows Registry. For more information about these fields, see: https://docs.microsoft.com/en-us/windows/win32/msi/uninstall-registry-key # Details of Windows Application.
+              &quot;displayName&quot;: &quot;A String&quot;, # The name of the application or product.
+              &quot;displayVersion&quot;: &quot;A String&quot;, # The version of the product or application in string format.
+              &quot;helpLink&quot;: &quot;A String&quot;, # The internet address for technical support.
+              &quot;installDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # The last time this product received service. The value of this property is replaced each time a patch is applied or removed from the product or the command-line option is used to repair the product.
+                &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
+                &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
+                &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
+              },
+              &quot;publisher&quot;: &quot;A String&quot;, # The name of the manufacturer for the product or application.
             },
             &quot;wuaPackage&quot;: { # Details related to a Windows Update package. Field data and names are taken from Windows Update API IUpdate Interface: https://docs.microsoft.com/en-us/windows/win32/api/_wua/ Descriptive fields like title, and description are localized based on the locale of the VM being updated. # Details of a Windows Update package. See https://docs.microsoft.com/en-us/windows/win32/api/_wua/ for information about Windows Update.
               &quot;categories&quot;: [ # The categories that are associated with this update package.
@@ -363,6 +396,17 @@ Returns:
               &quot;description&quot;: &quot;A String&quot;, # A textual description of the QFE update.
               &quot;hotFixId&quot;: &quot;A String&quot;, # Unique identifier associated with a particular QFE update.
               &quot;installTime&quot;: &quot;A String&quot;, # Date that the QFE update was installed. Mapped from installed_on field.
+            },
+            &quot;windowsApplication&quot;: { # Contains information about a Windows application that is retrieved from the Windows Registry. For more information about these fields, see: https://docs.microsoft.com/en-us/windows/win32/msi/uninstall-registry-key # Details of Windows Application.
+              &quot;displayName&quot;: &quot;A String&quot;, # The name of the application or product.
+              &quot;displayVersion&quot;: &quot;A String&quot;, # The version of the product or application in string format.
+              &quot;helpLink&quot;: &quot;A String&quot;, # The internet address for technical support.
+              &quot;installDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # The last time this product received service. The value of this property is replaced each time a patch is applied or removed from the product or the command-line option is used to repair the product.
+                &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
+                &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
+                &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
+              },
+              &quot;publisher&quot;: &quot;A String&quot;, # The name of the manufacturer for the product or application.
             },
             &quot;wuaPackage&quot;: { # Details related to a Windows Update package. Field data and names are taken from Windows Update API IUpdate Interface: https://docs.microsoft.com/en-us/windows/win32/api/_wua/ Descriptive fields like title, and description are localized based on the locale of the VM being updated. # Details of a Windows Update package. See https://docs.microsoft.com/en-us/windows/win32/api/_wua/ for information about Windows Update.
               &quot;categories&quot;: [ # The categories that are associated with this update package.

@@ -89,7 +89,7 @@ h1, h2, h3 {
   <code><a href="#create">create(parent, body=None, certificateAuthorityId=None, requestId=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Create a new CertificateAuthority in a given Project and Location.</p>
 <p class="toc_element">
-  <code><a href="#delete">delete(name, ignoreActiveCertificates=None, requestId=None, x__xgafv=None)</a></code></p>
+  <code><a href="#delete">delete(name, ignoreActiveCertificates=None, requestId=None, skipGracePeriod=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Delete a CertificateAuthority.</p>
 <p class="toc_element">
   <code><a href="#disable">disable(name, body=None, x__xgafv=None)</a></code></p>
@@ -129,7 +129,7 @@ Args:
   &quot;pemCaCertificate&quot;: &quot;A String&quot;, # Required. The signed CA certificate issued from FetchCertificateAuthorityCsrResponse.pem_csr.
   &quot;requestId&quot;: &quot;A String&quot;, # Optional. An ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and t he request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
   &quot;subordinateConfig&quot;: { # Describes a subordinate CA&#x27;s issuers. This is either a resource name to a known issuing CertificateAuthority, or a PEM issuer certificate chain. # Required. Must include information about the issuer of &#x27;pem_ca_certificate&#x27;, and any further issuers until the self-signed CA.
-    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority in the same project that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
+    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
     &quot;pemIssuerChain&quot;: { # This message describes a subordinate CA&#x27;s issuer certificate chain. This wrapper exists for compatibility reasons. # Required. Contains the PEM certificate chain for the issuers of this CertificateAuthority, but not pem certificate for this CA itself.
       &quot;pemCertificates&quot;: [ # Required. Expected to be in leaf-to-root order according to RFC 5246.
         &quot;A String&quot;,
@@ -208,8 +208,8 @@ Args:
       },
       &quot;subjectDescription&quot;: { # These values describe fields in an issued X.509 certificate such as the distinguished name, subject alternative names, serial number, and lifetime. # Describes some of the values in a certificate that are related to the subject and lifetime.
         &quot;hexSerialNumber&quot;: &quot;A String&quot;, # The serial number encoded in lowercase hexadecimal.
-        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate. Corresponds to &#x27;not_after_time&#x27; - &#x27;not_before_time&#x27;.
-        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time at which the certificate expires.
+        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate.
+        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time after which the certificate is expired. Per RFC 5280, the validity period for a certificate is the period of time from not_before_time through not_after_time, inclusive. Corresponds to &#x27;not_before_time&#x27; + &#x27;lifetime&#x27; - 1 second.
         &quot;notBeforeTime&quot;: &quot;A String&quot;, # The time at which the certificate becomes valid.
         &quot;subject&quot;: { # Subject describes parts of a distinguished name that, in turn, describes the subject of the certificate. # Contains distinguished name fields such as the common name, location and / organization.
           &quot;commonName&quot;: &quot;A String&quot;, # The &quot;common name&quot; of the subject.
@@ -222,7 +222,7 @@ Args:
           &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
         },
         &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # The subject alternative name fields.
-          &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+          &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
             { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
               &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
               &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -324,7 +324,7 @@ Args:
         &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
       },
       &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # Optional. The subject alternative name fields.
-        &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+        &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
           { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
             &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
             &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -416,14 +416,14 @@ Args:
   &quot;labels&quot;: { # Optional. Labels with user-defined metadata.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
-  &quot;lifetime&quot;: &quot;A String&quot;, # Required. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
+  &quot;lifetime&quot;: &quot;A String&quot;, # Required. Immutable. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this CertificateAuthority in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
   &quot;pemCaCertificates&quot;: [ # Output only. This CertificateAuthority&#x27;s certificate chain, including the current CertificateAuthority&#x27;s certificate. Ordered such that the root issuer is the final element (consistent with RFC 5246). For a self-signed CA, this will only list the current CertificateAuthority&#x27;s certificate.
     &quot;A String&quot;,
   ],
   &quot;state&quot;: &quot;A String&quot;, # Output only. The State for this CertificateAuthority.
   &quot;subordinateConfig&quot;: { # Describes a subordinate CA&#x27;s issuers. This is either a resource name to a known issuing CertificateAuthority, or a PEM issuer certificate chain. # Optional. If this is a subordinate CertificateAuthority, this field will be set with the subordinate configuration, which describes its issuers. This may be updated, but this CertificateAuthority must continue to validate.
-    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority in the same project that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
+    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
     &quot;pemIssuerChain&quot;: { # This message describes a subordinate CA&#x27;s issuer certificate chain. This wrapper exists for compatibility reasons. # Required. Contains the PEM certificate chain for the issuers of this CertificateAuthority, but not pem certificate for this CA itself.
       &quot;pemCertificates&quot;: [ # Required. Expected to be in leaf-to-root order according to RFC 5246.
         &quot;A String&quot;,
@@ -467,13 +467,14 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="delete">delete(name, ignoreActiveCertificates=None, requestId=None, x__xgafv=None)</code>
+    <code class="details" id="delete">delete(name, ignoreActiveCertificates=None, requestId=None, skipGracePeriod=None, x__xgafv=None)</code>
   <pre>Delete a CertificateAuthority.
 
 Args:
   name: string, Required. The resource name for this CertificateAuthority in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`. (required)
   ignoreActiveCertificates: boolean, Optional. This field allows the CA to be deleted even if the CA has active certs. Active certs include both unrevoked and unexpired certs.
   requestId: string, Optional. An ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and t he request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
+  skipGracePeriod: boolean, Optional. If this flag is set, the Certificate Authority will be deleted as soon as possible without a 30-day grace period where undeletion would have been allowed. If you proceed, there will be no way to recover this CA.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -647,8 +648,8 @@ Returns:
       },
       &quot;subjectDescription&quot;: { # These values describe fields in an issued X.509 certificate such as the distinguished name, subject alternative names, serial number, and lifetime. # Describes some of the values in a certificate that are related to the subject and lifetime.
         &quot;hexSerialNumber&quot;: &quot;A String&quot;, # The serial number encoded in lowercase hexadecimal.
-        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate. Corresponds to &#x27;not_after_time&#x27; - &#x27;not_before_time&#x27;.
-        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time at which the certificate expires.
+        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate.
+        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time after which the certificate is expired. Per RFC 5280, the validity period for a certificate is the period of time from not_before_time through not_after_time, inclusive. Corresponds to &#x27;not_before_time&#x27; + &#x27;lifetime&#x27; - 1 second.
         &quot;notBeforeTime&quot;: &quot;A String&quot;, # The time at which the certificate becomes valid.
         &quot;subject&quot;: { # Subject describes parts of a distinguished name that, in turn, describes the subject of the certificate. # Contains distinguished name fields such as the common name, location and / organization.
           &quot;commonName&quot;: &quot;A String&quot;, # The &quot;common name&quot; of the subject.
@@ -661,7 +662,7 @@ Returns:
           &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
         },
         &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # The subject alternative name fields.
-          &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+          &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
             { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
               &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
               &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -763,7 +764,7 @@ Returns:
         &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
       },
       &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # Optional. The subject alternative name fields.
-        &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+        &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
           { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
             &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
             &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -855,14 +856,14 @@ Returns:
   &quot;labels&quot;: { # Optional. Labels with user-defined metadata.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
-  &quot;lifetime&quot;: &quot;A String&quot;, # Required. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
+  &quot;lifetime&quot;: &quot;A String&quot;, # Required. Immutable. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this CertificateAuthority in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
   &quot;pemCaCertificates&quot;: [ # Output only. This CertificateAuthority&#x27;s certificate chain, including the current CertificateAuthority&#x27;s certificate. Ordered such that the root issuer is the final element (consistent with RFC 5246). For a self-signed CA, this will only list the current CertificateAuthority&#x27;s certificate.
     &quot;A String&quot;,
   ],
   &quot;state&quot;: &quot;A String&quot;, # Output only. The State for this CertificateAuthority.
   &quot;subordinateConfig&quot;: { # Describes a subordinate CA&#x27;s issuers. This is either a resource name to a known issuing CertificateAuthority, or a PEM issuer certificate chain. # Optional. If this is a subordinate CertificateAuthority, this field will be set with the subordinate configuration, which describes its issuers. This may be updated, but this CertificateAuthority must continue to validate.
-    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority in the same project that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
+    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
     &quot;pemIssuerChain&quot;: { # This message describes a subordinate CA&#x27;s issuer certificate chain. This wrapper exists for compatibility reasons. # Required. Contains the PEM certificate chain for the issuers of this CertificateAuthority, but not pem certificate for this CA itself.
       &quot;pemCertificates&quot;: [ # Required. Expected to be in leaf-to-root order according to RFC 5246.
         &quot;A String&quot;,
@@ -922,8 +923,8 @@ Returns:
           },
           &quot;subjectDescription&quot;: { # These values describe fields in an issued X.509 certificate such as the distinguished name, subject alternative names, serial number, and lifetime. # Describes some of the values in a certificate that are related to the subject and lifetime.
             &quot;hexSerialNumber&quot;: &quot;A String&quot;, # The serial number encoded in lowercase hexadecimal.
-            &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate. Corresponds to &#x27;not_after_time&#x27; - &#x27;not_before_time&#x27;.
-            &quot;notAfterTime&quot;: &quot;A String&quot;, # The time at which the certificate expires.
+            &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate.
+            &quot;notAfterTime&quot;: &quot;A String&quot;, # The time after which the certificate is expired. Per RFC 5280, the validity period for a certificate is the period of time from not_before_time through not_after_time, inclusive. Corresponds to &#x27;not_before_time&#x27; + &#x27;lifetime&#x27; - 1 second.
             &quot;notBeforeTime&quot;: &quot;A String&quot;, # The time at which the certificate becomes valid.
             &quot;subject&quot;: { # Subject describes parts of a distinguished name that, in turn, describes the subject of the certificate. # Contains distinguished name fields such as the common name, location and / organization.
               &quot;commonName&quot;: &quot;A String&quot;, # The &quot;common name&quot; of the subject.
@@ -936,7 +937,7 @@ Returns:
               &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
             },
             &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # The subject alternative name fields.
-              &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+              &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
                 { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
                   &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
                   &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -1038,7 +1039,7 @@ Returns:
             &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
           },
           &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # Optional. The subject alternative name fields.
-            &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+            &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
               { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
                 &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
                 &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -1130,14 +1131,14 @@ Returns:
       &quot;labels&quot;: { # Optional. Labels with user-defined metadata.
         &quot;a_key&quot;: &quot;A String&quot;,
       },
-      &quot;lifetime&quot;: &quot;A String&quot;, # Required. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
+      &quot;lifetime&quot;: &quot;A String&quot;, # Required. Immutable. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
       &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this CertificateAuthority in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
       &quot;pemCaCertificates&quot;: [ # Output only. This CertificateAuthority&#x27;s certificate chain, including the current CertificateAuthority&#x27;s certificate. Ordered such that the root issuer is the final element (consistent with RFC 5246). For a self-signed CA, this will only list the current CertificateAuthority&#x27;s certificate.
         &quot;A String&quot;,
       ],
       &quot;state&quot;: &quot;A String&quot;, # Output only. The State for this CertificateAuthority.
       &quot;subordinateConfig&quot;: { # Describes a subordinate CA&#x27;s issuers. This is either a resource name to a known issuing CertificateAuthority, or a PEM issuer certificate chain. # Optional. If this is a subordinate CertificateAuthority, this field will be set with the subordinate configuration, which describes its issuers. This may be updated, but this CertificateAuthority must continue to validate.
-        &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority in the same project that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
+        &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
         &quot;pemIssuerChain&quot;: { # This message describes a subordinate CA&#x27;s issuer certificate chain. This wrapper exists for compatibility reasons. # Required. Contains the PEM certificate chain for the issuers of this CertificateAuthority, but not pem certificate for this CA itself.
           &quot;pemCertificates&quot;: [ # Required. Expected to be in leaf-to-root order according to RFC 5246.
             &quot;A String&quot;,
@@ -1206,8 +1207,8 @@ Args:
       },
       &quot;subjectDescription&quot;: { # These values describe fields in an issued X.509 certificate such as the distinguished name, subject alternative names, serial number, and lifetime. # Describes some of the values in a certificate that are related to the subject and lifetime.
         &quot;hexSerialNumber&quot;: &quot;A String&quot;, # The serial number encoded in lowercase hexadecimal.
-        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate. Corresponds to &#x27;not_after_time&#x27; - &#x27;not_before_time&#x27;.
-        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time at which the certificate expires.
+        &quot;lifetime&quot;: &quot;A String&quot;, # For convenience, the actual lifetime of an issued certificate.
+        &quot;notAfterTime&quot;: &quot;A String&quot;, # The time after which the certificate is expired. Per RFC 5280, the validity period for a certificate is the period of time from not_before_time through not_after_time, inclusive. Corresponds to &#x27;not_before_time&#x27; + &#x27;lifetime&#x27; - 1 second.
         &quot;notBeforeTime&quot;: &quot;A String&quot;, # The time at which the certificate becomes valid.
         &quot;subject&quot;: { # Subject describes parts of a distinguished name that, in turn, describes the subject of the certificate. # Contains distinguished name fields such as the common name, location and / organization.
           &quot;commonName&quot;: &quot;A String&quot;, # The &quot;common name&quot; of the subject.
@@ -1220,7 +1221,7 @@ Args:
           &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
         },
         &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # The subject alternative name fields.
-          &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+          &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
             { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
               &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
               &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -1322,7 +1323,7 @@ Args:
         &quot;streetAddress&quot;: &quot;A String&quot;, # The street address of the subject.
       },
       &quot;subjectAltName&quot;: { # SubjectAltNames corresponds to a more modern way of listing what the asserted identity is in a certificate (i.e., compared to the &quot;common name&quot; in the distinguished name). # Optional. The subject alternative name fields.
-        &quot;customSans&quot;: [ # Contains additional subject alternative name values.
+        &quot;customSans&quot;: [ # Contains additional subject alternative name values. For each custom_san, the `value` field must contain an ASN.1 encoded UTF8String.
           { # An X509Extension specifies an X.509 extension, which may be used in different parts of X.509 objects like certificates, CSRs, and CRLs.
             &quot;critical&quot;: True or False, # Optional. Indicates whether or not this extension is critical (i.e., if the client does not know how to handle this extension, the client should consider this to be an error).
             &quot;objectId&quot;: { # An ObjectId specifies an object identifier (OID). These provide context and describe types in ASN.1 messages. # Required. The OID for this X.509 extension.
@@ -1414,14 +1415,14 @@ Args:
   &quot;labels&quot;: { # Optional. Labels with user-defined metadata.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
-  &quot;lifetime&quot;: &quot;A String&quot;, # Required. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
+  &quot;lifetime&quot;: &quot;A String&quot;, # Required. Immutable. The desired lifetime of the CA certificate. Used to create the &quot;not_before_time&quot; and &quot;not_after_time&quot; fields inside an X.509 certificate.
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this CertificateAuthority in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
   &quot;pemCaCertificates&quot;: [ # Output only. This CertificateAuthority&#x27;s certificate chain, including the current CertificateAuthority&#x27;s certificate. Ordered such that the root issuer is the final element (consistent with RFC 5246). For a self-signed CA, this will only list the current CertificateAuthority&#x27;s certificate.
     &quot;A String&quot;,
   ],
   &quot;state&quot;: &quot;A String&quot;, # Output only. The State for this CertificateAuthority.
   &quot;subordinateConfig&quot;: { # Describes a subordinate CA&#x27;s issuers. This is either a resource name to a known issuing CertificateAuthority, or a PEM issuer certificate chain. # Optional. If this is a subordinate CertificateAuthority, this field will be set with the subordinate configuration, which describes its issuers. This may be updated, but this CertificateAuthority must continue to validate.
-    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority in the same project that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
+    &quot;certificateAuthority&quot;: &quot;A String&quot;, # Required. This can refer to a CertificateAuthority that was used to create a subordinate CertificateAuthority. This field is used for information and usability purposes only. The resource name is in the format `projects/*/locations/*/caPools/*/certificateAuthorities/*`.
     &quot;pemIssuerChain&quot;: { # This message describes a subordinate CA&#x27;s issuer certificate chain. This wrapper exists for compatibility reasons. # Required. Contains the PEM certificate chain for the issuers of this CertificateAuthority, but not pem certificate for this CA itself.
       &quot;pemCertificates&quot;: [ # Required. Expected to be in leaf-to-root order according to RFC 5246.
         &quot;A String&quot;,

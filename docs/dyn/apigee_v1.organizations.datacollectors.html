@@ -118,7 +118,7 @@ Args:
   &quot;type&quot;: &quot;A String&quot;, # Immutable. The type of data this data collector will collect.
 }
 
-  dataCollectorId: string, ID of the data collector. Overrides any ID in the data collector resource. Must begin with `dc_`.
+  dataCollectorId: string, ID of the data collector. Overrides any ID in the data collector resource. Must be a string beginning with `dc_` that contains only letters, numbers, and underscores.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -150,7 +150,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 

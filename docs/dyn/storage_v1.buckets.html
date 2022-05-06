@@ -78,37 +78,37 @@ h1, h2, h3 {
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
-  <code><a href="#delete">delete(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#delete">delete(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, userProject=None)</a></code></p>
 <p class="firstline">Permanently deletes an empty bucket.</p>
 <p class="toc_element">
-  <code><a href="#get">get(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, projection=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#get">get(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, projection=None, userProject=None)</a></code></p>
 <p class="firstline">Returns metadata for the specified bucket.</p>
 <p class="toc_element">
-  <code><a href="#getIamPolicy">getIamPolicy(bucket, optionsRequestedPolicyVersion=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#getIamPolicy">getIamPolicy(bucket, optionsRequestedPolicyVersion=None, userProject=None)</a></code></p>
 <p class="firstline">Returns an IAM policy for the specified bucket.</p>
 <p class="toc_element">
-  <code><a href="#insert">insert(project, body=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#insert">insert(project, body=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</a></code></p>
 <p class="firstline">Creates a new bucket.</p>
 <p class="toc_element">
-  <code><a href="#list">list(project, maxResults=None, pageToken=None, prefix=None, projection=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#list">list(project, maxResults=None, pageToken=None, prefix=None, projection=None, userProject=None)</a></code></p>
 <p class="firstline">Retrieves a list of buckets for a given project.</p>
 <p class="toc_element">
   <code><a href="#list_next">list_next(previous_request, previous_response)</a></code></p>
 <p class="firstline">Retrieves the next page of results.</p>
 <p class="toc_element">
-  <code><a href="#lockRetentionPolicy">lockRetentionPolicy(bucket, ifMetagenerationMatch, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#lockRetentionPolicy">lockRetentionPolicy(bucket, ifMetagenerationMatch, userProject=None)</a></code></p>
 <p class="firstline">Locks retention policy on a bucket.</p>
 <p class="toc_element">
-  <code><a href="#patch">patch(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#patch">patch(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</a></code></p>
 <p class="firstline">Patches a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.</p>
 <p class="toc_element">
-  <code><a href="#setIamPolicy">setIamPolicy(bucket, body=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#setIamPolicy">setIamPolicy(bucket, body=None, userProject=None)</a></code></p>
 <p class="firstline">Updates an IAM policy for the specified bucket.</p>
 <p class="toc_element">
-  <code><a href="#testIamPermissions">testIamPermissions(bucket, permissions, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#testIamPermissions">testIamPermissions(bucket, permissions, userProject=None)</a></code></p>
 <p class="firstline">Tests a set of permissions on the given bucket to see which, if any, are held by the caller.</p>
 <p class="toc_element">
-  <code><a href="#update">update(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</a></code></p>
+  <code><a href="#update">update(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</a></code></p>
 <p class="firstline">Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.</p>
 <h3>Method Details</h3>
 <div class="method">
@@ -117,20 +117,19 @@ h1, h2, h3 {
 </div>
 
 <div class="method">
-    <code class="details" id="delete">delete(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="delete">delete(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, userProject=None)</code>
   <pre>Permanently deletes an empty bucket.
 
 Args:
   bucket: string, Name of a bucket. (required)
   ifMetagenerationMatch: string, If set, only deletes the bucket if its metageneration matches this value.
   ifMetagenerationNotMatch: string, If set, only deletes the bucket if its metageneration does not match this value.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 </pre>
 </div>
 
 <div class="method">
-    <code class="details" id="get">get(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, projection=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="get">get(bucket, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, projection=None, userProject=None)</code>
   <pre>Returns metadata for the specified bucket.
 
 Args:
@@ -141,7 +140,6 @@ Args:
     Allowed values
       full - Include all properties.
       noAcl - Omit owner, acl and defaultObjectAcl properties.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -177,6 +175,10 @@ Returns:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -235,7 +237,7 @@ Returns:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -288,6 +290,7 @@ Returns:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -300,20 +303,16 @@ Returns:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }</pre>
 </div>
 
 <div class="method">
-    <code class="details" id="getIamPolicy">getIamPolicy(bucket, optionsRequestedPolicyVersion=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="getIamPolicy">getIamPolicy(bucket, optionsRequestedPolicyVersion=None, userProject=None)</code>
   <pre>Returns an IAM policy for the specified bucket.
 
 Args:
   bucket: string, Name of a bucket. (required)
   optionsRequestedPolicyVersion: integer, The IAM policy format version to be returned. If the optionsRequestedPolicyVersion is for an older version that doesn&#x27;t support part of the requested IAM policy, the request fails.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -361,7 +360,7 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="insert">insert(project, body=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="insert">insert(project, body=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</code>
   <pre>Creates a new bucket.
 
 Args:
@@ -399,6 +398,10 @@ Args:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -457,7 +460,7 @@ Args:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -510,6 +513,7 @@ Args:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -522,9 +526,6 @@ Args:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }
 
   predefinedAcl: string, Apply a predefined set of access controls to this bucket.
@@ -546,7 +547,6 @@ Args:
     Allowed values
       full - Include all properties.
       noAcl - Omit owner, acl and defaultObjectAcl properties.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request.
 
 Returns:
@@ -582,6 +582,10 @@ Returns:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -640,7 +644,7 @@ Returns:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -693,6 +697,7 @@ Returns:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -705,14 +710,11 @@ Returns:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }</pre>
 </div>
 
 <div class="method">
-    <code class="details" id="list">list(project, maxResults=None, pageToken=None, prefix=None, projection=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="list">list(project, maxResults=None, pageToken=None, prefix=None, projection=None, userProject=None)</code>
   <pre>Retrieves a list of buckets for a given project.
 
 Args:
@@ -724,7 +726,6 @@ Args:
     Allowed values
       full - Include all properties.
       noAcl - Omit owner, acl and defaultObjectAcl properties.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request.
 
 Returns:
@@ -762,6 +763,10 @@ Returns:
           &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
         },
       ],
+      &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+        &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+        &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+      },
       &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
         &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
       },
@@ -820,7 +825,7 @@ Returns:
           &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
           &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
         },
-        &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+        &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
         &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
           &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
           &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -873,6 +878,7 @@ Returns:
         &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
         &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
       },
+      &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
       &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
       &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
       &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -885,9 +891,6 @@ Returns:
         &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
         &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
       },
-      &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-        &quot;A String&quot;,
-      ],
     },
   ],
   &quot;kind&quot;: &quot;storage#buckets&quot;, # The kind of item this is. For lists of buckets, this is always storage#buckets.
@@ -910,13 +913,12 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="lockRetentionPolicy">lockRetentionPolicy(bucket, ifMetagenerationMatch, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="lockRetentionPolicy">lockRetentionPolicy(bucket, ifMetagenerationMatch, userProject=None)</code>
   <pre>Locks retention policy on a bucket.
 
 Args:
   bucket: string, Name of a bucket. (required)
   ifMetagenerationMatch: string, Makes the operation conditional on whether bucket&#x27;s current metageneration matches the given value. (required)
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -952,6 +954,10 @@ Returns:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -1010,7 +1016,7 @@ Returns:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -1063,6 +1069,7 @@ Returns:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -1075,14 +1082,11 @@ Returns:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }</pre>
 </div>
 
 <div class="method">
-    <code class="details" id="patch">patch(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="patch">patch(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</code>
   <pre>Patches a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.
 
 Args:
@@ -1120,6 +1124,10 @@ Args:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -1178,7 +1186,7 @@ Args:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -1231,6 +1239,7 @@ Args:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -1243,9 +1252,6 @@ Args:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }
 
   ifMetagenerationMatch: string, Makes the return of the bucket metadata conditional on whether the bucket&#x27;s current metageneration matches the given value.
@@ -1269,7 +1275,6 @@ Args:
     Allowed values
       full - Include all properties.
       noAcl - Omit owner, acl and defaultObjectAcl properties.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -1305,6 +1310,10 @@ Returns:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -1363,7 +1372,7 @@ Returns:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -1416,6 +1425,7 @@ Returns:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -1428,14 +1438,11 @@ Returns:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }</pre>
 </div>
 
 <div class="method">
-    <code class="details" id="setIamPolicy">setIamPolicy(bucket, body=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="setIamPolicy">setIamPolicy(bucket, body=None, userProject=None)</code>
   <pre>Updates an IAM policy for the specified bucket.
 
 Args:
@@ -1483,7 +1490,6 @@ Args:
   &quot;version&quot;: 42, # The IAM policy format version.
 }
 
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -1531,13 +1537,12 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="testIamPermissions">testIamPermissions(bucket, permissions, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="testIamPermissions">testIamPermissions(bucket, permissions, userProject=None)</code>
   <pre>Tests a set of permissions on the given bucket to see which, if any, are held by the caller.
 
 Args:
   bucket: string, Name of a bucket. (required)
   permissions: string, Permissions to test. (required) (repeated)
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -1566,7 +1571,7 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="update">update(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, provisionalUserProject=None, userProject=None)</code>
+    <code class="details" id="update">update(bucket, body=None, ifMetagenerationMatch=None, ifMetagenerationNotMatch=None, predefinedAcl=None, predefinedDefaultObjectAcl=None, projection=None, userProject=None)</code>
   <pre>Updates a bucket. Changes to the bucket will be readable immediately after writing, but configuration changes may take time to propagate.
 
 Args:
@@ -1604,6 +1609,10 @@ Args:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -1662,7 +1671,7 @@ Args:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -1715,6 +1724,7 @@ Args:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -1727,9 +1737,6 @@ Args:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }
 
   ifMetagenerationMatch: string, Makes the return of the bucket metadata conditional on whether the bucket&#x27;s current metageneration matches the given value.
@@ -1753,7 +1760,6 @@ Args:
     Allowed values
       full - Include all properties.
       noAcl - Omit owner, acl and defaultObjectAcl properties.
-  provisionalUserProject: string, The project to be billed for this request if the target bucket is requester-pays bucket.
   userProject: string, The project to be billed for this request. Required for Requester Pays buckets.
 
 Returns:
@@ -1789,6 +1795,10 @@ Returns:
       &quot;selfLink&quot;: &quot;A String&quot;, # The link to this access-control entry.
     },
   ],
+  &quot;autoclass&quot;: { # The bucket&#x27;s Autoclass configuration.
+    &quot;enabled&quot;: True or False, # Whether or not Autoclass is enabled on this bucket
+    &quot;toggleTime&quot;: &quot;A String&quot;, # A date and time in RFC 3339 format representing the instant at which &quot;enabled&quot; was last toggled.
+  },
   &quot;billing&quot;: { # The bucket&#x27;s billing configuration.
     &quot;requesterPays&quot;: True or False, # When set to true, Requester Pays is enabled for this bucket.
   },
@@ -1847,7 +1857,7 @@ Returns:
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed from true to false until the locked time, after which the field is immutable.
     },
-    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;unspecified&#x27; and &#x27;enforced&#x27; are supported.
+    &quot;publicAccessPrevention&quot;: &quot;A String&quot;, # The bucket&#x27;s Public Access Prevention configuration. Currently, &#x27;inherited&#x27; and &#x27;enforced&#x27; are supported.
     &quot;uniformBucketLevelAccess&quot;: { # The bucket&#x27;s uniform bucket-level access configuration.
       &quot;enabled&quot;: True or False, # If set, access is controlled only by bucket-level or above IAM policies.
       &quot;lockedTime&quot;: &quot;A String&quot;, # The deadline for changing iamConfiguration.uniformBucketLevelAccess.enabled from true to false in RFC 3339  format. iamConfiguration.uniformBucketLevelAccess.enabled may be changed from true to false until the locked time, after which the field is immutable.
@@ -1900,6 +1910,7 @@ Returns:
     &quot;isLocked&quot;: True or False, # Once locked, an object retention policy cannot be modified.
     &quot;retentionPeriod&quot;: &quot;A String&quot;, # The duration in seconds that objects need to be retained. Retention duration must be greater than zero and less than 100 years. Note that enforcement of retention periods less than a day is not guaranteed. Such periods should only be used for testing purposes.
   },
+  &quot;rpo&quot;: &quot;A String&quot;, # The Recovery Point Objective (RPO) of this bucket. Set to ASYNC_TURBO to turn on Turbo Replication on a bucket.
   &quot;satisfiesPZS&quot;: True or False, # Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # The URI of this bucket.
   &quot;storageClass&quot;: &quot;A String&quot;, # The bucket&#x27;s default storage class, used whenever no storageClass is specified for a newly-created object. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Values include MULTI_REGIONAL, REGIONAL, STANDARD, NEARLINE, COLDLINE, ARCHIVE, and DURABLE_REDUCED_AVAILABILITY. If this value is not specified when the bucket is created, it will default to STANDARD. For more information, see storage classes.
@@ -1912,9 +1923,6 @@ Returns:
     &quot;mainPageSuffix&quot;: &quot;A String&quot;, # If the requested object path is missing, the service will ensure the path has a trailing &#x27;/&#x27;, append this suffix, and attempt to retrieve the resulting object. This allows the creation of index.html objects to represent directory pages.
     &quot;notFoundPage&quot;: &quot;A String&quot;, # If the requested object path is missing, and any mainPageSuffix object is missing, if applicable, the service will return the named object from this bucket as the content for a 404 Not Found result.
   },
-  &quot;zoneAffinity&quot;: [ # The zone or zones from which the bucket is intended to use zonal quota. Requests for data from outside the specified affinities are still allowed but won&#x27;t be able to use zonal quota. The zone or zones need to be within the bucket location otherwise the requests will fail with a 400 Bad Request response.
-    &quot;A String&quot;,
-  ],
 }</pre>
 </div>
 

@@ -118,6 +118,7 @@ Args:
 
 { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -125,6 +126,7 @@ Args:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -137,9 +139,13 @@ Args:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],
@@ -158,6 +164,7 @@ Returns:
 
     { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -165,6 +172,7 @@ Returns:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -177,9 +185,13 @@ Returns:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],
@@ -203,7 +215,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -223,6 +235,7 @@ Returns:
 
     { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -230,6 +243,7 @@ Returns:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -242,9 +256,13 @@ Returns:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],
@@ -277,6 +295,7 @@ Returns:
       &quot;passedCount&quot;: &quot;A String&quot;, # Count of nocaptchas (successful verification without a challenge) plus submitted challenge solutions that were correct and resulted in verification.
     },
   ],
+  &quot;name&quot;: &quot;A String&quot;, # Output only. The name of the metrics, in the format &quot;projects/{project}/keys/{key}/metrics&quot;.
   &quot;scoreMetrics&quot;: [ # Metrics will be continuous and in order by dates, and in the granularity of day. All Key types should have score-based data.
     { # Metrics related to scoring.
       &quot;actionMetrics&quot;: { # Action-based metrics. The map key is the action name which specified by the site owners at time of the &quot;execute&quot; client-side call. Populated only for SCORE keys.
@@ -317,6 +336,7 @@ Returns:
   &quot;keys&quot;: [ # Key details.
     { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
       &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+        &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
         &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
           &quot;A String&quot;,
         ],
@@ -324,6 +344,7 @@ Returns:
       &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
       &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
       &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+        &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
         &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
           &quot;A String&quot;,
         ],
@@ -336,9 +357,13 @@ Returns:
         &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
         &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
       },
+      &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+        &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+        &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+      },
       &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
         &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-        &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+        &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
         &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
           &quot;A String&quot;,
         ],
@@ -387,6 +412,7 @@ Returns:
 
     { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -394,6 +420,7 @@ Returns:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -406,9 +433,13 @@ Returns:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],
@@ -429,6 +460,7 @@ Args:
 
 { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -436,6 +468,7 @@ Args:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -448,9 +481,13 @@ Args:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],
@@ -470,6 +507,7 @@ Returns:
 
     { # A key used to identify and configure applications (web and/or mobile) that use reCAPTCHA Enterprise.
   &quot;androidSettings&quot;: { # Settings specific to keys that can be used by Android apps. # Settings for keys that can be used by Android apps.
+    &quot;allowAllPackageNames&quot;: True or False, # If set to true, allowed_package_names are not enforced.
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -477,6 +515,7 @@ Returns:
   &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
+    &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
@@ -489,9 +528,13 @@ Returns:
     &quot;testingChallenge&quot;: &quot;A String&quot;, # For challenge-based keys only (CHECKBOX, INVISIBLE), all challenge requests for this site will return nocaptcha if NOCAPTCHA, or an unsolvable challenge if CHALLENGE.
     &quot;testingScore&quot;: 3.14, # All assessments for this Key will return this score. Must be between 0 (likely not legitimate) and 1 (likely legitimate) inclusive.
   },
+  &quot;wafSettings&quot;: { # Settings specific to keys that can be used for WAF (Web Application Firewall). # Settings for WAF
+    &quot;wafFeature&quot;: &quot;A String&quot;, # Required. The WAF feature for which this key is enabled.
+    &quot;wafService&quot;: &quot;A String&quot;, # Required. The WAF service that uses this key.
+  },
   &quot;webSettings&quot;: { # Settings specific to keys that can be used by websites. # Settings for keys that can be used by websites.
     &quot;allowAllDomains&quot;: True or False, # If set to true, it means allowed_domains will not be enforced.
-    &quot;allowAmpTraffic&quot;: True or False, # Required. Whether this key can be used on AMP (Accelerated Mobile Pages) websites. This can only be set for the SCORE integration type.
+    &quot;allowAmpTraffic&quot;: True or False, # If set to true, the key can be used on AMP (Accelerated Mobile Pages) websites. This is supported only for the SCORE integration type.
     &quot;allowedDomains&quot;: [ # Domains or subdomains of websites allowed to use the key. All subdomains of an allowed domain are automatically allowed. A valid domain requires a host and must not include any path, port, query or fragment. Examples: &#x27;example.com&#x27; or &#x27;subdomain.example.com&#x27;
       &quot;A String&quot;,
     ],

@@ -78,7 +78,7 @@ h1, h2, h3 {
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
-  <code><a href="#delete">delete(driveId)</a></code></p>
+  <code><a href="#delete">delete(driveId, allowItemDeletion=None, useDomainAdminAccess=None)</a></code></p>
 <p class="firstline">Permanently deletes a shared drive for which the user is an organizer. The shared drive cannot contain any untrashed items.</p>
 <p class="toc_element">
   <code><a href="#get">get(driveId, useDomainAdminAccess=None)</a></code></p>
@@ -108,11 +108,13 @@ h1, h2, h3 {
 </div>
 
 <div class="method">
-    <code class="details" id="delete">delete(driveId)</code>
+    <code class="details" id="delete">delete(driveId, allowItemDeletion=None, useDomainAdminAccess=None)</code>
   <pre>Permanently deletes a shared drive for which the user is an organizer. The shared drive cannot contain any untrashed items.
 
 Args:
   driveId: string, The ID of the shared drive. (required)
+  allowItemDeletion: boolean, Whether any items inside the shared drive should also be deleted. This option is only supported when useDomainAdminAccess is also set to true.
+  useDomainAdminAccess: boolean, Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs.
 </pre>
 </div>
 
@@ -161,6 +163,7 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -215,6 +218,7 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -268,6 +272,7 @@ Args:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -315,6 +320,7 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -330,7 +336,7 @@ Returns:
   <pre>Lists the user&#x27;s shared drives.
 
 Args:
-  maxResults: integer, Maximum number of shared drives to return.
+  maxResults: integer, Maximum number of shared drives to return per page.
   pageToken: string, Page token for shared drives.
   q: string, Query string for searching shared drives.
   useDomainAdminAccess: boolean, Issue the request as a domain administrator; if set to true, then all shared drives of the domain in which the requester is an administrator are returned.
@@ -374,6 +380,7 @@ Returns:
       &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
       &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
       &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+      &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
       &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
         &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
         &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -446,6 +453,7 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -499,6 +507,7 @@ Args:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
@@ -547,6 +556,7 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # The ID of this shared drive which is also the ID of the top level folder of this shared drive.
   &quot;kind&quot;: &quot;drive#drive&quot;, # This is always drive#drive
   &quot;name&quot;: &quot;A String&quot;, # The name of this shared drive.
+  &quot;orgUnitId&quot;: &quot;A String&quot;, # The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
   &quot;restrictions&quot;: { # A set of restrictions that apply to this shared drive or items inside this shared drive.
     &quot;adminManagedRestrictions&quot;: True or False, # Whether administrative privileges on this shared drive are required to modify restrictions.
     &quot;copyRequiresWriterPermission&quot;: True or False, # Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.

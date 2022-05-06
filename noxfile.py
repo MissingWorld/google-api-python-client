@@ -1,4 +1,3 @@
-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +13,22 @@
 # limitations under the License.
 
 import os
-import sys
+import shutil
 
 import nox
-import os
-import shutil
+
+BLACK_VERSION = "black==22.3.0"
+ISORT_VERSION = "isort==5.10.1"
+BLACK_PATHS = [
+    "apiclient",
+    "googleapiclient",
+    "scripts",
+    "tests",
+    "describe.py",
+    "noxfile.py",
+    "owlbot.py",
+    "setup.py",
+]
 
 test_dependencies = [
     "django>=2.0.0",
@@ -31,7 +41,6 @@ test_dependencies = [
     "pytest-cov",
     "webtest",
     "coverage",
-    "unittest2",
     "mock",
 ]
 
@@ -50,7 +59,27 @@ def lint(session):
     )
 
 
-@nox.session(python=["3.6", "3.7", "3.8", "3.9"])
+@nox.session(python="3.8")
+def format(session):
+    """
+    Run isort to sort imports. Then run black
+    to format code to uniform standard.
+    """
+    session.install(BLACK_VERSION, ISORT_VERSION)
+    # Use the --fss option to sort imports using strict alphabetical order.
+    # See https://pycqa.github.io/isort/docs/configuration/options.html#force-sort-within-sections
+    session.run(
+        "isort",
+        "--fss",
+        *BLACK_PATHS,
+    )
+    session.run(
+        "black",
+        *BLACK_PATHS,
+    )
+
+
+@nox.session(python=["3.6", "3.7", "3.8", "3.9", "3.10"])
 @nox.parametrize(
     "oauth2client",
     [
@@ -62,21 +91,21 @@ def lint(session):
 )
 def unit(session, oauth2client):
     # Clean up dist and build folders
-    shutil.rmtree('dist', ignore_errors=True)
-    shutil.rmtree('build', ignore_errors=True)
+    shutil.rmtree("dist", ignore_errors=True)
+    shutil.rmtree("build", ignore_errors=True)
 
     session.install(*test_dependencies)
     session.install(oauth2client)
 
     # Create and install wheels
-    session.run('python3', 'setup.py', 'bdist_wheel')
-    session.install(os.path.join('dist', os.listdir('dist').pop()))
+    session.run("python3", "setup.py", "bdist_wheel")
+    session.install(os.path.join("dist", os.listdir("dist").pop()))
 
     # Run tests from a different directory to test the package artifacts
     root_dir = os.path.dirname(os.path.realpath(__file__))
     temp_dir = session.create_tmp()
     session.chdir(temp_dir)
-    shutil.copytree(os.path.join(root_dir, 'tests'), 'tests')
+    shutil.copytree(os.path.join(root_dir, "tests"), "tests")
 
     # Run py.test against the unit tests.
     session.run(
@@ -91,6 +120,7 @@ def unit(session, oauth2client):
         "tests",
         *session.posargs,
     )
+
 
 @nox.session(python=["3.9"])
 def scripts(session):

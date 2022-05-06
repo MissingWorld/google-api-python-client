@@ -81,6 +81,9 @@ h1, h2, h3 {
   <code><a href="#batchRunReports">batchRunReports(property, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Returns multiple reports in a batch. All reports must be for the same GA4 Property.</p>
 <p class="toc_element">
+  <code><a href="#checkCompatibility">checkCompatibility(property, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">This compatibility method lists dimensions and metrics that can be added to a report request and maintain compatibility. This method fails if the request's dimensions and metrics are incompatible. In Google Analytics, reports fail if they request incompatible dimensions and/or metrics; in that case, you will need to remove dimensions and/or metrics from the incompatible report until the report is compatible. The Realtime and Core reports have different compatibility rules. This method checks compatibility for Core reports.</p>
+<p class="toc_element">
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
@@ -91,10 +94,10 @@ h1, h2, h3 {
 <p class="firstline">Returns a customized pivot report of your Google Analytics event data. Pivot reports are more advanced and expressive formats than regular reports. In a pivot report, dimensions are only visible if they are included in a pivot. Multiple pivots can be specified to further dissect your data.</p>
 <p class="toc_element">
   <code><a href="#runRealtimeReport">runRealtimeReport(property, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">The Google Analytics Realtime API returns a customized report of realtime event data for your property. These reports show events and usage from the last 30 minutes.</p>
+<p class="firstline">The Google Analytics Realtime API returns a customized report of realtime event data for your property. These reports show events and usage from the last 30 minutes. For a guide to constructing realtime requests & understanding responses, see [Creating a Realtime Report](https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-basics).</p>
 <p class="toc_element">
   <code><a href="#runReport">runReport(property, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns a customized report of your Google Analytics event data. Reports contain statistics derived from data collected by the Google Analytics tracking code. The data returned from the API is as a table with columns for the requested dimensions and metrics. Metrics are individual measurements of user activity on your property, such as active users or event count. Dimensions break down metrics across some common criteria, such as country or event name.</p>
+<p class="firstline">Returns a customized report of your Google Analytics event data. Reports contain statistics derived from data collected by the Google Analytics tracking code. The data returned from the API is as a table with columns for the requested dimensions and metrics. Metrics are individual measurements of user activity on your property, such as active users or event count. Dimensions break down metrics across some common criteria, such as country or event name. For a guide to constructing requests & understanding responses, see [Creating a Report](https://developers.google.com/analytics/devguides/reporting/data/v1/basics).</p>
 <h3>Method Details</h3>
 <div class="method">
     <code class="details" id="batchRunPivotReports">batchRunPivotReports(property, body=None, x__xgafv=None)</code>
@@ -143,7 +146,7 @@ Args:
             # Object with schema name: FilterExpression
           ],
         },
-        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
           &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
             &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
               &quot;doubleValue&quot;: 3.14, # Double value
@@ -182,7 +185,7 @@ Args:
         },
       },
       &quot;dimensions&quot;: [ # The dimensions requested. All defined dimensions must be used by one of the following: dimension_expression, dimension_filter, pivots, order_bys.
-        { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+        { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
           &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
             &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
               &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
@@ -197,7 +200,7 @@ Args:
               &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
             },
           },
-          &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+          &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
         },
       ],
       &quot;keepEmptyRows&quot;: True or False, # If false or unspecified, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter.
@@ -207,7 +210,7 @@ Args:
             # Object with schema name: FilterExpression
           ],
         },
-        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
           &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
             &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
               &quot;doubleValue&quot;: 3.14, # Double value
@@ -249,7 +252,7 @@ Args:
         { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
           &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
           &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
-          &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+          &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
         },
       ],
       &quot;pivots&quot;: [ # Describes the visual format of the report&#x27;s dimensions in columns or rows. The union of the fieldNames (dimension names) in all pivots must be a subset of dimension names defined in Dimensions. No two pivots can share a dimension. A dimension is only visible if it appears in a pivot.
@@ -263,7 +266,7 @@ Args:
           ],
           &quot;offset&quot;: &quot;A String&quot;, # The row count of the start row. The first row is counted as row 0.
           &quot;orderBys&quot;: [ # Specifies how dimensions are ordered in the pivot. In the first Pivot, the OrderBys determine Row and PivotDimensionHeader ordering; in subsequent Pivots, the OrderBys determine only PivotDimensionHeader ordering. Dimensions specified in these OrderBys must be a subset of Pivot.field_names.
-            { # The sort options.
+            { # Order bys define how rows will be sorted in the response. For example, ordering rows by descending event count is one ordering, and ordering rows by the event name string is a different ordering.
               &quot;desc&quot;: True or False, # If true, sorts by descending order.
               &quot;dimension&quot;: { # Sorts by dimension values. # Sorts results by a dimension&#x27;s values.
                 &quot;dimensionName&quot;: &quot;A String&quot;, # A dimension name in the request to order by.
@@ -324,7 +327,21 @@ Returns:
       ],
       &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this message is. This `kind` is always the fixed string &quot;analyticsData#runPivotReport&quot;. Useful to distinguish between response types in JSON.
       &quot;metadata&quot;: { # Response&#x27;s metadata carrying additional information about the report content. # Metadata for the report.
+        &quot;currencyCode&quot;: &quot;A String&quot;, # The currency code used in this report. Intended to be used in formatting currency metrics like `purchaseRevenue` for visualization. If currency_code was specified in the request, this response parameter will echo the request parameter; otherwise, this response parameter is the property&#x27;s current currency_code. Currency codes are string encodings of currency types from the ISO 4217 standard (https://en.wikipedia.org/wiki/ISO_4217); for example &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;. To learn more, see https://support.google.com/analytics/answer/9796179.
         &quot;dataLossFromOtherRow&quot;: True or False, # If true, indicates some buckets of dimension combinations are rolled into &quot;(other)&quot; row. This can happen for high cardinality reports.
+        &quot;emptyReason&quot;: &quot;A String&quot;, # If empty reason is specified, the report is empty for this reason.
+        &quot;schemaRestrictionResponse&quot;: { # The schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388). # Describes the schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+          &quot;activeMetricRestrictions&quot;: [ # All restrictions actively enforced in creating the report. For example, `purchaseRevenue` always has the restriction type `REVENUE_DATA`. However, this active response restriction is only populated if the user&#x27;s custom role disallows access to `REVENUE_DATA`.
+            { # A metric actively restricted in creating the report.
+              &quot;metricName&quot;: &quot;A String&quot;, # The name of the restricted metric.
+              &quot;restrictedMetricTypes&quot;: [ # The reason for this metric&#x27;s restriction.
+                &quot;A String&quot;,
+              ],
+            },
+          ],
+        },
+        &quot;subjectToThresholding&quot;: True or False, # If `subjectToThresholding` is true, this report is subject to thresholding and only returns data that meets the minimum aggregation thresholds. It is possible for a request to be subject to thresholding thresholding and no data is absent from the report, and this happens when all data is above the thresholds. To learn more, see [Data thresholds](https://support.google.com/analytics/answer/9383630) and [About Demographics and Interests](https://support.google.com/analytics/answer/2799357).
+        &quot;timeZone&quot;: &quot;A String&quot;, # The property&#x27;s current timezone. Intended to be used to interpret time-based dimensions like `hour` and `minute`. Formatted as strings from the IANA Time Zone database (https://www.iana.org/time-zones); for example &quot;America/New_York&quot; or &quot;Asia/Tokyo&quot;.
       },
       &quot;metricHeaders&quot;: [ # Describes metric columns. The number of MetricHeaders and ordering of MetricHeaders matches the metrics present in rows.
         { # Describes a metric column in the report. Visible metrics requested in a report produce column entries within rows and MetricHeaders. However, metrics used exclusively within filters or expressions do not produce columns in a report; correspondingly, those metrics do not produce headers.
@@ -428,13 +445,13 @@ Args:
           &quot;startDate&quot;: &quot;A String&quot;, # The inclusive start date for the query in the format `YYYY-MM-DD`. Cannot be after `end_date`. The format `NdaysAgo`, `yesterday`, or `today` is also accepted, and in that case, the date is inferred based on the property&#x27;s reporting time zone.
         },
       ],
-      &quot;dimensionFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of dimensions. Dimensions must be requested to be used in this filter. Metrics cannot be used in this filter.
+      &quot;dimensionFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # Dimension filters allow you to ask for only specific dimension values in the report. To learn more, see [Fundamentals of Dimension Filters](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters) for examples. Metrics cannot be used in this filter.
         &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
           &quot;expressions&quot;: [ # A list of filter expressions.
             # Object with schema name: FilterExpression
           ],
         },
-        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
           &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
             &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
               &quot;doubleValue&quot;: 3.14, # Double value
@@ -473,7 +490,7 @@ Args:
         },
       },
       &quot;dimensions&quot;: [ # The dimensions requested and displayed.
-        { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+        { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
           &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
             &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
               &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
@@ -488,7 +505,7 @@ Args:
               &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
             },
           },
-          &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+          &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
         },
       ],
       &quot;keepEmptyRows&quot;: True or False, # If false or unspecified, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter.
@@ -496,13 +513,13 @@ Args:
       &quot;metricAggregations&quot;: [ # Aggregation of metrics. Aggregated metric values will be shown in rows where the dimension_values are set to &quot;RESERVED_(MetricAggregation)&quot;.
         &quot;A String&quot;,
       ],
-      &quot;metricFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of metrics. Applied at post aggregation phase, similar to SQL having-clause. Metrics must be requested to be used in this filter. Dimensions cannot be used in this filter.
+      &quot;metricFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of metrics. Applied after aggregating the report&#x27;s rows, similar to SQL having-clause. Dimensions cannot be used in this filter.
         &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
           &quot;expressions&quot;: [ # A list of filter expressions.
             # Object with schema name: FilterExpression
           ],
         },
-        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+        &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
           &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
             &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
               &quot;doubleValue&quot;: 3.14, # Double value
@@ -544,12 +561,12 @@ Args:
         { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
           &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
           &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
-          &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+          &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
         },
       ],
       &quot;offset&quot;: &quot;A String&quot;, # The row count of the start row. The first row is counted as row 0. When paging, the first request does not specify offset; or equivalently, sets offset to 0; the first request returns the first `limit` of rows. The second request sets offset to the `limit` of the first request; the second request returns the second `limit` of rows. To learn more about this pagination parameter, see [Pagination](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination).
       &quot;orderBys&quot;: [ # Specifies how rows are ordered in the response.
-        { # The sort options.
+        { # Order bys define how rows will be sorted in the response. For example, ordering rows by descending event count is one ordering, and ordering rows by the event name string is a different ordering.
           &quot;desc&quot;: True or False, # If true, sorts by descending order.
           &quot;dimension&quot;: { # Sorts by dimension values. # Sorts results by a dimension&#x27;s values.
             &quot;dimensionName&quot;: &quot;A String&quot;, # A dimension name in the request to order by.
@@ -608,7 +625,21 @@ Returns:
         },
       ],
       &quot;metadata&quot;: { # Response&#x27;s metadata carrying additional information about the report content. # Metadata for the report.
+        &quot;currencyCode&quot;: &quot;A String&quot;, # The currency code used in this report. Intended to be used in formatting currency metrics like `purchaseRevenue` for visualization. If currency_code was specified in the request, this response parameter will echo the request parameter; otherwise, this response parameter is the property&#x27;s current currency_code. Currency codes are string encodings of currency types from the ISO 4217 standard (https://en.wikipedia.org/wiki/ISO_4217); for example &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;. To learn more, see https://support.google.com/analytics/answer/9796179.
         &quot;dataLossFromOtherRow&quot;: True or False, # If true, indicates some buckets of dimension combinations are rolled into &quot;(other)&quot; row. This can happen for high cardinality reports.
+        &quot;emptyReason&quot;: &quot;A String&quot;, # If empty reason is specified, the report is empty for this reason.
+        &quot;schemaRestrictionResponse&quot;: { # The schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388). # Describes the schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+          &quot;activeMetricRestrictions&quot;: [ # All restrictions actively enforced in creating the report. For example, `purchaseRevenue` always has the restriction type `REVENUE_DATA`. However, this active response restriction is only populated if the user&#x27;s custom role disallows access to `REVENUE_DATA`.
+            { # A metric actively restricted in creating the report.
+              &quot;metricName&quot;: &quot;A String&quot;, # The name of the restricted metric.
+              &quot;restrictedMetricTypes&quot;: [ # The reason for this metric&#x27;s restriction.
+                &quot;A String&quot;,
+              ],
+            },
+          ],
+        },
+        &quot;subjectToThresholding&quot;: True or False, # If `subjectToThresholding` is true, this report is subject to thresholding and only returns data that meets the minimum aggregation thresholds. It is possible for a request to be subject to thresholding thresholding and no data is absent from the report, and this happens when all data is above the thresholds. To learn more, see [Data thresholds](https://support.google.com/analytics/answer/9383630) and [About Demographics and Interests](https://support.google.com/analytics/answer/2799357).
+        &quot;timeZone&quot;: &quot;A String&quot;, # The property&#x27;s current timezone. Intended to be used to interpret time-based dimensions like `hour` and `minute`. Formatted as strings from the IANA Time Zone database (https://www.iana.org/time-zones); for example &quot;America/New_York&quot; or &quot;Asia/Tokyo&quot;.
       },
       &quot;metricHeaders&quot;: [ # Describes metric columns. The number of MetricHeaders and ordering of MetricHeaders matches the metrics present in rows.
         { # Describes a metric column in the report. Visible metrics requested in a report produce column entries within rows and MetricHeaders. However, metrics used exclusively within filters or expressions do not produce columns in a report; correspondingly, those metrics do not produce headers.
@@ -687,6 +718,180 @@ Returns:
 </div>
 
 <div class="method">
+    <code class="details" id="checkCompatibility">checkCompatibility(property, body=None, x__xgafv=None)</code>
+  <pre>This compatibility method lists dimensions and metrics that can be added to a report request and maintain compatibility. This method fails if the request&#x27;s dimensions and metrics are incompatible. In Google Analytics, reports fail if they request incompatible dimensions and/or metrics; in that case, you will need to remove dimensions and/or metrics from the incompatible report until the report is compatible. The Realtime and Core reports have different compatibility rules. This method checks compatibility for Core reports.
+
+Args:
+  property: string, A Google Analytics GA4 property identifier whose events are tracked. To learn more, see [where to find your Property ID](https://developers.google.com/analytics/devguides/reporting/data/v1/property-id). `property` should be the same value as in your `runReport` request. Example: properties/1234 Set the Property ID to 0 for compatibility checking on dimensions and metrics common to all properties. In this special mode, this method will not return custom dimensions and metrics. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # The request for compatibility information for a report&#x27;s dimensions and metrics. Check compatibility provides a preview of the compatibility of a report; fields shared with the `runReport` request should be the same values as in your `runReport` request.
+  &quot;compatibilityFilter&quot;: &quot;A String&quot;, # Filters the dimensions and metrics in the response to just this compatibility. Commonly used as `”compatibilityFilter”: “COMPATIBLE”` to only return compatible dimensions &amp; metrics.
+  &quot;dimensionFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of dimensions. `dimensionFilter` should be the same value as in your `runReport` request.
+    &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
+      &quot;expressions&quot;: [ # A list of filter expressions.
+        # Object with schema name: FilterExpression
+      ],
+    },
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
+      &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
+        &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+        &quot;toValue&quot;: { # To represent a number. # Ends with this number.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+      },
+      &quot;fieldName&quot;: &quot;A String&quot;, # The dimension name or metric name. Must be a name defined in dimensions or metrics.
+      &quot;inListFilter&quot;: { # The result needs to be in a list of string values. # A filter for in list values.
+        &quot;caseSensitive&quot;: True or False, # If true, the string value is case sensitive.
+        &quot;values&quot;: [ # The list of string values. Must be non-empty.
+          &quot;A String&quot;,
+        ],
+      },
+      &quot;numericFilter&quot;: { # Filters for numeric or date values. # A filter for numeric or date values.
+        &quot;operation&quot;: &quot;A String&quot;, # The operation type for this filter.
+        &quot;value&quot;: { # To represent a number. # A numeric value or a date value.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+      },
+      &quot;stringFilter&quot;: { # The filter for string # Strings related filter.
+        &quot;caseSensitive&quot;: True or False, # If true, the string value is case sensitive.
+        &quot;matchType&quot;: &quot;A String&quot;, # The match type for this filter.
+        &quot;value&quot;: &quot;A String&quot;, # The string value used for the matching.
+      },
+    },
+    &quot;notExpression&quot;: # Object with schema name: FilterExpression # The FilterExpression is NOT of not_expression.
+    &quot;orGroup&quot;: { # A list of filter expressions. # The FilterExpressions in or_group have an OR relationship.
+      &quot;expressions&quot;: [ # A list of filter expressions.
+        # Object with schema name: FilterExpression
+      ],
+    },
+  },
+  &quot;dimensions&quot;: [ # The dimensions in this report. `dimensions` should be the same value as in your `runReport` request.
+    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+      &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
+        &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
+          &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
+          &quot;dimensionNames&quot;: [ # Names of dimensions. The names must refer back to names in the dimensions field of the request.
+            &quot;A String&quot;,
+          ],
+        },
+        &quot;lowerCase&quot;: { # Used to convert a dimension value to a single case. # Used to convert a dimension value to lower case.
+          &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
+        },
+        &quot;upperCase&quot;: { # Used to convert a dimension value to a single case. # Used to convert a dimension value to upper case.
+          &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
+        },
+      },
+      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+    },
+  ],
+  &quot;metricFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of metrics. `metricFilter` should be the same value as in your `runReport` request
+    &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
+      &quot;expressions&quot;: [ # A list of filter expressions.
+        # Object with schema name: FilterExpression
+      ],
+    },
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
+      &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
+        &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+        &quot;toValue&quot;: { # To represent a number. # Ends with this number.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+      },
+      &quot;fieldName&quot;: &quot;A String&quot;, # The dimension name or metric name. Must be a name defined in dimensions or metrics.
+      &quot;inListFilter&quot;: { # The result needs to be in a list of string values. # A filter for in list values.
+        &quot;caseSensitive&quot;: True or False, # If true, the string value is case sensitive.
+        &quot;values&quot;: [ # The list of string values. Must be non-empty.
+          &quot;A String&quot;,
+        ],
+      },
+      &quot;numericFilter&quot;: { # Filters for numeric or date values. # A filter for numeric or date values.
+        &quot;operation&quot;: &quot;A String&quot;, # The operation type for this filter.
+        &quot;value&quot;: { # To represent a number. # A numeric value or a date value.
+          &quot;doubleValue&quot;: 3.14, # Double value
+          &quot;int64Value&quot;: &quot;A String&quot;, # Integer value
+        },
+      },
+      &quot;stringFilter&quot;: { # The filter for string # Strings related filter.
+        &quot;caseSensitive&quot;: True or False, # If true, the string value is case sensitive.
+        &quot;matchType&quot;: &quot;A String&quot;, # The match type for this filter.
+        &quot;value&quot;: &quot;A String&quot;, # The string value used for the matching.
+      },
+    },
+    &quot;notExpression&quot;: # Object with schema name: FilterExpression # The FilterExpression is NOT of not_expression.
+    &quot;orGroup&quot;: { # A list of filter expressions. # The FilterExpressions in or_group have an OR relationship.
+      &quot;expressions&quot;: [ # A list of filter expressions.
+        # Object with schema name: FilterExpression
+      ],
+    },
+  },
+  &quot;metrics&quot;: [ # The metrics in this report. `metrics` should be the same value as in your `runReport` request.
+    { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
+      &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
+      &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+    },
+  ],
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # The compatibility response with the compatibility of each dimension &amp; metric.
+  &quot;dimensionCompatibilities&quot;: [ # The compatibility of each dimension.
+    { # The compatibility for a single dimension.
+      &quot;compatibility&quot;: &quot;A String&quot;, # The compatibility of this dimension. If the compatibility is COMPATIBLE, this dimension can be successfully added to the report.
+      &quot;dimensionMetadata&quot;: { # Explains a dimension. # The dimension metadata contains the API name for this compatibility information. The dimension metadata also contains other helpful information like the UI name and description.
+        &quot;apiName&quot;: &quot;A String&quot;, # This dimension&#x27;s name. Useable in [Dimension](#Dimension)&#x27;s `name`. For example, `eventName`.
+        &quot;category&quot;: &quot;A String&quot;, # The display name of the category that this dimension belongs to. Similar dimensions and metrics are categorized together.
+        &quot;customDefinition&quot;: True or False, # True if the dimension is a custom dimension for this property.
+        &quot;deprecatedApiNames&quot;: [ # Still usable but deprecated names for this dimension. If populated, this dimension is available by either `apiName` or one of `deprecatedApiNames` for a period of time. After the deprecation period, the dimension will be available only by `apiName`.
+          &quot;A String&quot;,
+        ],
+        &quot;description&quot;: &quot;A String&quot;, # Description of how this dimension is used and calculated.
+        &quot;uiName&quot;: &quot;A String&quot;, # This dimension&#x27;s name within the Google Analytics user interface. For example, `Event name`.
+      },
+    },
+  ],
+  &quot;metricCompatibilities&quot;: [ # The compatibility of each metric.
+    { # The compatibility for a single metric.
+      &quot;compatibility&quot;: &quot;A String&quot;, # The compatibility of this metric. If the compatibility is COMPATIBLE, this metric can be successfully added to the report.
+      &quot;metricMetadata&quot;: { # Explains a metric. # The metric metadata contains the API name for this compatibility information. The metric metadata also contains other helpful information like the UI name and description.
+        &quot;apiName&quot;: &quot;A String&quot;, # A metric name. Useable in [Metric](#Metric)&#x27;s `name`. For example, `eventCount`.
+        &quot;blockedReasons&quot;: [ # If reasons are specified, your access is blocked to this metric for this property. API requests from you to this property for this metric will succeed; however, the report will contain only zeros for this metric. API requests with metric filters on blocked metrics will fail. If reasons are empty, you have access to this metric. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+          &quot;A String&quot;,
+        ],
+        &quot;category&quot;: &quot;A String&quot;, # The display name of the category that this metrics belongs to. Similar dimensions and metrics are categorized together.
+        &quot;customDefinition&quot;: True or False, # True if the metric is a custom metric for this property.
+        &quot;deprecatedApiNames&quot;: [ # Still usable but deprecated names for this metric. If populated, this metric is available by either `apiName` or one of `deprecatedApiNames` for a period of time. After the deprecation period, the metric will be available only by `apiName`.
+          &quot;A String&quot;,
+        ],
+        &quot;description&quot;: &quot;A String&quot;, # Description of how this metric is used and calculated.
+        &quot;expression&quot;: &quot;A String&quot;, # The mathematical expression for this derived metric. Can be used in [Metric](#Metric)&#x27;s `expression` field for equivalent reports. Most metrics are not expressions, and for non-expressions, this field is empty.
+        &quot;type&quot;: &quot;A String&quot;, # The type of this metric.
+        &quot;uiName&quot;: &quot;A String&quot;, # This metric&#x27;s name within the Google Analytics user interface. For example, `Event count`.
+      },
+    },
+  ],
+}</pre>
+</div>
+
+<div class="method">
     <code class="details" id="close">close()</code>
   <pre>Close httplib2 connections.</pre>
 </div>
@@ -709,6 +914,7 @@ Returns:
   &quot;dimensions&quot;: [ # The dimension descriptions.
     { # Explains a dimension.
       &quot;apiName&quot;: &quot;A String&quot;, # This dimension&#x27;s name. Useable in [Dimension](#Dimension)&#x27;s `name`. For example, `eventName`.
+      &quot;category&quot;: &quot;A String&quot;, # The display name of the category that this dimension belongs to. Similar dimensions and metrics are categorized together.
       &quot;customDefinition&quot;: True or False, # True if the dimension is a custom dimension for this property.
       &quot;deprecatedApiNames&quot;: [ # Still usable but deprecated names for this dimension. If populated, this dimension is available by either `apiName` or one of `deprecatedApiNames` for a period of time. After the deprecation period, the dimension will be available only by `apiName`.
         &quot;A String&quot;,
@@ -720,6 +926,10 @@ Returns:
   &quot;metrics&quot;: [ # The metric descriptions.
     { # Explains a metric.
       &quot;apiName&quot;: &quot;A String&quot;, # A metric name. Useable in [Metric](#Metric)&#x27;s `name`. For example, `eventCount`.
+      &quot;blockedReasons&quot;: [ # If reasons are specified, your access is blocked to this metric for this property. API requests from you to this property for this metric will succeed; however, the report will contain only zeros for this metric. API requests with metric filters on blocked metrics will fail. If reasons are empty, you have access to this metric. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+        &quot;A String&quot;,
+      ],
+      &quot;category&quot;: &quot;A String&quot;, # The display name of the category that this metrics belongs to. Similar dimensions and metrics are categorized together.
       &quot;customDefinition&quot;: True or False, # True if the metric is a custom metric for this property.
       &quot;deprecatedApiNames&quot;: [ # Still usable but deprecated names for this metric. If populated, this metric is available by either `apiName` or one of `deprecatedApiNames` for a period of time. After the deprecation period, the metric will be available only by `apiName`.
         &quot;A String&quot;,
@@ -779,7 +989,7 @@ Args:
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -818,7 +1028,7 @@ Args:
     },
   },
   &quot;dimensions&quot;: [ # The dimensions requested. All defined dimensions must be used by one of the following: dimension_expression, dimension_filter, pivots, order_bys.
-    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
       &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
         &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
           &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
@@ -833,7 +1043,7 @@ Args:
           &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
         },
       },
-      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
     },
   ],
   &quot;keepEmptyRows&quot;: True or False, # If false or unspecified, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter.
@@ -843,7 +1053,7 @@ Args:
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -885,7 +1095,7 @@ Args:
     { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
       &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
       &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
-      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
     },
   ],
   &quot;pivots&quot;: [ # Describes the visual format of the report&#x27;s dimensions in columns or rows. The union of the fieldNames (dimension names) in all pivots must be a subset of dimension names defined in Dimensions. No two pivots can share a dimension. A dimension is only visible if it appears in a pivot.
@@ -899,7 +1109,7 @@ Args:
       ],
       &quot;offset&quot;: &quot;A String&quot;, # The row count of the start row. The first row is counted as row 0.
       &quot;orderBys&quot;: [ # Specifies how dimensions are ordered in the pivot. In the first Pivot, the OrderBys determine Row and PivotDimensionHeader ordering; in subsequent Pivots, the OrderBys determine only PivotDimensionHeader ordering. Dimensions specified in these OrderBys must be a subset of Pivot.field_names.
-        { # The sort options.
+        { # Order bys define how rows will be sorted in the response. For example, ordering rows by descending event count is one ordering, and ordering rows by the event name string is a different ordering.
           &quot;desc&quot;: True or False, # If true, sorts by descending order.
           &quot;dimension&quot;: { # Sorts by dimension values. # Sorts results by a dimension&#x27;s values.
             &quot;dimensionName&quot;: &quot;A String&quot;, # A dimension name in the request to order by.
@@ -955,7 +1165,21 @@ Returns:
   ],
   &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this message is. This `kind` is always the fixed string &quot;analyticsData#runPivotReport&quot;. Useful to distinguish between response types in JSON.
   &quot;metadata&quot;: { # Response&#x27;s metadata carrying additional information about the report content. # Metadata for the report.
+    &quot;currencyCode&quot;: &quot;A String&quot;, # The currency code used in this report. Intended to be used in formatting currency metrics like `purchaseRevenue` for visualization. If currency_code was specified in the request, this response parameter will echo the request parameter; otherwise, this response parameter is the property&#x27;s current currency_code. Currency codes are string encodings of currency types from the ISO 4217 standard (https://en.wikipedia.org/wiki/ISO_4217); for example &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;. To learn more, see https://support.google.com/analytics/answer/9796179.
     &quot;dataLossFromOtherRow&quot;: True or False, # If true, indicates some buckets of dimension combinations are rolled into &quot;(other)&quot; row. This can happen for high cardinality reports.
+    &quot;emptyReason&quot;: &quot;A String&quot;, # If empty reason is specified, the report is empty for this reason.
+    &quot;schemaRestrictionResponse&quot;: { # The schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388). # Describes the schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+      &quot;activeMetricRestrictions&quot;: [ # All restrictions actively enforced in creating the report. For example, `purchaseRevenue` always has the restriction type `REVENUE_DATA`. However, this active response restriction is only populated if the user&#x27;s custom role disallows access to `REVENUE_DATA`.
+        { # A metric actively restricted in creating the report.
+          &quot;metricName&quot;: &quot;A String&quot;, # The name of the restricted metric.
+          &quot;restrictedMetricTypes&quot;: [ # The reason for this metric&#x27;s restriction.
+            &quot;A String&quot;,
+          ],
+        },
+      ],
+    },
+    &quot;subjectToThresholding&quot;: True or False, # If `subjectToThresholding` is true, this report is subject to thresholding and only returns data that meets the minimum aggregation thresholds. It is possible for a request to be subject to thresholding thresholding and no data is absent from the report, and this happens when all data is above the thresholds. To learn more, see [Data thresholds](https://support.google.com/analytics/answer/9383630) and [About Demographics and Interests](https://support.google.com/analytics/answer/2799357).
+    &quot;timeZone&quot;: &quot;A String&quot;, # The property&#x27;s current timezone. Intended to be used to interpret time-based dimensions like `hour` and `minute`. Formatted as strings from the IANA Time Zone database (https://www.iana.org/time-zones); for example &quot;America/New_York&quot; or &quot;Asia/Tokyo&quot;.
   },
   &quot;metricHeaders&quot;: [ # Describes metric columns. The number of MetricHeaders and ordering of MetricHeaders matches the metrics present in rows.
     { # Describes a metric column in the report. Visible metrics requested in a report produce column entries within rows and MetricHeaders. However, metrics used exclusively within filters or expressions do not produce columns in a report; correspondingly, those metrics do not produce headers.
@@ -1018,7 +1242,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="runRealtimeReport">runRealtimeReport(property, body=None, x__xgafv=None)</code>
-  <pre>The Google Analytics Realtime API returns a customized report of realtime event data for your property. These reports show events and usage from the last 30 minutes.
+  <pre>The Google Analytics Realtime API returns a customized report of realtime event data for your property. These reports show events and usage from the last 30 minutes. For a guide to constructing realtime requests &amp; understanding responses, see [Creating a Realtime Report](https://developers.google.com/analytics/devguides/reporting/data/v1/realtime-basics).
 
 Args:
   property: string, A Google Analytics GA4 property identifier whose events are tracked. Specified in the URL path and not the body. To learn more, see [where to find your Property ID](https://developers.google.com/analytics/devguides/reporting/data/v1/property-id). Example: properties/1234 (required)
@@ -1032,7 +1256,7 @@ Args:
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -1071,7 +1295,7 @@ Args:
     },
   },
   &quot;dimensions&quot;: [ # The dimensions requested and displayed.
-    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
       &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
         &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
           &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
@@ -1086,7 +1310,7 @@ Args:
           &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
         },
       },
-      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
     },
   ],
   &quot;limit&quot;: &quot;A String&quot;, # The number of rows to return. If unspecified, 10,000 rows are returned. The API returns a maximum of 100,000 rows per request, no matter how many you ask for. `limit` must be positive. The API can also return fewer rows than the requested `limit`, if there aren&#x27;t as many dimension values as the `limit`. For instance, there are fewer than 300 possible values for the dimension `country`, so when reporting on only `country`, you can&#x27;t get more than 300 rows, even if you set `limit` to a higher value.
@@ -1099,7 +1323,7 @@ Args:
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -1141,11 +1365,18 @@ Args:
     { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
       &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
       &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
-      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+    },
+  ],
+  &quot;minuteRanges&quot;: [ # The minute ranges of event data to read. If unspecified, one minute range for the last 30 minutes will be used. If multiple minute ranges are requested, each response row will contain a zero based minute range index. If two minute ranges overlap, the event data for the overlapping minutes is included in the response rows for both minute ranges.
+    { # A contiguous set of minutes: startMinutesAgo, startMinutesAgo + 1, ..., endMinutesAgo. Requests are allowed up to 2 minute ranges.
+      &quot;endMinutesAgo&quot;: 42, # The inclusive end minute for the query as a number of minutes before now. Cannot be before `startMinutesAgo`. For example, `&quot;endMinutesAgo&quot;: 15` specifies the report should include event data from prior to 15 minutes ago. If unspecified, `endMinutesAgo` is defaulted to 0. Standard Analytics properties can request any minute in the last 30 minutes of event data (`endMinutesAgo &lt;= 29`), and 360 Analytics properties can request any minute in the last 60 minutes of event data (`endMinutesAgo &lt;= 59`).
+      &quot;name&quot;: &quot;A String&quot;, # Assigns a name to this minute range. The dimension `dateRange` is valued to this name in a report response. If set, cannot begin with `date_range_` or `RESERVED_`. If not set, minute ranges are named by their zero based index in the request: `date_range_0`, `date_range_1`, etc.
+      &quot;startMinutesAgo&quot;: 42, # The inclusive start minute for the query as a number of minutes before now. For example, `&quot;startMinutesAgo&quot;: 29` specifies the report should include event data from 29 minutes ago and after. Cannot be after `endMinutesAgo`. If unspecified, `startMinutesAgo` is defaulted to 29. Standard Analytics properties can request up to the last 30 minutes of event data (`startMinutesAgo &lt;= 29`), and 360 Analytics properties can request up to the last 60 minutes of event data (`startMinutesAgo &lt;= 59`).
     },
   ],
   &quot;orderBys&quot;: [ # Specifies how rows are ordered in the response.
-    { # The sort options.
+    { # Order bys define how rows will be sorted in the response. For example, ordering rows by descending event count is one ordering, and ordering rows by the event name string is a different ordering.
       &quot;desc&quot;: True or False, # If true, sorts by descending order.
       &quot;dimension&quot;: { # Sorts by dimension values. # Sorts results by a dimension&#x27;s values.
         &quot;dimensionName&quot;: &quot;A String&quot;, # A dimension name in the request to order by.
@@ -1273,7 +1504,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="runReport">runReport(property, body=None, x__xgafv=None)</code>
-  <pre>Returns a customized report of your Google Analytics event data. Reports contain statistics derived from data collected by the Google Analytics tracking code. The data returned from the API is as a table with columns for the requested dimensions and metrics. Metrics are individual measurements of user activity on your property, such as active users or event count. Dimensions break down metrics across some common criteria, such as country or event name.
+  <pre>Returns a customized report of your Google Analytics event data. Reports contain statistics derived from data collected by the Google Analytics tracking code. The data returned from the API is as a table with columns for the requested dimensions and metrics. Metrics are individual measurements of user activity on your property, such as active users or event count. Dimensions break down metrics across some common criteria, such as country or event name. For a guide to constructing requests &amp; understanding responses, see [Creating a Report](https://developers.google.com/analytics/devguides/reporting/data/v1/basics).
 
 Args:
   property: string, A Google Analytics GA4 property identifier whose events are tracked. Specified in the URL path and not the body. To learn more, see [where to find your Property ID](https://developers.google.com/analytics/devguides/reporting/data/v1/property-id). Within a batch request, this property should either be unspecified or consistent with the batch-level property. Example: properties/1234 (required)
@@ -1310,13 +1541,13 @@ Args:
       &quot;startDate&quot;: &quot;A String&quot;, # The inclusive start date for the query in the format `YYYY-MM-DD`. Cannot be after `end_date`. The format `NdaysAgo`, `yesterday`, or `today` is also accepted, and in that case, the date is inferred based on the property&#x27;s reporting time zone.
     },
   ],
-  &quot;dimensionFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of dimensions. Dimensions must be requested to be used in this filter. Metrics cannot be used in this filter.
+  &quot;dimensionFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # Dimension filters allow you to ask for only specific dimension values in the report. To learn more, see [Fundamentals of Dimension Filters](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#dimension_filters) for examples. Metrics cannot be used in this filter.
     &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
       &quot;expressions&quot;: [ # A list of filter expressions.
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -1355,7 +1586,7 @@ Args:
     },
   },
   &quot;dimensions&quot;: [ # The dimensions requested and displayed.
-    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
+    { # Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be &quot;Paris&quot; or &quot;New York&quot;. Requests are allowed up to 9 dimensions.
       &quot;dimensionExpression&quot;: { # Used to express a dimension which is the result of a formula of multiple dimensions. Example usages: 1) lower_case(dimension) 2) concatenate(dimension1, symbol, dimension2). # One dimension can be the result of an expression of multiple dimensions. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
         &quot;concatenate&quot;: { # Used to combine dimension values to a single dimension. # Used to combine dimension values to a single dimension. For example, dimension &quot;country, city&quot;: concatenate(country, &quot;, &quot;, city).
           &quot;delimiter&quot;: &quot;A String&quot;, # The delimiter placed between dimension names. Delimiters are often single characters such as &quot;|&quot; or &quot;,&quot; but can be longer strings. If a dimension value contains the delimiter, both will be present in response with no distinction. For example if dimension 1 value = &quot;US,FR&quot;, dimension 2 value = &quot;JP&quot;, and delimiter = &quot;,&quot;, then the response will contain &quot;US,FR,JP&quot;.
@@ -1370,7 +1601,7 @@ Args:
           &quot;dimensionName&quot;: &quot;A String&quot;, # Name of a dimension. The name must refer back to a name in dimensions field of the request.
         },
       },
-      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the dimension. See the [API Dimensions](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#dimensions) for the list of dimension names. If `dimensionExpression` is specified, `name` can be any string that you would like within the allowed character set. For example if a `dimensionExpression` concatenates `country` and `city`, you could call that dimension `countryAndCity`. Dimension names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Dimensions are referenced by `name` in `dimensionFilter`, `orderBys`, `dimensionExpression`, and `pivots`.
     },
   ],
   &quot;keepEmptyRows&quot;: True or False, # If false or unspecified, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter.
@@ -1378,13 +1609,13 @@ Args:
   &quot;metricAggregations&quot;: [ # Aggregation of metrics. Aggregated metric values will be shown in rows where the dimension_values are set to &quot;RESERVED_(MetricAggregation)&quot;.
     &quot;A String&quot;,
   ],
-  &quot;metricFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of metrics. Applied at post aggregation phase, similar to SQL having-clause. Metrics must be requested to be used in this filter. Dimensions cannot be used in this filter.
+  &quot;metricFilter&quot;: { # To express dimension or metric filters. The fields in the same FilterExpression need to be either all dimensions or all metrics. # The filter clause of metrics. Applied after aggregating the report&#x27;s rows, similar to SQL having-clause. Dimensions cannot be used in this filter.
     &quot;andGroup&quot;: { # A list of filter expressions. # The FilterExpressions in and_group have an AND relationship.
       &quot;expressions&quot;: [ # A list of filter expressions.
         # Object with schema name: FilterExpression
       ],
     },
-    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. All fields in filter in same FilterExpression needs to be either all dimensions or metrics.
+    &quot;filter&quot;: { # An expression to filter dimension or metric values. # A primitive filter. In the same FilterExpression, all of the filter&#x27;s field names need to be either all dimensions or all metrics.
       &quot;betweenFilter&quot;: { # To express that the result needs to be between two numbers (inclusive). # A filter for two values.
         &quot;fromValue&quot;: { # To represent a number. # Begins with this number.
           &quot;doubleValue&quot;: 3.14, # Double value
@@ -1426,12 +1657,12 @@ Args:
     { # The quantitative measurements of a report. For example, the metric `eventCount` is the total number of events. Requests are allowed up to 10 metrics.
       &quot;expression&quot;: &quot;A String&quot;, # A mathematical expression for derived metrics. For example, the metric Event count per user is `eventCount/totalUsers`.
       &quot;invisible&quot;: True or False, # Indicates if a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in `metricFilter`, `orderBys`, or a metric `expression`.
-      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression &quot;^[a-zA-Z0-9_]$&quot;. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
+      &quot;name&quot;: &quot;A String&quot;, # The name of the metric. See the [API Metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema#metrics) for the list of metric names. If `expression` is specified, `name` can be any string that you would like within the allowed character set. For example if `expression` is `screenPageViews/sessions`, you could call that metric&#x27;s name = `viewsPerSession`. Metric names that you choose must match the regular expression `^[a-zA-Z0-9_]$`. Metrics are referenced by `name` in `metricFilter`, `orderBys`, and metric `expression`.
     },
   ],
   &quot;offset&quot;: &quot;A String&quot;, # The row count of the start row. The first row is counted as row 0. When paging, the first request does not specify offset; or equivalently, sets offset to 0; the first request returns the first `limit` of rows. The second request sets offset to the `limit` of the first request; the second request returns the second `limit` of rows. To learn more about this pagination parameter, see [Pagination](https://developers.google.com/analytics/devguides/reporting/data/v1/basics#pagination).
   &quot;orderBys&quot;: [ # Specifies how rows are ordered in the response.
-    { # The sort options.
+    { # Order bys define how rows will be sorted in the response. For example, ordering rows by descending event count is one ordering, and ordering rows by the event name string is a different ordering.
       &quot;desc&quot;: True or False, # If true, sorts by descending order.
       &quot;dimension&quot;: { # Sorts by dimension values. # Sorts results by a dimension&#x27;s values.
         &quot;dimensionName&quot;: &quot;A String&quot;, # A dimension name in the request to order by.
@@ -1485,7 +1716,21 @@ Returns:
     },
   ],
   &quot;metadata&quot;: { # Response&#x27;s metadata carrying additional information about the report content. # Metadata for the report.
+    &quot;currencyCode&quot;: &quot;A String&quot;, # The currency code used in this report. Intended to be used in formatting currency metrics like `purchaseRevenue` for visualization. If currency_code was specified in the request, this response parameter will echo the request parameter; otherwise, this response parameter is the property&#x27;s current currency_code. Currency codes are string encodings of currency types from the ISO 4217 standard (https://en.wikipedia.org/wiki/ISO_4217); for example &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;. To learn more, see https://support.google.com/analytics/answer/9796179.
     &quot;dataLossFromOtherRow&quot;: True or False, # If true, indicates some buckets of dimension combinations are rolled into &quot;(other)&quot; row. This can happen for high cardinality reports.
+    &quot;emptyReason&quot;: &quot;A String&quot;, # If empty reason is specified, the report is empty for this reason.
+    &quot;schemaRestrictionResponse&quot;: { # The schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388). # Describes the schema restrictions actively enforced in creating this report. To learn more, see [Access and data-restriction management](https://support.google.com/analytics/answer/10851388).
+      &quot;activeMetricRestrictions&quot;: [ # All restrictions actively enforced in creating the report. For example, `purchaseRevenue` always has the restriction type `REVENUE_DATA`. However, this active response restriction is only populated if the user&#x27;s custom role disallows access to `REVENUE_DATA`.
+        { # A metric actively restricted in creating the report.
+          &quot;metricName&quot;: &quot;A String&quot;, # The name of the restricted metric.
+          &quot;restrictedMetricTypes&quot;: [ # The reason for this metric&#x27;s restriction.
+            &quot;A String&quot;,
+          ],
+        },
+      ],
+    },
+    &quot;subjectToThresholding&quot;: True or False, # If `subjectToThresholding` is true, this report is subject to thresholding and only returns data that meets the minimum aggregation thresholds. It is possible for a request to be subject to thresholding thresholding and no data is absent from the report, and this happens when all data is above the thresholds. To learn more, see [Data thresholds](https://support.google.com/analytics/answer/9383630) and [About Demographics and Interests](https://support.google.com/analytics/answer/2799357).
+    &quot;timeZone&quot;: &quot;A String&quot;, # The property&#x27;s current timezone. Intended to be used to interpret time-based dimensions like `hour` and `minute`. Formatted as strings from the IANA Time Zone database (https://www.iana.org/time-zones); for example &quot;America/New_York&quot; or &quot;Asia/Tokyo&quot;.
   },
   &quot;metricHeaders&quot;: [ # Describes metric columns. The number of MetricHeaders and ordering of MetricHeaders matches the metrics present in rows.
     { # Describes a metric column in the report. Visible metrics requested in a report produce column entries within rows and MetricHeaders. However, metrics used exclusively within filters or expressions do not produce columns in a report; correspondingly, those metrics do not produce headers.

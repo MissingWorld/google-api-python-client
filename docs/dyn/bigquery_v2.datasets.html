@@ -134,10 +134,8 @@ Returns:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -163,6 +161,7 @@ Returns:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -172,14 +171,22 @@ Returns:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }</pre>
 </div>
 
@@ -200,10 +207,8 @@ Args:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -229,6 +234,7 @@ Args:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -238,14 +244,22 @@ Args:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }
 
 
@@ -260,10 +274,8 @@ Returns:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -289,6 +301,7 @@ Returns:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -298,14 +311,22 @@ Returns:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }</pre>
 </div>
 
@@ -377,10 +398,8 @@ Args:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -406,6 +425,7 @@ Args:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -415,14 +435,22 @@ Args:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }
 
 
@@ -437,10 +465,8 @@ Returns:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -466,6 +492,7 @@ Returns:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -475,14 +502,22 @@ Returns:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }</pre>
 </div>
 
@@ -504,10 +539,8 @@ Args:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -533,6 +566,7 @@ Args:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -542,14 +576,22 @@ Args:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }
 
 
@@ -564,10 +606,8 @@ Returns:
           &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
           &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
         },
-        &quot;target_types&quot;: [
-          {
-            &quot;targetType&quot;: &quot;A String&quot;, # [Required] Which resources in the dataset this entry applies to. Currently, only views are supported, but additional target types may be added in the future. Possible values: VIEWS: This entry applies to all views in the dataset.
-          },
+        &quot;targetTypes&quot;: [
+          &quot;A String&quot;,
         ],
       },
       &quot;domain&quot;: &quot;A String&quot;, # [Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: &quot;example.com&quot;. Maps to IAM policy member &quot;domain:DOMAIN&quot;.
@@ -593,6 +633,7 @@ Returns:
     &quot;datasetId&quot;: &quot;A String&quot;, # [Required] A unique ID for this dataset, without the project name. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 1,024 characters.
     &quot;projectId&quot;: &quot;A String&quot;, # [Optional] The ID of the project containing this dataset.
   },
+  &quot;defaultCollation&quot;: &quot;A String&quot;, # [Output-only] The default collation of the dataset.
   &quot;defaultEncryptionConfiguration&quot;: {
     &quot;kmsKeyName&quot;: &quot;A String&quot;, # [Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.
   },
@@ -602,14 +643,22 @@ Returns:
   &quot;etag&quot;: &quot;A String&quot;, # [Output-only] A hash of the resource.
   &quot;friendlyName&quot;: &quot;A String&quot;, # [Optional] A descriptive name for the dataset.
   &quot;id&quot;: &quot;A String&quot;, # [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
+  &quot;isCaseInsensitive&quot;: True or False, # [Optional] Indicates if table names are case insensitive in the dataset.
   &quot;kind&quot;: &quot;bigquery#dataset&quot;, # [Output-only] The resource type.
   &quot;labels&quot;: { # The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;lastModifiedTime&quot;: &quot;A String&quot;, # [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
   &quot;location&quot;: &quot;A String&quot;, # The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.
-  &quot;satisfiesPZS&quot;: True or False, # [Output-only] Reserved for future use.
+  &quot;maxTimeTravelHours&quot;: &quot;A String&quot;, # [Optional] Number of hours for the max time travel for all tables in the dataset.
+  &quot;satisfiesPzs&quot;: True or False, # [Output-only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
+  &quot;tags&quot;: [ # [Optional]The tags associated with this dataset. Tag keys are globally unique.
+    {
+      &quot;tagKey&quot;: &quot;A String&quot;, # [Required] The namespaced friendly name of the tag key, e.g. &quot;12345/environment&quot; where 12345 is org id.
+      &quot;tagValue&quot;: &quot;A String&quot;, # [Required] Friendly short name of the tag value, e.g. &quot;production&quot;.
+    },
+  ],
 }</pre>
 </div>
 

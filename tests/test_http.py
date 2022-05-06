@@ -19,47 +19,45 @@
 Unit tests for the googleapiclient.http.
 """
 from __future__ import absolute_import
-from six.moves import range
 
 __author__ = "jcgregorio@google.com (Joe Gregorio)"
 
-from six import PY3
-from six import BytesIO, StringIO
+import io
 from io import FileIO
-from six.moves.urllib.parse import urlencode
 
 # Do not remove the httplib2 import
 import json
-import httplib2
-import io
 import logging
-import mock
 import os
-import unittest2 as unittest
 import random
 import socket
 import ssl
 import time
+import unittest
+import urllib
+
+import httplib2
+import mock
+from oauth2client.client import Credentials
 
 from googleapiclient.discovery import build
-from googleapiclient.errors import BatchError
-from googleapiclient.errors import HttpError
-from googleapiclient.errors import InvalidChunkSizeError
-from googleapiclient.http import build_http
-from googleapiclient.http import BatchHttpRequest
-from googleapiclient.http import HttpMock
-from googleapiclient.http import HttpMockSequence
-from googleapiclient.http import HttpRequest
-from googleapiclient.http import MAX_URI_LENGTH
-from googleapiclient.http import MediaFileUpload
-from googleapiclient.http import MediaInMemoryUpload
-from googleapiclient.http import MediaIoBaseDownload
-from googleapiclient.http import MediaIoBaseUpload
-from googleapiclient.http import MediaUpload
-from googleapiclient.http import _StreamSlice
-from googleapiclient.http import set_user_agent
+from googleapiclient.errors import BatchError, HttpError, InvalidChunkSizeError
+from googleapiclient.http import (
+    MAX_URI_LENGTH,
+    BatchHttpRequest,
+    HttpMock,
+    HttpMockSequence,
+    HttpRequest,
+    MediaFileUpload,
+    MediaInMemoryUpload,
+    MediaIoBaseDownload,
+    MediaIoBaseUpload,
+    MediaUpload,
+    _StreamSlice,
+    build_http,
+    set_user_agent,
+)
 from googleapiclient.model import JsonModel
-from oauth2client.client import Credentials
 
 
 class MockCredentials(Credentials):
@@ -132,7 +130,7 @@ class HttpMockWithErrors(object):
     def request(self, *args, **kwargs):
         if not self.num_errors:
             return httplib2.Response(self.success_json), self.success_data
-        elif self.num_errors == 5 and PY3:
+        elif self.num_errors == 5:
             ex = ConnectionResetError  # noqa: F821
         elif self.num_errors == 4:
             ex = httplib2.ServerNotFoundError()
@@ -149,11 +147,7 @@ class HttpMockWithErrors(object):
                 ex.errno = socket.errno.WSAETIMEDOUT
             except AttributeError:
                 # For Linux/Mac:
-                if PY3:
-                    ex = socket.timeout()
-                else:
-                    ex = OSError()
-                    ex.errno = socket.errno.ETIMEDOUT
+                ex = socket.timeout()
 
         self.num_errors -= 1
         raise ex
@@ -214,12 +208,8 @@ class TestMediaUpload(unittest.TestCase):
     def test_media_file_upload_closes_fd_in___del__(self):
         file_desc = mock.Mock(spec=io.TextIOWrapper)
         opener = mock.mock_open(file_desc)
-        if PY3:
-            with mock.patch("builtins.open", return_value=opener):
-                upload = MediaFileUpload(datafile("test_close"), mimetype="text/plain")
-        else:
-            with mock.patch("__builtin__.open", return_value=opener):
-                upload = MediaFileUpload(datafile("test_close"), mimetype="text/plain")
+        with mock.patch("builtins.open", return_value=opener):
+            upload = MediaFileUpload(datafile("test_close"), mimetype="text/plain")
         self.assertIs(upload.stream(), file_desc)
         del upload
         file_desc.close.assert_called_once_with()
@@ -338,25 +328,9 @@ class TestMediaIoBaseUpload(unittest.TestCase):
         except NotImplementedError:
             pass
 
-    @unittest.skipIf(PY3, "Strings and Bytes are different types")
-    def test_media_io_base_upload_from_string_io(self):
-        f = open(datafile("small.png"), "rb")
-        fd = StringIO(f.read())
-        f.close()
-
-        upload = MediaIoBaseUpload(
-            fd=fd, mimetype="image/png", chunksize=500, resumable=True
-        )
-        self.assertEqual("image/png", upload.mimetype())
-        self.assertEqual(190, upload.size())
-        self.assertEqual(True, upload.resumable())
-        self.assertEqual(500, upload.chunksize())
-        self.assertEqual(b"PNG", upload.getbytes(1, 3))
-        f.close()
-
     def test_media_io_base_upload_from_bytes(self):
         f = open(datafile("small.png"), "rb")
-        fd = BytesIO(f.read())
+        fd = io.BytesIO(f.read())
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
         )
@@ -368,7 +342,7 @@ class TestMediaIoBaseUpload(unittest.TestCase):
 
     def test_media_io_base_upload_raises_on_invalid_chunksize(self):
         f = open(datafile("small.png"), "rb")
-        fd = BytesIO(f.read())
+        fd = io.BytesIO(f.read())
         self.assertRaises(
             InvalidChunkSizeError,
             MediaIoBaseUpload,
@@ -379,7 +353,7 @@ class TestMediaIoBaseUpload(unittest.TestCase):
         )
 
     def test_media_io_base_upload_streamable(self):
-        fd = BytesIO(b"stuff")
+        fd = io.BytesIO(b"stuff")
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
         )
@@ -388,7 +362,7 @@ class TestMediaIoBaseUpload(unittest.TestCase):
 
     def test_media_io_base_next_chunk_retries(self):
         f = open(datafile("small.png"), "rb")
-        fd = BytesIO(f.read())
+        fd = io.BytesIO(f.read())
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
         )
@@ -409,8 +383,8 @@ class TestMediaIoBaseUpload(unittest.TestCase):
         )
 
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/upload/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/upload/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http, model.response, uri, method=method, headers={}, resumable=upload
         )
@@ -423,7 +397,7 @@ class TestMediaIoBaseUpload(unittest.TestCase):
         self.assertEqual([20, 40, 80, 20, 40, 80], sleeptimes)
 
     def test_media_io_base_next_chunk_no_retry_403_not_configured(self):
-        fd = BytesIO(b"i am png")
+        fd = io.BytesIO(b"i am png")
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
         )
@@ -433,8 +407,8 @@ class TestMediaIoBaseUpload(unittest.TestCase):
         )
 
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/upload/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/upload/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http, model.response, uri, method=method, headers={}, resumable=upload
         )
@@ -446,23 +420,34 @@ class TestMediaIoBaseUpload(unittest.TestCase):
             request.execute(num_retries=3)
         request._sleep.assert_not_called()
 
-
     def test_media_io_base_empty_file(self):
-        fd = BytesIO()
+        fd = io.BytesIO()
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
         )
 
         http = HttpMockSequence(
             [
-                ({"status": "200", "location": "https://www.googleapis.com/someapi/v1/upload?foo=bar"}, "{}"),
-                ({"status": "200", "location": "https://www.googleapis.com/someapi/v1/upload?foo=bar"}, "{}")
+                (
+                    {
+                        "status": "200",
+                        "location": "https://www.googleapis.com/someapi/v1/upload?foo=bar",
+                    },
+                    "{}",
+                ),
+                (
+                    {
+                        "status": "200",
+                        "location": "https://www.googleapis.com/someapi/v1/upload?foo=bar",
+                    },
+                    "{}",
+                ),
             ]
         )
 
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/upload/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/upload/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http, model.response, uri, method=method, headers={}, resumable=upload
         )
@@ -479,7 +464,7 @@ class TestMediaIoBaseDownload(unittest.TestCase):
         http = HttpMock(datafile("zoo.json"), {"status": "200"})
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         self.request = zoo.animals().get_media(name="Lion")
-        self.fd = BytesIO()
+        self.fd = io.BytesIO()
 
     def test_media_io_base_download(self):
         self.request.http = HttpMockSequence(
@@ -514,6 +499,23 @@ class TestMediaIoBaseDownload(unittest.TestCase):
         self.assertEqual(5, download._progress)
         self.assertEqual(5, download._total_size)
 
+    def test_media_io_base_download_range_request_header(self):
+        self.request.http = HttpMockSequence(
+            [
+                (
+                    {"status": "200", "content-range": "0-2/5"},
+                    "echo_request_headers_as_json",
+                ),
+            ]
+        )
+
+        download = MediaIoBaseDownload(fd=self.fd, request=self.request, chunksize=3)
+
+        status, done = download.next_chunk()
+        result = json.loads(self.fd.getvalue().decode("utf-8"))
+
+        self.assertEqual(result.get("range"), "bytes=0-2")
+
     def test_media_io_base_download_custom_request_headers(self):
         self.request.http = HttpMockSequence(
             [
@@ -544,7 +546,7 @@ class TestMediaIoBaseDownload(unittest.TestCase):
 
         self.assertEqual(result.get("Cache-Control"), "no-store")
 
-        download._fd = self.fd = BytesIO()
+        download._fd = self.fd = io.BytesIO()
         status, done = download.next_chunk()
 
         result = json.loads(self.fd.getvalue().decode("utf-8"))
@@ -921,14 +923,14 @@ class TestHttpRequest(unittest.TestCase):
     def test_unicode(self):
         http = HttpMock(datafile("zoo.json"), headers={"status": "200"})
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
         request.execute()
@@ -940,8 +942,8 @@ class TestHttpRequest(unittest.TestCase):
     def test_empty_content_type(self):
         """Test for #284"""
         http = HttpMock(None, headers={"status": 200})
-        uri = u"https://www.googleapis.com/someapi/v1/upload/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/upload/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http, _postproc_none, uri, method=method, headers={"content-type": ""}
         )
@@ -953,7 +955,7 @@ class TestHttpRequest(unittest.TestCase):
         request = HttpRequest(
             HttpMockWithNonRetriableErrors(1, {"status": "200"}, '{"foo": "bar"}'),
             model.response,
-            u"https://www.example.com/json_api_endpoint",
+            "https://www.example.com/json_api_endpoint",
         )
         request._sleep = lambda _x: 0  # do nothing
         request._rand = lambda: 10
@@ -965,16 +967,16 @@ class TestHttpRequest(unittest.TestCase):
         request = HttpRequest(
             HttpMockWithErrors(5, {"status": "200"}, '{"foo": "bar"}'),
             model.response,
-            u"https://www.example.com/json_api_endpoint",
+            "https://www.example.com/json_api_endpoint",
         )
         request._sleep = lambda _x: 0  # do nothing
         request._rand = lambda: 10
         response = request.execute(num_retries=5)
-        self.assertEqual({u"foo": u"bar"}, response)
+        self.assertEqual({"foo": "bar"}, response)
 
     def test_retry_connection_errors_resumable(self):
         with open(datafile("small.png"), "rb") as small_png_file:
-            small_png_fd = BytesIO(small_png_file.read())
+            small_png_fd = io.BytesIO(small_png_file.read())
         upload = MediaIoBaseUpload(
             fd=small_png_fd, mimetype="image/png", chunksize=500, resumable=True
         )
@@ -985,34 +987,38 @@ class TestHttpRequest(unittest.TestCase):
                 5, {"status": "200", "location": "location"}, '{"foo": "bar"}'
             ),
             model.response,
-            u"https://www.example.com/file_upload",
+            "https://www.example.com/file_upload",
             method="POST",
             resumable=upload,
         )
         request._sleep = lambda _x: 0  # do nothing
         request._rand = lambda: 10
         response = request.execute(num_retries=5)
-        self.assertEqual({u"foo": u"bar"}, response)
+        self.assertEqual({"foo": "bar"}, response)
 
     def test_retry(self):
         num_retries = 6
         resp_seq = [({"status": "500"}, "")] * (num_retries - 4)
         resp_seq.append(({"status": "403"}, RATE_LIMIT_EXCEEDED_RESPONSE))
-        resp_seq.append(({"status": "403"}, USER_RATE_LIMIT_EXCEEDED_RESPONSE_NO_STATUS))
-        resp_seq.append(({"status": "403"}, USER_RATE_LIMIT_EXCEEDED_RESPONSE_WITH_STATUS))
+        resp_seq.append(
+            ({"status": "403"}, USER_RATE_LIMIT_EXCEEDED_RESPONSE_NO_STATUS)
+        )
+        resp_seq.append(
+            ({"status": "403"}, USER_RATE_LIMIT_EXCEEDED_RESPONSE_WITH_STATUS)
+        )
         resp_seq.append(({"status": "429"}, ""))
         resp_seq.append(({"status": "200"}, "{}"))
 
         http = HttpMockSequence(resp_seq)
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1032,14 +1038,14 @@ class TestHttpRequest(unittest.TestCase):
 
         http = HttpMockSequence(resp_seq)
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1054,14 +1060,14 @@ class TestHttpRequest(unittest.TestCase):
     def test_no_retry_fails_fast(self):
         http = HttpMockSequence([({"status": "500"}, ""), ({"status": "200"}, "{}")])
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1077,14 +1083,14 @@ class TestHttpRequest(unittest.TestCase):
             [({"status": "403"}, NOT_CONFIGURED_RESPONSE), ({"status": "200"}, "{}")]
         )
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1098,14 +1104,14 @@ class TestHttpRequest(unittest.TestCase):
     def test_no_retry_403_fails_fast(self):
         http = HttpMockSequence([({"status": "403"}, ""), ({"status": "200"}, "{}")])
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1119,14 +1125,14 @@ class TestHttpRequest(unittest.TestCase):
     def test_no_retry_401_fails_fast(self):
         http = HttpMockSequence([({"status": "401"}, ""), ({"status": "200"}, "{}")])
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1145,14 +1151,14 @@ class TestHttpRequest(unittest.TestCase):
             ]
         )
         model = JsonModel()
-        uri = u"https://www.googleapis.com/someapi/v1/collection/?foo=bar"
-        method = u"POST"
+        uri = "https://www.googleapis.com/someapi/v1/collection/?foo=bar"
+        method = "POST"
         request = HttpRequest(
             http,
             model.response,
             uri,
             method=method,
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
         )
 
@@ -1207,7 +1213,7 @@ class TestBatch(unittest.TestCase):
             None,
             "https://www.googleapis.com/someapi/v1/collection/?foo=bar",
             method="POST",
-            body=u"{}",
+            body="{}",
             headers={"content-type": "application/json"},
             methodId=None,
             resumable=None,
@@ -1540,7 +1546,7 @@ class TestBatch(unittest.TestCase):
         self.assertEqual(
             "Authorization Required", callbacks.exceptions["1"].resp.reason
         )
-        self.assertEqual({u"baz": u"qux"}, callbacks.responses["2"])
+        self.assertEqual({"baz": "qux"}, callbacks.responses["2"])
         self.assertEqual(None, callbacks.exceptions["2"])
 
     def test_execute_global_callback(self):
@@ -1609,7 +1615,7 @@ class TestRequestUriTooLong(unittest.TestCase):
         req = HttpRequest(
             http,
             _postproc,
-            "http://example.com?" + urlencode(query),
+            "http://example.com?" + urllib.parse.urlencode(query),
             method="GET",
             body=None,
             headers={},
@@ -1632,7 +1638,7 @@ class TestStreamSlice(unittest.TestCase):
     """Test _StreamSlice."""
 
     def setUp(self):
-        self.stream = BytesIO(b"0123456789")
+        self.stream = io.BytesIO(b"0123456789")
 
     def test_read(self):
         s = _StreamSlice(self.stream, 0, 4)

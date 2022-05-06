@@ -101,7 +101,7 @@
         "products": {
           "methods": {
             "list": {
-              "description": "Used by partners to list products that can be resold to their customers. It should be called directly by the partner using service accounts.",
+              "description": "To retrieve the products that can be resold by the partner. It should be autenticated with a service account.",
               "flatPath": "v1/partners/{partnersId}/products",
               "httpMethod": "GET",
               "id": "paymentsresellersubscription.partners.products.list",
@@ -109,6 +109,11 @@
                 "parent"
               ],
               "parameters": {
+                "filter": {
+                  "description": "Optional. Specifies the filters for the products results. The syntax defined in the EBNF grammar: https://google.aip.dev/assets/misc/ebnf-filtering.txt. An error will be thrown if any specified parameter is not supported. Currently, it can only be used by Youtube partners. Allowed parameters are: - regionCodes - zipCode - eligibilityId Multiple parameters can be specified, for example: \"regionCodes=US zipCode=94043 eligibilityId=2022H1Campaign\"",
+                  "location": "query",
+                  "type": "string"
+                },
                 "pageSize": {
                   "description": "Optional. The maximum number of products to return. The service may return fewer than this value. If unspecified, at most 50 products will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.",
                   "format": "int32",
@@ -137,8 +142,33 @@
         },
         "promotions": {
           "methods": {
+            "findEligible": {
+              "description": "To find eligible promotions for the current user. The API requires user authorization via OAuth. The user is inferred from the authenticated OAuth credential.",
+              "flatPath": "v1/partners/{partnersId}/promotions:findEligible",
+              "httpMethod": "POST",
+              "id": "paymentsresellersubscription.partners.promotions.findEligible",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "parent": {
+                  "description": "Required. The parent, the partner that can resell. Format: partners/{partner}",
+                  "location": "path",
+                  "pattern": "^partners/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+parent}/promotions:findEligible",
+              "request": {
+                "$ref": "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsRequest"
+              },
+              "response": {
+                "$ref": "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsResponse"
+              }
+            },
             "list": {
-              "description": "Used by partners to list promotions, such as free trial, that can be applied on subscriptions. It should be called directly by the partner using service accounts.",
+              "description": "To retrieve the promotions, such as free trial, that can be used by the partner. It should be autenticated with a service account.",
               "flatPath": "v1/partners/{partnersId}/promotions",
               "httpMethod": "GET",
               "id": "paymentsresellersubscription.partners.promotions.list",
@@ -147,7 +177,7 @@
               ],
               "parameters": {
                 "filter": {
-                  "description": "Optional. Specifies the filters for the promotion results. The syntax defined in the EBNF grammar: https://google.aip.dev/assets/misc/ebnf-filtering.txt. Examples: - applicable_products: \"sku1\" - region_codes: \"US\" - applicable_products: \"sku1\" AND region_codes: \"US\"",
+                  "description": "Optional. Specifies the filters for the promotion results. The syntax defined in the EBNF grammar: https://google.aip.dev/assets/misc/ebnf-filtering.txt. An error will be thrown if the specified parameter(s) is not supported. Currently, it can only be used by Youtube partners. Allowed parameters are: - region_codes: \"US\" - zip_code: \"94043\" - eligibility_id: \"2022H1Campaign\" Multiple parameters can be specified, for example: \"region_codes=US zip_code=94043 eligibility_id=2022H1Campaign\"",
                   "location": "query",
                   "type": "string"
                 },
@@ -180,7 +210,7 @@
         "subscriptions": {
           "methods": {
             "cancel": {
-              "description": "Used by partners to cancel a subscription service by the end of the current billing cycle for their customers. It should be called directly by the partner using service accounts.",
+              "description": "Used by partners to cancel a subscription service either immediately or by the end of the current billing cycle for their customers. It should be called directly by the partner using service accounts.",
               "flatPath": "v1/partners/{partnersId}/subscriptions/{subscriptionsId}:cancel",
               "httpMethod": "POST",
               "id": "paymentsresellersubscription.partners.subscriptions.cancel",
@@ -260,7 +290,7 @@
               }
             },
             "extend": {
-              "description": "Used by partners to extend a subscription service for their customers. It should be called directly by the partner using service accounts.",
+              "description": "Used by partners to extend a subscription service for their customers on an ongoing basis for the subscription to remain active and renewable. It should be called directly by the partner using service accounts.",
               "flatPath": "v1/partners/{partnersId}/subscriptions/{subscriptionsId}:extend",
               "httpMethod": "POST",
               "id": "paymentsresellersubscription.partners.subscriptions.extend",
@@ -366,14 +396,14 @@
       }
     }
   },
-  "revision": "20210615",
+  "revision": "20220501",
   "rootUrl": "https://paymentsresellersubscription.googleapis.com/",
   "schemas": {
     "GoogleCloudPaymentsResellerSubscriptionV1CancelSubscriptionRequest": {
       "id": "GoogleCloudPaymentsResellerSubscriptionV1CancelSubscriptionRequest",
       "properties": {
         "cancelImmediately": {
-          "description": "Optional. If true, the subscription will be cancelled immediately. Otherwise, the subscription will be cancelled at the end of the current cycle, and therefore no prorated refund will be issued for the rest of the cycle.",
+          "description": "Optional. If true, the subscription will be cancelled immediately. Otherwise, the subscription will be cancelled at renewal_time, and therefore no prorated refund will be issued for the rest of the cycle.",
           "type": "boolean"
         },
         "cancellationReason": {
@@ -386,6 +416,7 @@
             "CANCELLATION_REASON_PAST_DUE",
             "CANCELLATION_REASON_ACCOUNT_CLOSED",
             "CANCELLATION_REASON_UPGRADE_DOWNGRADE",
+            "CANCELLATION_REASON_USER_DELINQUENCY",
             "CANCELLATION_REASON_OTHER"
           ],
           "enumDescriptions": [
@@ -395,7 +426,8 @@
             "Accidential purchase.",
             "Payment is past due.",
             "User account closed.",
-            "Used for notification only, do not use in Cancel API. Cancallation due to upgrade or downgrade.",
+            "Used for notification only, do not use in Cancel API. Cancellation due to upgrade or downgrade.",
+            "Cancellation due to user delinquency",
             "Other reason."
           ],
           "type": "string"
@@ -482,6 +514,12 @@
           "description": "End of the free trial period, in ISO 8061 format. UTC timezone. Example, \"freeTrialEndTime\":\"2019-08-31T17:28:54.564Z\" This time will be set the same as initial subscription creation time if no free trial period is offered to the partner.",
           "format": "google-datetime",
           "type": "string"
+        },
+        "renewalTime": {
+          "description": "Output only. The time at which the subscription is expected to be renewed by Google - a new charge will be incurred and the service entitlement will be renewed. A non-immediate cancellation will take place at this time too, before which, the service entitlement for the end user will remain valid. UTC timezone in ISO 8061 format. For example: \"2019-08-31T17:28:54.564Z\"",
+          "format": "google-datetime",
+          "readOnly": true,
+          "type": "string"
         }
       },
       "type": "object"
@@ -497,6 +535,43 @@
         "partnerUserToken": {
           "description": "Required. Identifier of the end-user in partner\u2019s system.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsRequest": {
+      "id": "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsRequest",
+      "properties": {
+        "filter": {
+          "description": "Optional. Specifies the filters for the promotion results. The syntax defined in the EBNF grammar: https://google.aip.dev/assets/misc/ebnf-filtering.txt. An error will be thrown if any specified parameter is not supported. Currently, it can only be used by Youtube partners. Allowed parameters are: - regionCodes - zipCode - eligibilityId - applicableProducts Multiple parameters can be specified, for example: \"regionCodes=US zipCode=94043 eligibilityId=2022H1Campaign\", or \"applicableProducts=partners/p1/products/product2\"",
+          "type": "string"
+        },
+        "pageSize": {
+          "description": "Optional. The maximum number of promotions to return. The service may return fewer than this value. If unspecified, at most 50 products will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageToken": {
+          "description": "Optional. A page token, received from a previous `ListPromotions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListPromotions` must match the call that provided the page token.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsResponse": {
+      "description": "Response containing the found promotions for the current user.",
+      "id": "GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "A token, which can be sent as `page_token` to retrieve the next page. If this field is empty, there are no subsequent pages.",
+          "type": "string"
+        },
+        "promotions": {
+          "description": "The promotions for the current user.",
+          "items": {
+            "$ref": "GoogleCloudPaymentsResellerSubscriptionV1Promotion"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -602,11 +677,29 @@
         },
         "freeTrialDuration": {
           "$ref": "GoogleCloudPaymentsResellerSubscriptionV1Duration",
-          "description": "Output only. Specifies the duration of the free trial of the subscription.",
-          "readOnly": true
+          "description": "Optional. Specifies the duration of the free trial of the subscription when promotion_type is PROMOTION_TYPE_FREE_TRIAL"
+        },
+        "introductoryPricingDetails": {
+          "$ref": "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetails",
+          "description": "Optional. Specifies the introductory pricing details when the promotion_type is PROMOTION_TYPE_INTRODUCTORY_PRICING."
         },
         "name": {
           "description": "Output only. Response only. Resource name of the subscription promotion. It will have the format of \"partners/{partner_id}/promotion/{promotion_id}\"",
+          "readOnly": true,
+          "type": "string"
+        },
+        "promotionType": {
+          "description": "Output only. Output Only. Specifies the type of the promotion.",
+          "enum": [
+            "PROMOTION_TYPE_UNSPECIFIED",
+            "PROMOTION_TYPE_FREE_TRIAL",
+            "PROMOTION_TYPE_INTRODUCTORY_PRICING"
+          ],
+          "enumDescriptions": [
+            "The promotion type is unspecified.",
+            "The promotion is a free trial.",
+            "The promotion is a reduced introductory pricing."
+          ],
           "readOnly": true,
           "type": "string"
         },
@@ -630,6 +723,33 @@
           },
           "readOnly": true,
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetails": {
+      "description": "The details of a introductory pricing promotion.",
+      "id": "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetails",
+      "properties": {
+        "introductoryPricingSpecs": {
+          "description": "Specifies the introductory pricing periods.",
+          "items": {
+            "$ref": "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetailsIntroductoryPricingSpec"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetailsIntroductoryPricingSpec": {
+      "description": "The duration of an introductory pricing promotion.",
+      "id": "GoogleCloudPaymentsResellerSubscriptionV1PromotionIntroductoryPricingDetailsIntroductoryPricingSpec",
+      "properties": {
+        "recurrenceCount": {
+          "description": "Output only. Output Only. The duration of an introductory offer in billing cycles.",
+          "format": "int32",
+          "readOnly": true,
+          "type": "integer"
         }
       },
       "type": "object"
@@ -675,15 +795,30 @@
           "description": "Required. Identifier of the end-user in partner\u2019s system. The value is restricted to 63 ASCII characters at the maximum.",
           "type": "string"
         },
+        "processingState": {
+          "description": "Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).",
+          "enum": [
+            "PROCESSING_STATE_UNSPECIFIED",
+            "PROCESSING_STATE_CANCELLING",
+            "PROCESSING_STATE_RECURRING"
+          ],
+          "enumDescriptions": [
+            "The processing state is unspecified.",
+            "The subscription is being cancelled.",
+            "The subscription is recurring."
+          ],
+          "readOnly": true,
+          "type": "string"
+        },
         "products": {
-          "description": "Required. Resource name that identifies one or more subscription products. The format will be 'partners/{partner_id}/products/{product_id}'.",
+          "description": "Required. Required. Resource name that identifies the purchased products. The format will be 'partners/{partner_id}/products/{product_id}'.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "promotions": {
-          "description": "Optional. Resource name that identifies one or more promotions that can be applied on the product. A typical promotion for a subscription is Free trial. The format will be 'partners/{partner_id}/promotions/{promotion_id}'.",
+          "description": "Optional. Optional. Resource name that identifies one or more promotions that can be applied on the product. A typical promotion for a subscription is Free trial. The format will be 'partners/{partner_id}/promotions/{promotion_id}'.",
           "items": {
             "type": "string"
           },
@@ -694,12 +829,18 @@
           "readOnly": true,
           "type": "string"
         },
+        "renewalTime": {
+          "description": "Output only. The time at which the subscription is expected to be renewed by Google - a new charge will be incurred and the service entitlement will be renewed. A non-immediate cancellation will take place at this time too, before which, the service entitlement for the end user will remain valid. UTC timezone in ISO 8061 format. For example: \"2019-08-31T17:28:54.564Z\"",
+          "format": "google-datetime",
+          "readOnly": true,
+          "type": "string"
+        },
         "serviceLocation": {
           "$ref": "GoogleCloudPaymentsResellerSubscriptionV1Location",
           "description": "Required. The location that the service is provided as indicated by the partner."
         },
         "state": {
-          "description": "Output only. Descibes the state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).",
+          "description": "Output only. Describes the state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).",
           "enum": [
             "STATE_UNSPECIFIED",
             "STATE_CREATED",
@@ -724,12 +865,16 @@
           "format": "google-datetime",
           "readOnly": true,
           "type": "string"
+        },
+        "upgradeDowngradeDetails": {
+          "$ref": "GoogleCloudPaymentsResellerSubscriptionV1SubscriptionUpgradeDowngradeDetails",
+          "description": "Optional. Details about the previous subscription that this new subscription upgrades/downgrades from. Only populated if this subscription is an upgrade/downgrade from another subscription."
         }
       },
       "type": "object"
     },
     "GoogleCloudPaymentsResellerSubscriptionV1SubscriptionCancellationDetails": {
-      "description": "Describes the details of a cancelled subscription.",
+      "description": "Describes the details of a cancelled or cancelling subscription.",
       "id": "GoogleCloudPaymentsResellerSubscriptionV1SubscriptionCancellationDetails",
       "properties": {
         "reason": {
@@ -742,6 +887,7 @@
             "CANCELLATION_REASON_PAST_DUE",
             "CANCELLATION_REASON_ACCOUNT_CLOSED",
             "CANCELLATION_REASON_UPGRADE_DOWNGRADE",
+            "CANCELLATION_REASON_USER_DELINQUENCY",
             "CANCELLATION_REASON_OTHER"
           ],
           "enumDescriptions": [
@@ -751,9 +897,35 @@
             "Accidential purchase.",
             "Payment is past due.",
             "User account closed.",
-            "Used for notification only, do not use in Cancel API. Cancallation due to upgrade or downgrade.",
+            "Used for notification only, do not use in Cancel API. Cancellation due to upgrade or downgrade.",
+            "Cancellation due to user delinquency",
             "Other reason."
           ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudPaymentsResellerSubscriptionV1SubscriptionUpgradeDowngradeDetails": {
+      "description": "Details about the previous subscription that this new subscription upgrades/downgrades from.",
+      "id": "GoogleCloudPaymentsResellerSubscriptionV1SubscriptionUpgradeDowngradeDetails",
+      "properties": {
+        "billingCycleSpec": {
+          "description": "Required. Specifies the billing cycle spec for the new upgraded/downgraded subscription.",
+          "enum": [
+            "BILLING_CYCLE_SPEC_UNSPECIFIED",
+            "BILLING_CYCLE_SPEC_ALIGN_WITH_PREVIOUS_SUBSCRIPTION",
+            "BILLING_CYCLE_SPEC_START_IMMEDIATELY"
+          ],
+          "enumDescriptions": [
+            "Billing cycle spec is not specified.",
+            "The billing cycle of the new subscription aligns with the previous subscription it upgrades or downgrades from.",
+            "The billing cycle of the new subscription starts immediately."
+          ],
+          "type": "string"
+        },
+        "previousSubscriptionId": {
+          "description": "Required. The previous subscription id to be replaced. This is not the full resource name, use the subscription_id segment only.",
           "type": "string"
         }
       },

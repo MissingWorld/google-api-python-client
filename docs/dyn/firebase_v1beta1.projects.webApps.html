@@ -111,6 +111,7 @@ Args:
     The object takes the form of:
 
 { # Details of a Firebase App for the web.
+  &quot;apiKeyId&quot;: &quot;A String&quot;, # The key_id of the GCP ApiKey associated with this App. If set must have no restrictions, or only have restrictions that are valid for the associated Firebase App. Cannot be set in create requests, instead an existing valid API Key will be chosen, or if no valid API Keys exist, one will be provisioned for you. Cannot be set to an empty value in update requests.
   &quot;appId&quot;: &quot;A String&quot;, # Immutable. The globally unique, Firebase-assigned identifier for the `WebApp`. This identifier should be treated as an opaque token, as the data format is not specified.
   &quot;appUrls&quot;: [ # The URLs where the `WebApp` is hosted.
     &quot;A String&quot;,
@@ -165,6 +166,7 @@ Returns:
   An object of the form:
 
     { # Details of a Firebase App for the web.
+  &quot;apiKeyId&quot;: &quot;A String&quot;, # The key_id of the GCP ApiKey associated with this App. If set must have no restrictions, or only have restrictions that are valid for the associated Firebase App. Cannot be set in create requests, instead an existing valid API Key will be chosen, or if no valid API Keys exist, one will be provisioned for you. Cannot be set to an empty value in update requests.
   &quot;appId&quot;: &quot;A String&quot;, # Immutable. The globally unique, Firebase-assigned identifier for the `WebApp`. This identifier should be treated as an opaque token, as the data format is not specified.
   &quot;appUrls&quot;: [ # The URLs where the `WebApp` is hosted.
     &quot;A String&quot;,
@@ -196,7 +198,7 @@ Returns:
   &quot;authDomain&quot;: &quot;A String&quot;, # The domain Firebase Auth configures for OAuth redirects, in the format: PROJECT_ID.firebaseapp.com
   &quot;databaseURL&quot;: &quot;A String&quot;, # The default Firebase Realtime Database URL.
   &quot;locationId&quot;: &quot;A String&quot;, # The ID of the Project&#x27;s default GCP resource location. The location is one of the available [GCP resource locations](https://firebase.google.com/docs/projects/locations). This field is omitted if the default GCP resource location has not been finalized yet. To set a Project&#x27;s default GCP resource location, call [`FinalizeDefaultLocation`](../projects.defaultLocation/finalize) after you add Firebase resources to the Project.
-  &quot;measurementId&quot;: &quot;A String&quot;, # The unique Google-assigned identifier of the Google Analytics web stream associated with the `WebApp`. Firebase SDKs use this ID to interact with Google Analytics APIs. This field is only present if the `WebApp` is linked to a web stream in a Google Analytics App + Web property. Learn more about this ID and Google Analytics web streams in the [Analytics documentation](https://support.google.com/analytics/topic/9303475). To generate a `measurementId` and link the `WebApp` with a Google Analytics web stream, call [`AddGoogleAnalytics`](../../v1beta1/projects/addGoogleAnalytics). For apps using the Firebase JavaScript SDK v7.20.0 and later, Firebase dynamically fetches the `measurementId` when your app initializes Analytics. Having this ID in your config object is optional, but it does serve as a fallback in the rare case that the dynamic fetch fails.
+  &quot;measurementId&quot;: &quot;A String&quot;, # The unique Google-assigned identifier of the Google Analytics web stream associated with the `WebApp`. Firebase SDKs use this ID to interact with Google Analytics APIs. This field is only present if the `WebApp` is linked to a web stream in a Google Analytics App + Web property. Learn more about this ID and Google Analytics web streams in the [Analytics documentation](https://support.google.com/analytics/answer/9304153). To generate a `measurementId` and link the `WebApp` with a Google Analytics web stream, call [`AddGoogleAnalytics`](../../v1beta1/projects/addGoogleAnalytics). For apps using the Firebase JavaScript SDK v7.20.0 and later, Firebase dynamically fetches the `measurementId` when your app initializes Analytics. Having this ID in your config object is optional, but it does serve as a fallback in the rare case that the dynamic fetch fails.
   &quot;messagingSenderId&quot;: &quot;A String&quot;, # The sender ID for use with Firebase Cloud Messaging.
   &quot;projectId&quot;: &quot;A String&quot;, # Immutable. A user-assigned unique identifier for the `FirebaseProject`.
   &quot;storageBucket&quot;: &quot;A String&quot;, # The default Cloud Storage for Firebase storage bucket name.
@@ -222,6 +224,7 @@ Returns:
     {
   &quot;apps&quot;: [ # List of each `WebApp` associated with the specified `FirebaseProject`.
     { # Details of a Firebase App for the web.
+      &quot;apiKeyId&quot;: &quot;A String&quot;, # The key_id of the GCP ApiKey associated with this App. If set must have no restrictions, or only have restrictions that are valid for the associated Firebase App. Cannot be set in create requests, instead an existing valid API Key will be chosen, or if no valid API Keys exist, one will be provisioned for you. Cannot be set to an empty value in update requests.
       &quot;appId&quot;: &quot;A String&quot;, # Immutable. The globally unique, Firebase-assigned identifier for the `WebApp`. This identifier should be treated as an opaque token, as the data format is not specified.
       &quot;appUrls&quot;: [ # The URLs where the `WebApp` is hosted.
         &quot;A String&quot;,
@@ -260,6 +263,7 @@ Args:
     The object takes the form of:
 
 { # Details of a Firebase App for the web.
+  &quot;apiKeyId&quot;: &quot;A String&quot;, # The key_id of the GCP ApiKey associated with this App. If set must have no restrictions, or only have restrictions that are valid for the associated Firebase App. Cannot be set in create requests, instead an existing valid API Key will be chosen, or if no valid API Keys exist, one will be provisioned for you. Cannot be set to an empty value in update requests.
   &quot;appId&quot;: &quot;A String&quot;, # Immutable. The globally unique, Firebase-assigned identifier for the `WebApp`. This identifier should be treated as an opaque token, as the data format is not specified.
   &quot;appUrls&quot;: [ # The URLs where the `WebApp` is hosted.
     &quot;A String&quot;,
@@ -280,6 +284,7 @@ Returns:
   An object of the form:
 
     { # Details of a Firebase App for the web.
+  &quot;apiKeyId&quot;: &quot;A String&quot;, # The key_id of the GCP ApiKey associated with this App. If set must have no restrictions, or only have restrictions that are valid for the associated Firebase App. Cannot be set in create requests, instead an existing valid API Key will be chosen, or if no valid API Keys exist, one will be provisioned for you. Cannot be set to an empty value in update requests.
   &quot;appId&quot;: &quot;A String&quot;, # Immutable. The globally unique, Firebase-assigned identifier for the `WebApp`. This identifier should be treated as an opaque token, as the data format is not specified.
   &quot;appUrls&quot;: [ # The URLs where the `WebApp` is hosted.
     &quot;A String&quot;,

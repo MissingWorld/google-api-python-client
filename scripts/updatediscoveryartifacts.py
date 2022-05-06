@@ -18,9 +18,9 @@ import shutil
 import subprocess
 import tempfile
 
-import describe
 import changesummary
 
+import describe
 
 SCRIPTS_DIR = pathlib.Path(__file__).parent.resolve()
 DISCOVERY_DOC_DIR = (
@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory() as current_discovery_doc_dir:
         [
             "git",
             "diff",
-            "origin/master",
+            "origin/main",
             "--name-only",
             "--",
             DISCOVERY_DOC_DIR / "*.json",

@@ -15,9 +15,10 @@
 from enum import IntEnum
 import json
 from multiprocessing import Pool
-import pandas as pd
 import pathlib
+
 import numpy as np
+import pandas as pd
 
 BRANCH_ARTIFACTS_DIR = (
     pathlib.Path(__file__).parent.resolve()
@@ -509,13 +510,14 @@ class ChangeSummary:
         result = pd.DataFrame()
         # Process files in parallel to improve performance
         with Pool(processes=MULTIPROCESSING_NUM_AGENTS) as pool:
-            result = result.append(
-                pool.map(
-                    self._get_discovery_differences,
-                    self._file_list,
-                    MULTIPROCESSING_NUM_PER_BATCH,
+            if len(self._file_list):
+                result = pd.concat(
+                    pool.map(
+                        self._get_discovery_differences,
+                        self._file_list,
+                        MULTIPROCESSING_NUM_PER_BATCH,
+                    )
                 )
-            )
 
         if len(result):
             # Sort the resulting dataframe by `Name`, `Version`, `ChangeType`

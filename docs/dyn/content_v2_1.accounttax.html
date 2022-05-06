@@ -112,9 +112,9 @@ Args:
       &quot;accountId&quot;: &quot;A String&quot;, # The ID of the account for which to get/update account tax settings.
       &quot;accountTax&quot;: { # The tax settings of a merchant account. All methods require the admin role. # The account tax settings to update. Only defined if the method is `update`.
         &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-        &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-        &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-          { # Tax calculation rule to apply in a state or province (USA only).
+        &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+        &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+          { # Tax calculation rule to apply in a state or province (US only).
             &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
             &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
             &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.
@@ -143,9 +143,9 @@ Returns:
     { # A batch entry encoding a single non-batch accounttax response.
       &quot;accountTax&quot;: { # The tax settings of a merchant account. All methods require the admin role. # The retrieved or updated account tax settings.
         &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-        &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-        &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-          { # Tax calculation rule to apply in a state or province (USA only).
+        &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+        &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+          { # Tax calculation rule to apply in a state or province (US only).
             &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
             &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
             &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.
@@ -169,7 +169,7 @@ Returns:
       &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accounttaxCustomBatchResponseEntry`&quot;
     },
   ],
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accounttaxCustomBatchResponse&quot;.
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accounttaxCustomBatchResponse`&quot;.
 }</pre>
 </div>
 
@@ -190,9 +190,9 @@ Returns:
 
     { # The tax settings of a merchant account. All methods require the admin role.
   &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-    { # Tax calculation rule to apply in a state or province (USA only).
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+    { # Tax calculation rule to apply in a state or province (US only).
       &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
       &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
       &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.
@@ -220,14 +220,14 @@ Returns:
   An object of the form:
 
     {
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accounttaxListResponse&quot;.
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accounttaxListResponse`&quot;.
   &quot;nextPageToken&quot;: &quot;A String&quot;, # The token for the retrieval of the next page of account tax settings.
   &quot;resources&quot;: [
     { # The tax settings of a merchant account. All methods require the admin role.
       &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-      &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-      &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-        { # Tax calculation rule to apply in a state or province (USA only).
+      &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+      &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+        { # Tax calculation rule to apply in a state or province (US only).
           &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
           &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
           &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.
@@ -266,9 +266,9 @@ Args:
 
 { # The tax settings of a merchant account. All methods require the admin role.
   &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-    { # Tax calculation rule to apply in a state or province (USA only).
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+    { # Tax calculation rule to apply in a state or province (US only).
       &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
       &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
       &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.
@@ -288,9 +288,9 @@ Returns:
 
     { # The tax settings of a merchant account. All methods require the admin role.
   &quot;accountId&quot;: &quot;A String&quot;, # Required. The ID of the account to which these account tax settings belong.
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#accountTax&quot;.
-  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable US taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
-    { # Tax calculation rule to apply in a state or province (USA only).
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#accountTax`&quot;.
+  &quot;rules&quot;: [ # Tax rules. Updating the tax rules will enable &quot;US&quot; taxes (not reversible). Defining no rules is equivalent to not charging tax at all.
+    { # Tax calculation rule to apply in a state or province (US only).
       &quot;country&quot;: &quot;A String&quot;, # Country code in which tax is applicable.
       &quot;locationId&quot;: &quot;A String&quot;, # Required. State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).
       &quot;ratePercent&quot;: &quot;A String&quot;, # Explicit tax rate in percent, represented as a floating point number without the percentage character. Must not be negative.

@@ -6,10 +6,10 @@
           "description": "View and manage your applications deployed on Google App Engine"
         },
         "https://www.googleapis.com/auth/cloud-platform": {
-          "description": "See, edit, configure, and delete your Google Cloud Platform data"
+          "description": "See, edit, configure, and delete your Google Cloud data and see the email address for your Google Account."
         },
         "https://www.googleapis.com/auth/cloud-platform.read-only": {
-          "description": "View your data across Google Cloud Platform services"
+          "description": "View your data across Google Cloud services and see the email address of your Google Account"
         }
       }
     }
@@ -20,6 +20,7 @@
   "description": "Provisions and manages developers' App Engine applications.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/appengine/docs/admin-api/",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -171,7 +172,7 @@
               "type": "string"
             },
             "updateMask": {
-              "description": "Standard field mask for the set of fields to be updated.",
+              "description": "Required. Standard field mask for the set of fields to be updated.",
               "format": "google-fieldmask",
               "location": "query",
               "type": "string"
@@ -624,7 +625,7 @@
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Standard field mask for the set of fields to be updated.",
+                  "description": "Required. Standard field mask for the set of fields to be updated.",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -1140,7 +1141,7 @@
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Standard field mask for the set of fields to be updated.",
+                  "description": "Required. Standard field mask for the set of fields to be updated.",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -1594,7 +1595,7 @@
       }
     }
   },
-  "revision": "20210608",
+  "revision": "20220425",
   "rootUrl": "https://appengine.googleapis.com/",
   "schemas": {
     "ApiConfigHandler": {
@@ -1740,6 +1741,10 @@
         },
         "name": {
           "description": "Full path to the Application resource in the API. Example: apps/myapp.@OutputOnly",
+          "type": "string"
+        },
+        "serviceAccount": {
+          "description": "The service account associated with the application. This is the app-level default identity. If no identity provided during create version, Admin API will fallback to this one.",
           "type": "string"
         },
         "servingStatus": {
@@ -2173,7 +2178,7 @@
       "type": "object"
     },
     "Empty": {
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for Empty is empty JSON object {}.",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } ",
       "id": "Empty",
       "properties": {},
       "type": "object"
@@ -2308,7 +2313,7 @@
           "type": "string"
         },
         "description": {
-          "description": "An optional string description of this rule. This field has a maximum length of 100 characters.",
+          "description": "An optional string description of this rule. This field has a maximum length of 400 characters.",
           "type": "string"
         },
         "priority": {
@@ -2858,6 +2863,20 @@
           },
           "type": "array"
         },
+        "instanceIpMode": {
+          "description": "The IP mode for instances. Only applicable in the App Engine flexible environment.",
+          "enum": [
+            "INSTANCE_IP_MODE_UNSPECIFIED",
+            "EXTERNAL",
+            "INTERNAL"
+          ],
+          "enumDescriptions": [
+            "Unspecified is treated as EXTERNAL.",
+            "Instances are created with both internal and external IP addresses.",
+            "Instances are created with internal IP addresses only."
+          ],
+          "type": "string"
+        },
         "instanceTag": {
           "description": "Tag to apply to the instance during creation. Only applicable in the App Engine flexible environment.",
           "type": "string"
@@ -3234,6 +3253,13 @@
         "id": {
           "description": "Relative name of the service within the application. Example: default.@OutputOnly",
           "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "A set of labels to apply to this service. Labels are key/value pairs that describe the service and all resources that belong to it (e.g., versions). The labels can be used to search and group resources, and are propagated to the usage and billing reports, enabling fine-grain analysis of costs. An example of using labels is to tag resources belonging to different environments (e.g., \"env=prod\", \"env=qa\"). Label keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, dashes, and international characters. Label keys must start with a lowercase letter or an international character. Each service can have at most 32 labels.",
+          "type": "object"
         },
         "name": {
           "description": "Full path to the Service resource in the API. Example: apps/myapp/services/default.@OutputOnly",

@@ -128,7 +128,7 @@ h1, h2, h3 {
   <pre>Gets information about the selected AdSense account.
 
 Args:
-  name: string, Required. Account to get information about. Format: accounts/{account_id} (required)
+  name: string, Required. Account to get information about. Format: accounts/{account} (required)
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -145,6 +145,7 @@ Returns:
     &quot;A String&quot;,
   ],
   &quot;premium&quot;: True or False, # Output only. Whether this account is premium.
+  &quot;state&quot;: &quot;A String&quot;, # Output only. State of the account.
   &quot;timeZone&quot;: { # Represents a time zone from the [IANA Time Zone Database](https://www.iana.org/time-zones). # The account time zone, as used by reporting. For more information, see [changing the time zone of your reports](https://support.google.com/adsense/answer/9830725).
     &quot;id&quot;: &quot;A String&quot;, # IANA Time Zone Database time zone, e.g. &quot;America/New_York&quot;.
     &quot;version&quot;: &quot;A String&quot;, # Optional. IANA Time Zone Database version number, e.g. &quot;2019a&quot;.
@@ -177,6 +178,7 @@ Returns:
         &quot;A String&quot;,
       ],
       &quot;premium&quot;: True or False, # Output only. Whether this account is premium.
+      &quot;state&quot;: &quot;A String&quot;, # Output only. State of the account.
       &quot;timeZone&quot;: { # Represents a time zone from the [IANA Time Zone Database](https://www.iana.org/time-zones). # The account time zone, as used by reporting. For more information, see [changing the time zone of your reports](https://support.google.com/adsense/answer/9830725).
         &quot;id&quot;: &quot;A String&quot;, # IANA Time Zone Database time zone, e.g. &quot;America/New_York&quot;.
         &quot;version&quot;: &quot;A String&quot;, # Optional. IANA Time Zone Database version number, e.g. &quot;2019a&quot;.
@@ -213,6 +215,7 @@ Returns:
         &quot;A String&quot;,
       ],
       &quot;premium&quot;: True or False, # Output only. Whether this account is premium.
+      &quot;state&quot;: &quot;A String&quot;, # Output only. State of the account.
       &quot;timeZone&quot;: { # Represents a time zone from the [IANA Time Zone Database](https://www.iana.org/time-zones). # The account time zone, as used by reporting. For more information, see [changing the time zone of your reports](https://support.google.com/adsense/answer/9830725).
         &quot;id&quot;: &quot;A String&quot;, # IANA Time Zone Database time zone, e.g. &quot;America/New_York&quot;.
         &quot;version&quot;: &quot;A String&quot;, # Optional. IANA Time Zone Database version number, e.g. &quot;2019a&quot;.

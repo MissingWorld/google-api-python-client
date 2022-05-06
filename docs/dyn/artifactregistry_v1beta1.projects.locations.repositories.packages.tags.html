@@ -111,8 +111,8 @@ Args:
     The object takes the form of:
 
 { # Tags point to a version and represent an alternative name that can be used to access the version.
-  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
 }
 
   tagId: string, The tag id to use for this repository.
@@ -125,8 +125,8 @@ Returns:
   An object of the form:
 
     { # Tags point to a version and represent an alternative name that can be used to access the version.
-  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
 }</pre>
 </div>
 
@@ -144,7 +144,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -163,8 +163,8 @@ Returns:
   An object of the form:
 
     { # Tags point to a version and represent an alternative name that can be used to access the version.
-  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
 }</pre>
 </div>
 
@@ -175,7 +175,7 @@ Returns:
 Args:
   parent: string, The name of the parent resource whose tags will be listed. (required)
   filter: string, An expression for filtering the results of the request. Filter rules are case insensitive. The fields eligible for filtering are: * `version` An example of using a filter: * `version=&quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/1.0&quot;` --&gt; Tags that are applied to the version `1.0` in package `pkg1`.
-  pageSize: integer, The maximum number of tags to return.
+  pageSize: integer, The maximum number of tags to return. Maximum page size is 10,000.
   pageToken: string, The next_page_token value returned from a previous list request, if any.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -189,8 +189,8 @@ Returns:
   &quot;nextPageToken&quot;: &quot;A String&quot;, # The token to retrieve the next page of tags, or empty if there are no more tags to return.
   &quot;tags&quot;: [ # The tags returned.
     { # Tags point to a version and represent an alternative name that can be used to access the version.
-      &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-      &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+      &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+      &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
     },
   ],
 }</pre>
@@ -215,13 +215,13 @@ Returns:
   <pre>Updates a tag.
 
 Args:
-  name: string, The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped. (required)
+  name: string, The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded. (required)
   body: object, The request body.
     The object takes the form of:
 
 { # Tags point to a version and represent an alternative name that can be used to access the version.
-  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
 }
 
   updateMask: string, The update mask applies to the resource. For the `FieldMask` definition, see https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
@@ -234,8 +234,8 @@ Returns:
   An object of the form:
 
     { # Tags point to a version and represent an alternative name that can be used to access the version.
-  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package or tag ID parts contain slashes, the slashes are escaped.
-  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot;
+  &quot;name&quot;: &quot;A String&quot;, # The name of the tag, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/tags/tag1&quot;. If the package part contains slashes, the slashes are escaped. The tag part can only have characters in [a-zA-Z0-9\-._~:@], anything else must be URL encoded.
+  &quot;version&quot;: &quot;A String&quot;, # The name of the version the tag refers to, for example: &quot;projects/p1/locations/us-central1/repositories/repo1/packages/pkg1/versions/sha256:5243811&quot; If the package or version ID parts contain slashes, the slashes are escaped.
 }</pre>
 </div>
 

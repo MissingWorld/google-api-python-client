@@ -75,11 +75,6 @@ h1, h2, h3 {
 <h1><a href="analyticsadmin_v1alpha.html">Google Analytics Admin API</a> . <a href="analyticsadmin_v1alpha.properties.html">properties</a></h1>
 <h2>Instance Methods</h2>
 <p class="toc_element">
-  <code><a href="analyticsadmin_v1alpha.properties.androidAppDataStreams.html">androidAppDataStreams()</a></code>
-</p>
-<p class="firstline">Returns the androidAppDataStreams Resource.</p>
-
-<p class="toc_element">
   <code><a href="analyticsadmin_v1alpha.properties.conversionEvents.html">conversionEvents()</a></code>
 </p>
 <p class="firstline">Returns the conversionEvents Resource.</p>
@@ -95,6 +90,21 @@ h1, h2, h3 {
 <p class="firstline">Returns the customMetrics Resource.</p>
 
 <p class="toc_element">
+  <code><a href="analyticsadmin_v1alpha.properties.dataStreams.html">dataStreams()</a></code>
+</p>
+<p class="firstline">Returns the dataStreams Resource.</p>
+
+<p class="toc_element">
+  <code><a href="analyticsadmin_v1alpha.properties.displayVideo360AdvertiserLinkProposals.html">displayVideo360AdvertiserLinkProposals()</a></code>
+</p>
+<p class="firstline">Returns the displayVideo360AdvertiserLinkProposals Resource.</p>
+
+<p class="toc_element">
+  <code><a href="analyticsadmin_v1alpha.properties.displayVideo360AdvertiserLinks.html">displayVideo360AdvertiserLinks()</a></code>
+</p>
+<p class="firstline">Returns the displayVideo360AdvertiserLinks Resource.</p>
+
+<p class="toc_element">
   <code><a href="analyticsadmin_v1alpha.properties.firebaseLinks.html">firebaseLinks()</a></code>
 </p>
 <p class="firstline">Returns the firebaseLinks Resource.</p>
@@ -105,20 +115,13 @@ h1, h2, h3 {
 <p class="firstline">Returns the googleAdsLinks Resource.</p>
 
 <p class="toc_element">
-  <code><a href="analyticsadmin_v1alpha.properties.iosAppDataStreams.html">iosAppDataStreams()</a></code>
-</p>
-<p class="firstline">Returns the iosAppDataStreams Resource.</p>
-
-<p class="toc_element">
   <code><a href="analyticsadmin_v1alpha.properties.userLinks.html">userLinks()</a></code>
 </p>
 <p class="firstline">Returns the userLinks Resource.</p>
 
 <p class="toc_element">
-  <code><a href="analyticsadmin_v1alpha.properties.webDataStreams.html">webDataStreams()</a></code>
-</p>
-<p class="firstline">Returns the webDataStreams Resource.</p>
-
+  <code><a href="#acknowledgeUserDataCollection">acknowledgeUserDataCollection(property, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Acknowledges the terms of user data collection for the specified property. This acknowledgement must be completed (either in the Google Analytics UI or via this API) before MeasurementProtocolSecret resources may be created.</p>
 <p class="toc_element">
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
@@ -132,6 +135,9 @@ h1, h2, h3 {
   <code><a href="#get">get(name, x__xgafv=None)</a></code></p>
 <p class="firstline">Lookup for a single "GA4" Property.</p>
 <p class="toc_element">
+  <code><a href="#getDataRetentionSettings">getDataRetentionSettings(name, x__xgafv=None)</a></code></p>
+<p class="firstline">Returns the singleton data retention settings for this property.</p>
+<p class="toc_element">
   <code><a href="#getGoogleSignalsSettings">getGoogleSignalsSettings(name, x__xgafv=None)</a></code></p>
 <p class="firstline">Lookup for Google Signals settings for a property.</p>
 <p class="toc_element">
@@ -144,9 +150,37 @@ h1, h2, h3 {
   <code><a href="#patch">patch(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Updates a property.</p>
 <p class="toc_element">
+  <code><a href="#updateDataRetentionSettings">updateDataRetentionSettings(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Updates the singleton data retention settings for this property.</p>
+<p class="toc_element">
   <code><a href="#updateGoogleSignalsSettings">updateGoogleSignalsSettings(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Updates Google Signals settings for a property.</p>
 <h3>Method Details</h3>
+<div class="method">
+    <code class="details" id="acknowledgeUserDataCollection">acknowledgeUserDataCollection(property, body=None, x__xgafv=None)</code>
+  <pre>Acknowledges the terms of user data collection for the specified property. This acknowledgement must be completed (either in the Google Analytics UI or via this API) before MeasurementProtocolSecret resources may be created.
+
+Args:
+  property: string, Required. The property for which to acknowledge user data collection. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # Request message for AcknowledgeUserDataCollection RPC.
+  &quot;acknowledgement&quot;: &quot;A String&quot;, # Required. An acknowledgement that the caller of this method understands the terms of user data collection. This field must contain the exact value: &quot;I acknowledge that I have the necessary privacy disclosures and rights from my end users for the collection and processing of their data, including the association of such data with the visitation information Google Analytics collects from my site and/or app property.&quot;
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # Response message for AcknowledgeUserDataCollection RPC.
+}</pre>
+</div>
+
 <div class="method">
     <code class="details" id="close">close()</code>
   <pre>Close httplib2 connections.</pre>
@@ -161,6 +195,7 @@ Args:
     The object takes the form of:
 
 { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -168,7 +203,9 @@ Args:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
 }
@@ -182,6 +219,7 @@ Returns:
   An object of the form:
 
     { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -189,7 +227,9 @@ Returns:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
 }</pre>
@@ -210,6 +250,7 @@ Returns:
   An object of the form:
 
     { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -217,7 +258,9 @@ Returns:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
 }</pre>
@@ -238,6 +281,7 @@ Returns:
   An object of the form:
 
     { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -245,9 +289,32 @@ Returns:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
+}</pre>
+</div>
+
+<div class="method">
+    <code class="details" id="getDataRetentionSettings">getDataRetentionSettings(name, x__xgafv=None)</code>
+  <pre>Returns the singleton data retention settings for this property.
+
+Args:
+  name: string, Required. The name of the settings to lookup. Format: properties/{property}/dataRetentionSettings Example: &quot;properties/1000/dataRetentionSettings&quot; (required)
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # Settings values for data retention. This is a singleton resource.
+  &quot;eventDataRetention&quot;: &quot;A String&quot;, # The length of time that event-level data is retained.
+  &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings
+  &quot;resetUserDataOnNewActivity&quot;: True or False, # If true, reset the retention period for the user identifier with every event from that user.
 }</pre>
 </div>
 
@@ -277,7 +344,7 @@ Returns:
   <pre>Returns child Properties under the specified parent Account. Only &quot;GA4&quot; properties will be returned. Properties will be excluded if the caller does not have access. Soft-deleted (ie: &quot;trashed&quot;) properties are excluded by default. Returns an empty list if no relevant properties are found.
 
 Args:
-  filter: string, Required. An expression for filtering the results of the request. Fields eligible for filtering are: `parent:`(The resource name of the parent account) or `firebase_project:`(The id or number of the linked firebase project). Some examples of filters: ``` | Filter | Description | |-----------------------------|-------------------------------------------| | parent:accounts/123 | The account with account id: 123. | | firebase_project:project-id | The firebase project with id: project-id. | | firebase_project:123 | The firebase project with number: 123. | ```
+  filter: string, Required. An expression for filtering the results of the request. Fields eligible for filtering are: `parent:`(The resource name of the parent account/property) or `ancestor:`(The resource name of the parent account) or `firebase_project:`(The id or number of the linked firebase project). Some examples of filters: ``` | Filter | Description | |-----------------------------|-------------------------------------------| | parent:accounts/123 | The account with account id: 123. | | parent:properties/123 | The property with property id: 123. | | ancestor:accounts/123 | The account with account id: 123. | | firebase_project:project-id | The firebase project with id: project-id. | | firebase_project:123 | The firebase project with number: 123. | ```
   pageSize: integer, The maximum number of resources to return. The service may return fewer than this value, even if there are additional pages. If unspecified, at most 50 resources will be returned. The maximum value is 200; (higher values will be coerced to the maximum)
   pageToken: string, A page token, received from a previous `ListProperties` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListProperties` must match the call that provided the page token.
   showDeleted: boolean, Whether to include soft-deleted (ie: &quot;trashed&quot;) Properties in the results. Properties can be inspected to determine whether they are deleted or not.
@@ -293,6 +360,7 @@ Returns:
   &quot;nextPageToken&quot;: &quot;A String&quot;, # A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.
   &quot;properties&quot;: [ # Results that matched the filter criteria and were accessible to the caller.
     { # A resource message representing a Google Analytics GA4 property.
+      &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
       &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
       &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -300,7 +368,9 @@ Returns:
       &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
       &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
       &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-      &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+      &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+      &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+      &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
       &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
       &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
     },
@@ -332,6 +402,7 @@ Args:
     The object takes the form of:
 
 { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -339,7 +410,9 @@ Args:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
 }
@@ -354,6 +427,7 @@ Returns:
   An object of the form:
 
     { # A resource message representing a Google Analytics GA4 property.
+  &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
   &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -361,9 +435,42 @@ Returns:
   &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
   &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+  &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+  &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
   &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
+}</pre>
+</div>
+
+<div class="method">
+    <code class="details" id="updateDataRetentionSettings">updateDataRetentionSettings(name, body=None, updateMask=None, x__xgafv=None)</code>
+  <pre>Updates the singleton data retention settings for this property.
+
+Args:
+  name: string, Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # Settings values for data retention. This is a singleton resource.
+  &quot;eventDataRetention&quot;: &quot;A String&quot;, # The length of time that event-level data is retained.
+  &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings
+  &quot;resetUserDataOnNewActivity&quot;: True or False, # If true, reset the retention period for the user identifier with every event from that user.
+}
+
+  updateMask: string, Required. The list of fields to be updated. Field names must be in snake case (e.g., &quot;field_to_update&quot;). Omitted fields will not be updated. To replace the entire entity, use one path with the string &quot;*&quot; to match all fields.
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # Settings values for data retention. This is a singleton resource.
+  &quot;eventDataRetention&quot;: &quot;A String&quot;, # The length of time that event-level data is retained.
+  &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings
+  &quot;resetUserDataOnNewActivity&quot;: True or False, # If true, reset the retention period for the user identifier with every event from that user.
 }</pre>
 </div>
 

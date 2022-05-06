@@ -27,17 +27,23 @@ if sys.version_info < (3, 6):
 
 import io
 import os
+
 from setuptools import setup
 
 packages = ["apiclient", "googleapiclient", "googleapiclient/discovery_cache"]
 
 install_requires = [
     "httplib2>=0.15.0,<1dev",
-    "google-auth>=1.16.0,<2dev",
+    # NOTE: Maintainers, please do not require google-auth>=2.x.x
+    # Until this issue is closed
+    # https://github.com/googleapis/google-cloud-python/issues/10566
+    "google-auth>=1.16.0,<3.0.0dev",
     "google-auth-httplib2>=0.1.0",
-    "google-api-core>=1.21.0,<2dev",
-    "six>=1.13.0,<2dev",
-    "uritemplate>=3.0.0,<4dev",
+    # NOTE: Maintainers, please do not require google-api-core>=2.x.x
+    # Until this issue is closed
+    # https://github.com/googleapis/google-cloud-python/issues/10566
+    "google-api-core >= 1.31.5, <3.0.0dev,!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0",
+    "uritemplate>=3.0.1,<5",
 ]
 
 package_root = os.path.abspath(os.path.dirname(__file__))
@@ -46,14 +52,19 @@ readme_filename = os.path.join(package_root, "README.md")
 with io.open(readme_filename, encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
-version = "2.10.0"
+package_root = os.path.abspath(os.path.dirname(__file__))
+
+version = {}
+with open(os.path.join(package_root, "googleapiclient/version.py")) as fp:
+    exec(fp.read(), version)
+version = version["__version__"]
 
 setup(
     name="google-api-python-client",
     version=version,
     description="Google API Client Library for Python",
     long_description=readme,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="Google LLC",
     author_email="googleapis-packages@google.com",
     url="https://github.com/googleapis/google-api-python-client/",
@@ -69,6 +80,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",

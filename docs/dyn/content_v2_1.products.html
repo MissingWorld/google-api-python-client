@@ -116,10 +116,10 @@ Args:
   &quot;entries&quot;: [ # The request entries to be processed in the batch.
     { # A batch entry encoding a single non-batch products request.
       &quot;batchId&quot;: 42, # An entry ID, unique within the batch request.
-      &quot;feedId&quot;: &quot;A String&quot;, # The Content API feed id.
+      &quot;feedId&quot;: &quot;A String&quot;, # The Content API Supplemental Feed ID. If present then product insertion or deletion applies to a supplemental feed instead of primary Content API feed.
       &quot;merchantId&quot;: &quot;A String&quot;, # The ID of the managing account.
       &quot;method&quot;: &quot;A String&quot;, # The method of the batch entry. Acceptable values are: - &quot;`delete`&quot; - &quot;`get`&quot; - &quot;`insert`&quot; - &quot;`update`&quot;
-      &quot;product&quot;: { #  Required product attributes are primarily defined by the products data specification. See the Products Data Specification Help Center article for information. Product data. After inserting, updating, or deleting a product, it may take several minutes before changes take effect. # The product to insert. Only required if the method is `insert`.
+      &quot;product&quot;: { #  Required product attributes are primarily defined by the products data specification. See the Products Data Specification Help Center article for information. Product data. After inserting, updating, or deleting a product, it may take several minutes before changes take effect. # The product to insert or update. Only required if the method is `insert` or `update`. If the `update` method is used with `updateMask` only to delete a field, then this isn&#x27;t required. For example, setting `salePrice` on the `updateMask` and not providing a `product` will result in an existing sale price on the product specified by `productId` being deleted.
         &quot;additionalImageLinks&quot;: [ # Additional URLs of images of the item.
           &quot;A String&quot;,
         ],
@@ -143,7 +143,7 @@ Args:
           &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
           &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
         },
-        &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+        &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
           {
             &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
               # Object with schema name: CustomAttribute
@@ -166,10 +166,11 @@ Args:
         &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
         &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
         &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-        &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+        &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
           &quot;A String&quot;,
         ],
         &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+        &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
         &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
         &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
         &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -206,7 +207,8 @@ Args:
         &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
         &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
         &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-        &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+        &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+        &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
         &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
         &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
         &quot;price&quot;: { # Price of the item.
@@ -220,12 +222,28 @@ Args:
             &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
           },
         ],
+        &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
           &quot;A String&quot;,
         ],
+        &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
           &quot;A String&quot;,
         ],
+        &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+          &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+        },
+        &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;promotionIds&quot;: [ # The unique ID of a promotion.
           &quot;A String&quot;,
         ],
@@ -240,10 +258,10 @@ Args:
             &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
             &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
             &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-            &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-            &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-            &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-            &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+            &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+            &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+            &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+            &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
             &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
             &quot;price&quot;: { # Fixed shipping price, represented as a number.
               &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -278,7 +296,7 @@ Args:
         &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
           &quot;A String&quot;,
         ],
-        &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+        &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
         &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
           &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
             &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -310,7 +328,7 @@ Args:
           &quot;value&quot;: 3.14, # The measure of an item.
         },
       },
-      &quot;productId&quot;: &quot;A String&quot;, # The ID of the product to get or delete. Only defined if the method is `get` or `delete`.
+      &quot;productId&quot;: &quot;A String&quot;, # The ID of the product to get or mutate. Only defined if the method is `get`, `delete`, or `update`.
       &quot;updateMask&quot;: &quot;A String&quot;, # The comma-separated list of product attributes to be updated. Example: `&quot;title,salePrice&quot;`. Attributes specified in the update mask without a value specified in the body will be deleted from the product. Only top-level product attributes can be updated. If not defined, product attributes with set values will be updated and other attributes will stay unchanged. Only defined if the method is `update`.
     },
   ],
@@ -364,7 +382,7 @@ Returns:
           &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
           &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
         },
-        &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+        &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
           {
             &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
               # Object with schema name: CustomAttribute
@@ -387,10 +405,11 @@ Returns:
         &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
         &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
         &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-        &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+        &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
           &quot;A String&quot;,
         ],
         &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+        &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
         &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
         &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
         &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -427,7 +446,8 @@ Returns:
         &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
         &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
         &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-        &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+        &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+        &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
         &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
         &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
         &quot;price&quot;: { # Price of the item.
@@ -441,12 +461,28 @@ Returns:
             &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
           },
         ],
+        &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
           &quot;A String&quot;,
         ],
+        &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
           &quot;A String&quot;,
         ],
+        &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+          &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+        },
+        &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+          &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+          &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+        },
         &quot;promotionIds&quot;: [ # The unique ID of a promotion.
           &quot;A String&quot;,
         ],
@@ -461,10 +497,10 @@ Returns:
             &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
             &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
             &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-            &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-            &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-            &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-            &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+            &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+            &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+            &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+            &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
             &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
             &quot;price&quot;: { # Fixed shipping price, represented as a number.
               &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -499,7 +535,7 @@ Returns:
         &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
           &quot;A String&quot;,
         ],
-        &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+        &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
         &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
           &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
             &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -533,7 +569,7 @@ Returns:
       },
     },
   ],
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#productsCustomBatchResponse&quot;.
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#productsCustomBatchResponse`&quot;.
 }</pre>
 </div>
 
@@ -544,7 +580,7 @@ Returns:
 Args:
   merchantId: string, The ID of the account that contains the product. This account cannot be a multi-client account. (required)
   productId: string, The REST ID of the product. (required)
-  feedId: string, The Content API Supplemental Feed ID.
+  feedId: string, The Content API Supplemental Feed ID. If present then product deletion applies to the data in a supplemental feed. If absent, entire product will be deleted.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -591,7 +627,7 @@ Returns:
     &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
     &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
   },
-  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
     {
       &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
         # Object with schema name: CustomAttribute
@@ -614,10 +650,11 @@ Returns:
   &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
   &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
   &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
     &quot;A String&quot;,
   ],
   &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+  &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
   &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
   &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
   &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -654,7 +691,8 @@ Returns:
   &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
   &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
   &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+  &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
   &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
   &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
   &quot;price&quot;: { # Price of the item.
@@ -668,12 +706,28 @@ Returns:
       &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
     },
   ],
+  &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
     &quot;A String&quot;,
   ],
+  &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
     &quot;A String&quot;,
   ],
+  &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+    &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+  },
+  &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;promotionIds&quot;: [ # The unique ID of a promotion.
     &quot;A String&quot;,
   ],
@@ -688,10 +742,10 @@ Returns:
       &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
       &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
       &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
       &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
       &quot;price&quot;: { # Fixed shipping price, represented as a number.
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -726,7 +780,7 @@ Returns:
   &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
     &quot;A String&quot;,
   ],
-  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
   &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
     &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
       &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -793,7 +847,7 @@ Args:
     &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
     &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
   },
-  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
     {
       &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
         # Object with schema name: CustomAttribute
@@ -816,10 +870,11 @@ Args:
   &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
   &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
   &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
     &quot;A String&quot;,
   ],
   &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+  &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
   &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
   &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
   &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -856,7 +911,8 @@ Args:
   &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
   &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
   &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+  &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
   &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
   &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
   &quot;price&quot;: { # Price of the item.
@@ -870,12 +926,28 @@ Args:
       &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
     },
   ],
+  &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
     &quot;A String&quot;,
   ],
+  &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
     &quot;A String&quot;,
   ],
+  &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+    &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+  },
+  &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;promotionIds&quot;: [ # The unique ID of a promotion.
     &quot;A String&quot;,
   ],
@@ -890,10 +962,10 @@ Args:
       &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
       &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
       &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
       &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
       &quot;price&quot;: { # Fixed shipping price, represented as a number.
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -928,7 +1000,7 @@ Args:
   &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
     &quot;A String&quot;,
   ],
-  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
   &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
     &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
       &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -961,7 +1033,7 @@ Args:
   },
 }
 
-  feedId: string, The Content API Supplemental Feed ID.
+  feedId: string, The Content API Supplemental Feed ID. If present then product insertion applies to the data in a supplemental feed.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -994,7 +1066,7 @@ Returns:
     &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
     &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
   },
-  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
     {
       &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
         # Object with schema name: CustomAttribute
@@ -1017,10 +1089,11 @@ Returns:
   &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
   &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
   &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
     &quot;A String&quot;,
   ],
   &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+  &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
   &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
   &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
   &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -1057,7 +1130,8 @@ Returns:
   &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
   &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
   &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+  &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
   &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
   &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
   &quot;price&quot;: { # Price of the item.
@@ -1071,12 +1145,28 @@ Returns:
       &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
     },
   ],
+  &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
     &quot;A String&quot;,
   ],
+  &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
     &quot;A String&quot;,
   ],
+  &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+    &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+  },
+  &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;promotionIds&quot;: [ # The unique ID of a promotion.
     &quot;A String&quot;,
   ],
@@ -1091,10 +1181,10 @@ Returns:
       &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
       &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
       &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
       &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
       &quot;price&quot;: { # Fixed shipping price, represented as a number.
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1129,7 +1219,7 @@ Returns:
   &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
     &quot;A String&quot;,
   ],
-  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
   &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
     &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
       &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1180,7 +1270,7 @@ Returns:
   An object of the form:
 
     {
-  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;content#productsListResponse&quot;.
+  &quot;kind&quot;: &quot;A String&quot;, # Identifies what kind of resource this is. Value: the fixed string &quot;`content#productsListResponse`&quot;.
   &quot;nextPageToken&quot;: &quot;A String&quot;, # The token for the retrieval of the next page of products.
   &quot;resources&quot;: [
     { #  Required product attributes are primarily defined by the products data specification. See the Products Data Specification Help Center article for information. Product data. After inserting, updating, or deleting a product, it may take several minutes before changes take effect.
@@ -1207,7 +1297,7 @@ Returns:
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
         &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
       },
-      &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+      &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
         {
           &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
             # Object with schema name: CustomAttribute
@@ -1230,10 +1320,11 @@ Returns:
       &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
       &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
       &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-      &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+      &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
         &quot;A String&quot;,
       ],
       &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+      &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
       &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
       &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
       &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -1270,7 +1361,8 @@ Returns:
       &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
       &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
       &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-      &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+      &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+      &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
       &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
       &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
       &quot;price&quot;: { # Price of the item.
@@ -1284,12 +1376,28 @@ Returns:
           &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
         },
       ],
+      &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+        &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+        &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+      },
       &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
         &quot;A String&quot;,
       ],
+      &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+        &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+        &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+      },
       &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
         &quot;A String&quot;,
       ],
+      &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+        &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+        &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+      },
+      &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+        &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+        &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+      },
       &quot;promotionIds&quot;: [ # The unique ID of a promotion.
         &quot;A String&quot;,
       ],
@@ -1304,10 +1412,10 @@ Returns:
           &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
           &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
           &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-          &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-          &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-          &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-          &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+          &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+          &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+          &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+          &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
           &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
           &quot;price&quot;: { # Fixed shipping price, represented as a number.
             &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1342,7 +1450,7 @@ Returns:
       &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
         &quot;A String&quot;,
       ],
-      &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+      &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
       &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
         &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
           &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1426,7 +1534,7 @@ Args:
     &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
     &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
   },
-  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
     {
       &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
         # Object with schema name: CustomAttribute
@@ -1449,10 +1557,11 @@ Args:
   &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
   &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
   &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
     &quot;A String&quot;,
   ],
   &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+  &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
   &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
   &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
   &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -1489,7 +1598,8 @@ Args:
   &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
   &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
   &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+  &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
   &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
   &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
   &quot;price&quot;: { # Price of the item.
@@ -1503,12 +1613,28 @@ Args:
       &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
     },
   ],
+  &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
     &quot;A String&quot;,
   ],
+  &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
     &quot;A String&quot;,
   ],
+  &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+    &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+  },
+  &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;promotionIds&quot;: [ # The unique ID of a promotion.
     &quot;A String&quot;,
   ],
@@ -1523,10 +1649,10 @@ Args:
       &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
       &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
       &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
       &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
       &quot;price&quot;: { # Fixed shipping price, represented as a number.
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1561,7 +1687,7 @@ Args:
   &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
     &quot;A String&quot;,
   ],
-  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
   &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
     &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
       &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1627,7 +1753,7 @@ Returns:
     &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
     &quot;value&quot;: &quot;A String&quot;, # The price represented as a number.
   },
-  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
+  &quot;customAttributes&quot;: [ # A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (for example, `{ &quot;name&quot;: &quot;size type&quot;, &quot;value&quot;: &quot;regular&quot; }`). This is useful for submitting attributes not explicitly exposed by the API, such as additional attributes used for Buy on Google (formerly known as Shopping Actions).
     {
       &quot;groupValues&quot;: [ # Subattributes within this attribute group. Exactly one of value or groupValues must be provided.
         # Object with schema name: CustomAttribute
@@ -1650,10 +1776,11 @@ Returns:
   &quot;displayAdsTitle&quot;: &quot;A String&quot;, # Title of an item for dynamic remarketing campaigns.
   &quot;displayAdsValue&quot;: 3.14, # Offer margin for dynamic remarketing campaigns.
   &quot;energyEfficiencyClass&quot;: &quot;A String&quot;, # The energy efficiency class as defined in EU directive 2010/30/EU.
-  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to unchecked check boxes in Merchant Center).
+  &quot;excludedDestinations&quot;: [ # The list of destinations to exclude for this target (corresponds to cleared check boxes in Merchant Center).
     &quot;A String&quot;,
   ],
   &quot;expirationDate&quot;: &quot;A String&quot;, # Date on which the item should expire, as specified upon insertion, in ISO 8601 format. The actual expiration date in Google Shopping is exposed in `productstatuses` as `googleExpirationDate` and might be earlier if `expirationDate` is too far in the future.
+  &quot;externalSellerId&quot;: &quot;A String&quot;, # Required for multi-seller accounts. Use this attribute if you&#x27;re a marketplace uploading products for various sellers to your multi-seller account.
   &quot;gender&quot;: &quot;A String&quot;, # Target gender of the item.
   &quot;googleProductCategory&quot;: &quot;A String&quot;, # Google&#x27;s category of the item (see [Google product taxonomy](https://support.google.com/merchants/answer/1705911)). When querying products, this field will contain the user provided value. There is currently no way to get back the auto assigned google product categories through the API.
   &quot;gtin&quot;: &quot;A String&quot;, # Global Trade Item Number (GTIN) of the item.
@@ -1690,7 +1817,8 @@ Returns:
   &quot;mpn&quot;: &quot;A String&quot;, # Manufacturer Part Number (MPN) of the item.
   &quot;multipack&quot;: &quot;A String&quot;, # The number of identical products in a merchant-defined multipack.
   &quot;offerId&quot;: &quot;A String&quot;, # Required. A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details. *Note:* Content API methods that operate on products take the REST ID of the product, *not* this identifier.
-  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (e.g. polka dots).
+  &quot;pattern&quot;: &quot;A String&quot;, # The item&#x27;s pattern (for example, polka dots).
+  &quot;pause&quot;: &quot;A String&quot;, # Publication of this item should be temporarily paused. Acceptable values are: - &quot;`ads`&quot;
   &quot;pickupMethod&quot;: &quot;A String&quot;, # The pick up option for the item. Acceptable values are: - &quot;`buy`&quot; - &quot;`reserve`&quot; - &quot;`ship to store`&quot; - &quot;`not supported`&quot;
   &quot;pickupSla&quot;: &quot;A String&quot;, # Item store pickup timeline. Acceptable values are: - &quot;`same day`&quot; - &quot;`next day`&quot; - &quot;`2-day`&quot; - &quot;`3-day`&quot; - &quot;`4-day`&quot; - &quot;`5-day`&quot; - &quot;`6-day`&quot; - &quot;`7-day`&quot; - &quot;`multi-week`&quot;
   &quot;price&quot;: { # Price of the item.
@@ -1704,12 +1832,28 @@ Returns:
       &quot;sectionName&quot;: &quot;A String&quot;, # The section header used to group a set of product details.
     },
   ],
+  &quot;productHeight&quot;: { # The height of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productHighlights&quot;: [ # Bullet points describing the most relevant highlights of a product.
     &quot;A String&quot;,
   ],
+  &quot;productLength&quot;: { # The length of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;productTypes&quot;: [ # Categories of the item (formatted as in products data specification).
     &quot;A String&quot;,
   ],
+  &quot;productWeight&quot;: { # The weight of the product in the units provided. The value must be between 0 (exclusive) and 2000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The weight unit. Acceptable values are: - &quot;`g`&quot; - &quot;`kg`&quot; - &quot;`oz`&quot; - &quot;`lb`&quot;
+    &quot;value&quot;: 3.14, # Required. The weight represented as a number. The weight can have a maximum precision of four decimal places.
+  },
+  &quot;productWidth&quot;: { # The width of the product in the units provided. The value must be between 0 (exclusive) and 3000 (inclusive).
+    &quot;unit&quot;: &quot;A String&quot;, # Required. The length units. Acceptable values are: - &quot;`in`&quot; - &quot;`cm`&quot;
+    &quot;value&quot;: 3.14, # Required. The length value represented as a number. The value can have a maximum precision of four decimal places.
+  },
   &quot;promotionIds&quot;: [ # The unique ID of a promotion.
     &quot;A String&quot;,
   ],
@@ -1724,10 +1868,10 @@ Returns:
       &quot;country&quot;: &quot;A String&quot;, # The CLDR territory code of the country to which an item will ship.
       &quot;locationGroupName&quot;: &quot;A String&quot;, # The location where the shipping is applicable, represented by a location group name.
       &quot;locationId&quot;: &quot;A String&quot;, # The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.
-      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
-      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it is received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it is not required if maxHandlingTime is present.
-      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it is delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it is not required if maxTransitTime is present.
+      &quot;maxHandlingTime&quot;: &quot;A String&quot;, # Maximum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;maxTransitTime&quot;: &quot;A String&quot;, # Maximum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. Both maxHandlingTime and maxTransitTime are required if providing shipping speeds.
+      &quot;minHandlingTime&quot;: &quot;A String&quot;, # Minimum handling time (inclusive) between when the order is received and shipped in business days. 0 means that the order is shipped on the same day as it&#x27;s received if it happens before the cut-off time. minHandlingTime can only be present together with maxHandlingTime; but it&#x27;s not required if maxHandlingTime is present.
+      &quot;minTransitTime&quot;: &quot;A String&quot;, # Minimum transit time (inclusive) between when the order has shipped and when it&#x27;s delivered in business days. 0 means that the order is delivered on the same day as it ships. minTransitTime can only be present together with maxTransitTime; but it&#x27;s not required if maxTransitTime is present.
       &quot;postalCode&quot;: &quot;A String&quot;, # The postal code range that the shipping rate applies to, represented by a postal code, a postal code prefix followed by a * wildcard, a range between two postal codes or two postal code prefixes of equal length.
       &quot;price&quot;: { # Fixed shipping price, represented as a number.
         &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.
@@ -1762,7 +1906,7 @@ Returns:
   &quot;sizes&quot;: [ # Size of the item. Only one value is allowed. For variants with different sizes, insert a separate product for each size with the same `itemGroupId` value (see size definition).
     &quot;A String&quot;,
   ],
-  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, i.e., how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
+  &quot;source&quot;: &quot;A String&quot;, # The source of the offer, that is, how the offer was created. Acceptable values are: - &quot;`api`&quot; - &quot;`crawl`&quot; - &quot;`feed`&quot;
   &quot;subscriptionCost&quot;: { # Number of periods (months or years) and amount of payment per period for an item with an associated subscription contract.
     &quot;amount&quot;: { # The amount the buyer has to pay per subscription period.
       &quot;currency&quot;: &quot;A String&quot;, # The currency of the price.

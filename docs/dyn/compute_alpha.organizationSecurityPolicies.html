@@ -171,6 +171,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -210,7 +213,7 @@ Args:
     The object takes the form of:
 
 { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -264,15 +267,25 @@ Args:
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
-    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+    &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+      &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+      &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+    },
     &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+    &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+    &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+  },
   &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+  &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
   &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
   &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -311,6 +324,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -380,6 +396,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -443,6 +462,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -523,11 +545,14 @@ Returns:
   },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
+  &quot;recaptchaOptionsConfig&quot;: {
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+  },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule (rule with priority 2147483647 and match &quot;*&quot;). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -581,15 +606,25 @@ Returns:
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
-        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+        &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+          &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+        },
         &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+        &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+        &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+      },
       &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+      &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
       &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
       &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
       &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -602,7 +637,7 @@ Returns:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. CLOUD_ARMOR policies apply to backend services. FIREWALL policies apply to organizations.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
 }</pre>
 </div>
 
@@ -645,7 +680,7 @@ Returns:
   An object of the form:
 
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -699,15 +734,25 @@ Returns:
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
-    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+    &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+      &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+      &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+    },
     &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+    &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+    &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+  },
   &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+  &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
   &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
   &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -764,11 +809,14 @@ Args:
   },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
+  &quot;recaptchaOptionsConfig&quot;: {
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+  },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule (rule with priority 2147483647 and match &quot;*&quot;). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -822,15 +870,25 @@ Args:
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
-        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+        &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+          &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+        },
         &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+        &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+        &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+      },
       &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+      &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
       &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
       &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
       &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -843,7 +901,7 @@ Args:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. CLOUD_ARMOR policies apply to backend services. FIREWALL policies apply to organizations.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
 }
 
   parentId: string, Parent ID for this request. The ID can be either be &quot;folders/[FOLDER_ID]&quot; if the parent is a folder or &quot;organizations/[ORGANIZATION_ID]&quot; if the parent is an organization.
@@ -875,6 +933,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -909,7 +970,7 @@ Returns:
   <pre>List all the policies that have been configured for the specified project.
 
 Args:
-  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, a comparison operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The comparison operator must be either `=`, `!=`, `&gt;`, or `&lt;`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
+  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, an operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The operator must be either `=`, `!=`, `&gt;`, `&lt;`, `&lt;=`, `&gt;=` or `:`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. The `:` operator can be used with string fields to match substrings. For non-string fields it is equivalent to the `=` operator. The `:*` comparison can be used to test whether a key has been defined. For example, to find all objects with `owner` label use: ``` labels.owner:* ``` You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
   maxResults: integer, The maximum number of results per page that should be returned. If the number of available results is larger than `maxResults`, Compute Engine returns a `nextPageToken` that can be used to get the next page of results in subsequent list requests. Acceptable values are `0` to `500`, inclusive. (Default: `500`)
   orderBy: string, Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name. You can also sort results in descending order based on the creation timestamp using `orderBy=&quot;creationTimestamp desc&quot;`. This sorts results based on the `creationTimestamp` field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first. Currently, only sorting by `name` or `creationTimestamp desc` is supported.
   pageToken: string, Specifies a page token to use. Set `pageToken` to the `nextPageToken` returned by a previous list request to get the next page of results.
@@ -964,11 +1025,14 @@ Returns:
       },
       &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
+      &quot;recaptchaOptionsConfig&quot;: {
+        &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+      },
       &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
       &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
       &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule (rule with priority 2147483647 and match &quot;*&quot;). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
         { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
           &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
           &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
           &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -1022,15 +1086,25 @@ Returns:
               &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
               &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
             },
-            &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-            &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-            &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+            &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+            &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+            &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+            &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+            &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+              &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+              &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+            },
             &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
               &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
               &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
             },
           },
+          &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+            &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+            &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+          },
           &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+          &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
           &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
           &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
           &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -1043,7 +1117,7 @@ Returns:
       ],
       &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
       &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-      &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. CLOUD_ARMOR policies apply to backend services. FIREWALL policies apply to organizations.
+      &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
     },
   ],
   &quot;kind&quot;: &quot;compute#securityPolicyList&quot;, # [Output Only] Type of resource. Always compute#securityPolicyList for listsof securityPolicies
@@ -1140,6 +1214,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -1215,11 +1292,14 @@ Args:
   },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
+  &quot;recaptchaOptionsConfig&quot;: {
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+  },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule (rule with priority 2147483647 and match &quot;*&quot;). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -1273,15 +1353,25 @@ Args:
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
-        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+        &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+        &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+        &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+          &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+        },
         &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
           &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+        &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+        &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+      },
       &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+      &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
       &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
       &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
       &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -1294,7 +1384,7 @@ Args:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. CLOUD_ARMOR policies apply to backend services. FIREWALL policies apply to organizations.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
 }
 
   requestId: string, An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported ( 00000000-0000-0000-0000-000000000000).
@@ -1325,6 +1415,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -1364,7 +1457,7 @@ Args:
     The object takes the form of:
 
 { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the client connection triggers the rule. Can currently be either &quot;allow&quot; or &quot;deny()&quot; where valid values for status are 403, 404, and 502.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(): deny access to target, returns the HTTP response code specified (valid values are 403, 404, and 502). - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
@@ -1418,15 +1511,25 @@ Args:
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
-    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take when requests are under the given threshold. When requests are throttled, this is also the action for all requests which are not dropped. Valid options are &quot;allow&quot;, &quot;fairshare&quot;, and &quot;drop_overload&quot;.
-    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the threshold_rps limit on. If key is &quot;IP&quot;, each IP has this limit enforced separately, whereas &quot;ALL_IPs&quot; means a single limit is applied to all requests matching this rule.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # When a request is denied, returns the HTTP response code specified. Valid options are &quot;deny()&quot; where valid values for status are 403, 404, 429, and 502.
+    &quot;conformAction&quot;: &quot;A String&quot;, # Action to take for requests that are under the configured rate limit threshold. Valid option is &quot;allow&quot; only.
+    &quot;enforceOnKey&quot;: &quot;A String&quot;, # Determines the key to enforce the rate_limit_threshold on. Possible values are: - ALL: A single rate limit threshold is applied to all the requests matching this rule. This is the default value if this field &#x27;enforce_on_key&#x27; is not configured. - IP: The source IP address of the request is the key. Each IP has this limit enforced separately. - HTTP_HEADER: The value of the HTTP header whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the header value. If no such header is present in the request, the key type defaults to ALL. - XFF_IP: The first IP address (i.e. the originating client IP address) specified in the list of IPs under X-Forwarded-For HTTP header. If no such header is present or the value is not a valid IP, the key defaults to the source IP address of the request i.e. key type IP. - HTTP_COOKIE: The value of the HTTP cookie whose name is configured under &quot;enforce_on_key_name&quot;. The key value is truncated to the first 128 bytes of the cookie value. If no such cookie is present in the request, the key type defaults to ALL.
+    &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are &quot;deny(status)&quot;, where valid values for status are 403, 404, 429, and 502, and &quot;redirect&quot; where the redirect parameters come from exceedRedirectOptions below.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+      &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+      &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+    },
     &quot;rateLimitThreshold&quot;: { # Threshold at which to begin ratelimiting.
       &quot;count&quot;: 42, # Number of HTTP(S) requests for calculating the threshold.
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+    &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
+    &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
+  },
   &quot;redirectTarget&quot;: &quot;A String&quot;, # This must be specified for redirect actions. Cannot be specified for any other actions.
+  &quot;ruleManagedProtectionTier&quot;: &quot;A String&quot;, # [Output Only] The minimum managed protection tier required for this rule.
   &quot;ruleNumber&quot;: &quot;A String&quot;, # Identifier for the rule. This is only unique within the given security policy. This can only be set during rule creation, if rule number is not specified it will be generated by the server.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall security policy rule.
   &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule. This field may only be specified when versioned_expr is set to FIREWALL.
@@ -1466,6 +1569,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -1530,6 +1636,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.
@@ -1594,6 +1703,9 @@ Returns:
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
+  &quot;metadata&quot;: { # [Output Only] Service-specific metadata attached to this operation.
+    &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+  },
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
   &quot;operationType&quot;: &quot;A String&quot;, # [Output Only] The type of operation, such as `insert`, `update`, or `delete`, and so on.

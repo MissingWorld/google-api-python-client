@@ -126,7 +126,7 @@ h1, h2, h3 {
 
 Args:
   project: string, Project ID for this request. (required)
-  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, a comparison operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The comparison operator must be either `=`, `!=`, `&gt;`, or `&lt;`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
+  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, an operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The operator must be either `=`, `!=`, `&gt;`, `&lt;`, `&lt;=`, `&gt;=` or `:`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. The `:` operator can be used with string fields to match substrings. For non-string fields it is equivalent to the `=` operator. The `:*` comparison can be used to test whether a key has been defined. For example, to find all objects with `owner` label use: ``` labels.owner:* ``` You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
   includeAllScopes: boolean, Indicates whether every visible scope for each scope type (zone, region, global) should be included in the response. For new resource types added after this field, the flag has no effect as new resource types will always include every visible scope for each scope type in response. For resource types which predate this field, if this flag is omitted or false, only scopes of the scope types where the resource type is expected to be found will be included.
   maxResults: integer, The maximum number of results per page that should be returned. If the number of available results is larger than `maxResults`, Compute Engine returns a `nextPageToken` that can be used to get the next page of results in subsequent list requests. Acceptable values are `0` to `500`, inclusive. (Default: `500`)
   orderBy: string, Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name. You can also sort results in descending order based on the creation timestamp using `orderBy=&quot;creationTimestamp desc&quot;`. This sorts results based on the `creationTimestamp` field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first. Currently, only sorting by `name` or `creationTimestamp desc` is supported.
@@ -173,19 +173,23 @@ Returns:
                 },
               ],
               &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-              &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-                &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-                &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-                &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-                &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+              &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+                &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+                &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+                &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+                &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
               },
               &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+              &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
               &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
               &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+              &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
               &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+              &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
               &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
               &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
               &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+              &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
               &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
             },
           ],
@@ -206,23 +210,46 @@ Returns:
             },
           ],
           &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+          &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+            {
+              &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+              &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+            },
+          ],
           &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
           &quot;nats&quot;: [ # A list of NAT services created in this router.
             { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
               &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
                 &quot;A String&quot;,
               ],
+              &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
               &quot;enableEndpointIndependentMapping&quot;: True or False,
               &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
               &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
                 &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
                 &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
               },
+              &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
               &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
               &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
               &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
               &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
                 &quot;A String&quot;,
+              ],
+              &quot;rules&quot;: [ # A list of rules associated with this NAT.
+                {
+                  &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+                    &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+                      &quot;A String&quot;,
+                    ],
+                    &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+                      &quot;A String&quot;,
+                    ],
+                  },
+                  &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+                  &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+                  &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+                },
               ],
               &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
               &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -237,6 +264,7 @@ Returns:
                 },
               ],
               &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+              &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
               &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
               &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
             },
@@ -404,19 +432,23 @@ Returns:
         },
       ],
       &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-      &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+      &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
       },
       &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+      &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
       &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
       &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+      &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
       &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+      &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
       &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+      &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
       &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
     },
   ],
@@ -437,23 +469,46 @@ Returns:
     },
   ],
   &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+  &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+    {
+      &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+      &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+    },
+  ],
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;nats&quot;: [ # A list of NAT services created in this router.
     { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
       &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
         &quot;A String&quot;,
       ],
+      &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
       &quot;enableEndpointIndependentMapping&quot;: True or False,
       &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
       &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
         &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
         &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
       },
+      &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
       &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
       &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
       &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
       &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
         &quot;A String&quot;,
+      ],
+      &quot;rules&quot;: [ # A list of rules associated with this NAT.
+        {
+          &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+            &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+            &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+          },
+          &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+          &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+          &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+        },
       ],
       &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
       &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -468,6 +523,7 @@ Returns:
         },
       ],
       &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+      &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
       &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
       &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
     },
@@ -486,7 +542,7 @@ Args:
   project: string, Project ID for this request. (required)
   region: string, Name of the region for this request. (required)
   router: string, Name of the Router resource to query for Nat Mapping information of VM endpoints. (required)
-  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, a comparison operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The comparison operator must be either `=`, `!=`, `&gt;`, or `&lt;`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
+  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, an operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The operator must be either `=`, `!=`, `&gt;`, `&lt;`, `&lt;=`, `&gt;=` or `:`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. The `:` operator can be used with string fields to match substrings. For non-string fields it is equivalent to the `=` operator. The `:*` comparison can be used to test whether a key has been defined. For example, to find all objects with `owner` label use: ``` labels.owner:* ``` You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
   maxResults: integer, The maximum number of results per page that should be returned. If the number of available results is larger than `maxResults`, Compute Engine returns a `nextPageToken` that can be used to get the next page of results in subsequent list requests. Acceptable values are `0` to `500`, inclusive. (Default: `500`)
   natName: string, Name of the nat service to filter the Nat Mapping information. If it is omitted, all nats for this router will be returned. Name should conform to RFC1035.
   orderBy: string, Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name. You can also sort results in descending order based on the creation timestamp using `orderBy=&quot;creationTimestamp desc&quot;`. This sorts results based on the `creationTimestamp` field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first. Currently, only sorting by `name` or `creationTimestamp desc` is supported.
@@ -572,6 +628,14 @@ Returns:
   &quot;result&quot;: {
     &quot;bestRoutes&quot;: [ # Best routes for this router&#x27;s network.
       { # Represents a Route resource. A route defines a path from VM instances in the VPC network to a specific destination. This destination can be inside or outside the VPC network. For more information, read the Routes overview.
+        &quot;asPaths&quot;: [ # [Output Only] AS path.
+          {
+            &quot;asLists&quot;: [ # [Output Only] The AS numbers of the AS Path.
+              42,
+            ],
+            &quot;pathSegmentType&quot;: &quot;A String&quot;, # [Output Only] The type of the AS Path, which can be one of the following values: - &#x27;AS_SET&#x27;: unordered set of autonomous systems that the route in has traversed - &#x27;AS_SEQUENCE&#x27;: ordered set of autonomous systems that the route has traversed - &#x27;AS_CONFED_SEQUENCE&#x27;: ordered set of Member Autonomous Systems in the local confederation that the route has traversed - &#x27;AS_CONFED_SET&#x27;: unordered set of Member Autonomous Systems in the local confederation that the route has traversed
+          },
+        ],
         &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in RFC3339 text format.
         &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
         &quot;destRange&quot;: &quot;A String&quot;, # The destination range of outgoing packets that this route applies to. Both IPv4 and IPv6 are supported.
@@ -588,6 +652,8 @@ Returns:
         &quot;nextHopPeering&quot;: &quot;A String&quot;, # [Output Only] The network peering name that should handle matching packets, which should conform to RFC1035.
         &quot;nextHopVpnTunnel&quot;: &quot;A String&quot;, # The URL to a VpnTunnel that should handle matching packets.
         &quot;priority&quot;: 42, # The priority of this route. Priority is used to break ties in cases where there is more than one matching route of equal prefix length. In cases where multiple routes have equal prefix length, the one with the lowest-numbered priority value wins. The default value is `1000`. The priority value must be from `0` to `65535`, inclusive.
+        &quot;routeStatus&quot;: &quot;A String&quot;, # [Output only] The status of the route.
+        &quot;routeType&quot;: &quot;A String&quot;, # [Output Only] The type of this route, which can be one of the following values: - &#x27;TRANSIT&#x27; for a transit route that this router learned from another Cloud Router and will readvertise to one of its BGP peers - &#x27;SUBNET&#x27; for a route from a subnet of the VPC - &#x27;BGP&#x27; for a route learned from a BGP peer of this router - &#x27;STATIC&#x27; for a static route
         &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined fully-qualified URL for this resource.
         &quot;tags&quot;: [ # A list of instance tags to which this route applies.
           &quot;A String&quot;,
@@ -608,6 +674,14 @@ Returns:
     ],
     &quot;bestRoutesForRouter&quot;: [ # Best routes learned by this router.
       { # Represents a Route resource. A route defines a path from VM instances in the VPC network to a specific destination. This destination can be inside or outside the VPC network. For more information, read the Routes overview.
+        &quot;asPaths&quot;: [ # [Output Only] AS path.
+          {
+            &quot;asLists&quot;: [ # [Output Only] The AS numbers of the AS Path.
+              42,
+            ],
+            &quot;pathSegmentType&quot;: &quot;A String&quot;, # [Output Only] The type of the AS Path, which can be one of the following values: - &#x27;AS_SET&#x27;: unordered set of autonomous systems that the route in has traversed - &#x27;AS_SEQUENCE&#x27;: ordered set of autonomous systems that the route has traversed - &#x27;AS_CONFED_SEQUENCE&#x27;: ordered set of Member Autonomous Systems in the local confederation that the route has traversed - &#x27;AS_CONFED_SET&#x27;: unordered set of Member Autonomous Systems in the local confederation that the route has traversed
+          },
+        ],
         &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in RFC3339 text format.
         &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
         &quot;destRange&quot;: &quot;A String&quot;, # The destination range of outgoing packets that this route applies to. Both IPv4 and IPv6 are supported.
@@ -624,6 +698,8 @@ Returns:
         &quot;nextHopPeering&quot;: &quot;A String&quot;, # [Output Only] The network peering name that should handle matching packets, which should conform to RFC1035.
         &quot;nextHopVpnTunnel&quot;: &quot;A String&quot;, # The URL to a VpnTunnel that should handle matching packets.
         &quot;priority&quot;: 42, # The priority of this route. Priority is used to break ties in cases where there is more than one matching route of equal prefix length. In cases where multiple routes have equal prefix length, the one with the lowest-numbered priority value wins. The default value is `1000`. The priority value must be from `0` to `65535`, inclusive.
+        &quot;routeStatus&quot;: &quot;A String&quot;, # [Output only] The status of the route.
+        &quot;routeType&quot;: &quot;A String&quot;, # [Output Only] The type of this route, which can be one of the following values: - &#x27;TRANSIT&#x27; for a transit route that this router learned from another Cloud Router and will readvertise to one of its BGP peers - &#x27;SUBNET&#x27; for a route from a subnet of the VPC - &#x27;BGP&#x27; for a route learned from a BGP peer of this router - &#x27;STATIC&#x27; for a static route
         &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined fully-qualified URL for this resource.
         &quot;tags&quot;: [ # A list of instance tags to which this route applies.
           &quot;A String&quot;,
@@ -646,6 +722,14 @@ Returns:
       {
         &quot;advertisedRoutes&quot;: [ # Routes that were advertised to the remote BGP peer
           { # Represents a Route resource. A route defines a path from VM instances in the VPC network to a specific destination. This destination can be inside or outside the VPC network. For more information, read the Routes overview.
+            &quot;asPaths&quot;: [ # [Output Only] AS path.
+              {
+                &quot;asLists&quot;: [ # [Output Only] The AS numbers of the AS Path.
+                  42,
+                ],
+                &quot;pathSegmentType&quot;: &quot;A String&quot;, # [Output Only] The type of the AS Path, which can be one of the following values: - &#x27;AS_SET&#x27;: unordered set of autonomous systems that the route in has traversed - &#x27;AS_SEQUENCE&#x27;: ordered set of autonomous systems that the route has traversed - &#x27;AS_CONFED_SEQUENCE&#x27;: ordered set of Member Autonomous Systems in the local confederation that the route has traversed - &#x27;AS_CONFED_SET&#x27;: unordered set of Member Autonomous Systems in the local confederation that the route has traversed
+              },
+            ],
             &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in RFC3339 text format.
             &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
             &quot;destRange&quot;: &quot;A String&quot;, # The destination range of outgoing packets that this route applies to. Both IPv4 and IPv6 are supported.
@@ -662,6 +746,8 @@ Returns:
             &quot;nextHopPeering&quot;: &quot;A String&quot;, # [Output Only] The network peering name that should handle matching packets, which should conform to RFC1035.
             &quot;nextHopVpnTunnel&quot;: &quot;A String&quot;, # The URL to a VpnTunnel that should handle matching packets.
             &quot;priority&quot;: 42, # The priority of this route. Priority is used to break ties in cases where there is more than one matching route of equal prefix length. In cases where multiple routes have equal prefix length, the one with the lowest-numbered priority value wins. The default value is `1000`. The priority value must be from `0` to `65535`, inclusive.
+            &quot;routeStatus&quot;: &quot;A String&quot;, # [Output only] The status of the route.
+            &quot;routeType&quot;: &quot;A String&quot;, # [Output Only] The type of this route, which can be one of the following values: - &#x27;TRANSIT&#x27; for a transit route that this router learned from another Cloud Router and will readvertise to one of its BGP peers - &#x27;SUBNET&#x27; for a route from a subnet of the VPC - &#x27;BGP&#x27; for a route learned from a BGP peer of this router - &#x27;STATIC&#x27; for a static route
             &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined fully-qualified URL for this resource.
             &quot;tags&quot;: [ # A list of instance tags to which this route applies.
               &quot;A String&quot;,
@@ -742,12 +828,14 @@ Returns:
         },
         &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the local BGP interface.
         &quot;linkedVpnTunnel&quot;: &quot;A String&quot;, # URL of the VPN tunnel that this BGP peer controls.
+        &quot;md5AuthEnabled&quot;: True or False, # Informs whether MD5 authentication is enabled on this BGP peer.
         &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. Unique within the Routers resource.
         &quot;numLearnedRoutes&quot;: 42, # Number of routes learned from the remote BGP Peer.
         &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the remote BGP interface.
         &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # [Output only] URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance is the peer side of the BGP session.
-        &quot;state&quot;: &quot;A String&quot;, # BGP state as specified in RFC1771.
+        &quot;state&quot;: &quot;A String&quot;, # The state of the BGP session. For a list of possible values for this field, see BGP session states.
         &quot;status&quot;: &quot;A String&quot;, # Status of the BGP peer: {UP, DOWN}
+        &quot;statusReason&quot;: &quot;A String&quot;, # Indicates why particular status was returned.
         &quot;uptime&quot;: &quot;A String&quot;, # Time this session has been up. Format: 14 years, 51 weeks, 6 days, 23 hours, 59 minutes, 59 seconds
         &quot;uptimeSeconds&quot;: &quot;A String&quot;, # Time this session has been up, in seconds. Format: 145
       },
@@ -766,6 +854,19 @@ Returns:
         &quot;minExtraNatIpsNeeded&quot;: 42, # The number of extra IPs to allocate. This will be greater than 0 only if user-specified IPs are NOT enough to allow all configured VMs to use NAT. This value is meaningful only when auto-allocation of NAT IPs is *not* used.
         &quot;name&quot;: &quot;A String&quot;, # Unique name of this NAT.
         &quot;numVmEndpointsWithNatMappings&quot;: 42, # Number of VM endpoints (i.e., Nics) that can use NAT.
+        &quot;ruleStatus&quot;: [ # Status of rules in this NAT.
+          { # Status of a NAT Rule contained in this NAT.
+            &quot;activeNatIps&quot;: [ # A list of active IPs for NAT. Example: [&quot;1.1.1.1&quot;, &quot;179.12.26.133&quot;].
+              &quot;A String&quot;,
+            ],
+            &quot;drainNatIps&quot;: [ # A list of IPs for NAT that are in drain mode. Example: [&quot;1.1.1.1&quot;, &quot;179.12.26.133&quot;].
+              &quot;A String&quot;,
+            ],
+            &quot;minExtraIpsNeeded&quot;: 42, # The number of extra IPs to allocate. This will be greater than 0 only if the existing IPs in this NAT Rule are NOT enough to allow all configured VMs to use NAT.
+            &quot;numVmEndpointsWithNatMappings&quot;: 42, # Number of VM endpoints (i.e., NICs) that have NAT Mappings from this NAT Rule.
+            &quot;ruleNumber&quot;: 42, # Rule number of the rule.
+          },
+        ],
         &quot;userAllocatedNatIpResources&quot;: [ # A list of fully qualified URLs of reserved IP address resources.
           &quot;A String&quot;,
         ],
@@ -817,19 +918,23 @@ Args:
         },
       ],
       &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-      &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+      &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
       },
       &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+      &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
       &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
       &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+      &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
       &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+      &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
       &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+      &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
       &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
     },
   ],
@@ -850,23 +955,46 @@ Args:
     },
   ],
   &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+  &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+    {
+      &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+      &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+    },
+  ],
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;nats&quot;: [ # A list of NAT services created in this router.
     { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
       &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
         &quot;A String&quot;,
       ],
+      &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
       &quot;enableEndpointIndependentMapping&quot;: True or False,
       &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
       &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
         &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
         &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
       },
+      &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
       &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
       &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
       &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
       &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
         &quot;A String&quot;,
+      ],
+      &quot;rules&quot;: [ # A list of rules associated with this NAT.
+        {
+          &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+            &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+            &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+          },
+          &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+          &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+          &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+        },
       ],
       &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
       &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -881,6 +1009,7 @@ Args:
         },
       ],
       &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+      &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
       &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
       &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
     },
@@ -953,7 +1082,7 @@ Returns:
 Args:
   project: string, Project ID for this request. (required)
   region: string, Name of the region for this request. (required)
-  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, a comparison operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The comparison operator must be either `=`, `!=`, `&gt;`, or `&lt;`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
+  filter: string, A filter expression that filters resources listed in the response. The expression must specify the field name, an operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The operator must be either `=`, `!=`, `&gt;`, `&lt;`, `&lt;=`, `&gt;=` or `:`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. The `:` operator can be used with string fields to match substrings. For non-string fields it is equivalent to the `=` operator. The `:*` comparison can be used to test whether a key has been defined. For example, to find all objects with `owner` label use: ``` labels.owner:* ``` You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = &quot;Intel Skylake&quot;) ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = &quot;Intel Skylake&quot;) OR (cpuPlatform = &quot;Intel Broadwell&quot;) AND (scheduling.automaticRestart = true) ```
   maxResults: integer, The maximum number of results per page that should be returned. If the number of available results is larger than `maxResults`, Compute Engine returns a `nextPageToken` that can be used to get the next page of results in subsequent list requests. Acceptable values are `0` to `500`, inclusive. (Default: `500`)
   orderBy: string, Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name. You can also sort results in descending order based on the creation timestamp using `orderBy=&quot;creationTimestamp desc&quot;`. This sorts results based on the `creationTimestamp` field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first. Currently, only sorting by `name` or `creationTimestamp desc` is supported.
   pageToken: string, Specifies a page token to use. Set `pageToken` to the `nextPageToken` returned by a previous list request to get the next page of results.
@@ -997,19 +1126,23 @@ Returns:
             },
           ],
           &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-          &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-            &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-            &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-            &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-            &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+          &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+            &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+            &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+            &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+            &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
           },
           &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+          &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
           &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
           &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+          &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
           &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+          &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
           &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
           &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
           &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+          &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
           &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
         },
       ],
@@ -1030,23 +1163,46 @@ Returns:
         },
       ],
       &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+      &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+        {
+          &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+          &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+        },
+      ],
       &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;nats&quot;: [ # A list of NAT services created in this router.
         { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
           &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
             &quot;A String&quot;,
           ],
+          &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
           &quot;enableEndpointIndependentMapping&quot;: True or False,
           &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
           &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
             &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
             &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
           },
+          &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
           &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
           &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
           &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
           &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
             &quot;A String&quot;,
+          ],
+          &quot;rules&quot;: [ # A list of rules associated with this NAT.
+            {
+              &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+                &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+                  &quot;A String&quot;,
+                ],
+                &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+                  &quot;A String&quot;,
+                ],
+              },
+              &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+              &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+              &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+            },
           ],
           &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
           &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -1061,6 +1217,7 @@ Returns:
             },
           ],
           &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+          &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
           &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
           &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
         },
@@ -1139,19 +1296,23 @@ Args:
         },
       ],
       &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-      &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+      &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
       },
       &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+      &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
       &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
       &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+      &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
       &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+      &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
       &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+      &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
       &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
     },
   ],
@@ -1172,23 +1333,46 @@ Args:
     },
   ],
   &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+  &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+    {
+      &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+      &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+    },
+  ],
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;nats&quot;: [ # A list of NAT services created in this router.
     { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
       &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
         &quot;A String&quot;,
       ],
+      &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
       &quot;enableEndpointIndependentMapping&quot;: True or False,
       &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
       &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
         &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
         &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
       },
+      &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
       &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
       &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
       &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
       &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
         &quot;A String&quot;,
+      ],
+      &quot;rules&quot;: [ # A list of rules associated with this NAT.
+        {
+          &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+            &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+            &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+          },
+          &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+          &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+          &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+        },
       ],
       &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
       &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -1203,6 +1387,7 @@ Args:
         },
       ],
       &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+      &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
       &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
       &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
     },
@@ -1307,19 +1492,23 @@ Args:
         },
       ],
       &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-      &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+      &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
       },
       &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+      &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
       &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
       &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+      &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
       &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+      &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
       &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+      &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
       &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
     },
   ],
@@ -1340,23 +1529,46 @@ Args:
     },
   ],
   &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+  &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+    {
+      &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+      &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+    },
+  ],
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;nats&quot;: [ # A list of NAT services created in this router.
     { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
       &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
         &quot;A String&quot;,
       ],
+      &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
       &quot;enableEndpointIndependentMapping&quot;: True or False,
       &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
       &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
         &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
         &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
       },
+      &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
       &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
       &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
       &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
       &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
         &quot;A String&quot;,
+      ],
+      &quot;rules&quot;: [ # A list of rules associated with this NAT.
+        {
+          &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+            &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+            &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+          },
+          &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+          &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+          &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+        },
       ],
       &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
       &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -1371,6 +1583,7 @@ Args:
         },
       ],
       &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+      &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
       &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
       &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
     },
@@ -1417,19 +1630,23 @@ Returns:
           },
         ],
         &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-        &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-          &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-          &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-          &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-          &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+        &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+          &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+          &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+          &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+          &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
         },
         &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+        &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
         &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
         &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+        &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
         &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+        &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
         &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
         &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
         &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+        &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
         &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
       },
     ],
@@ -1450,23 +1667,46 @@ Returns:
       },
     ],
     &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+    &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+      {
+        &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+        &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+      },
+    ],
     &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
     &quot;nats&quot;: [ # A list of NAT services created in this router.
       { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
         &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
           &quot;A String&quot;,
         ],
+        &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
         &quot;enableEndpointIndependentMapping&quot;: True or False,
         &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
         &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
           &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
           &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
         },
+        &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
         &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
         &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
         &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
         &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
           &quot;A String&quot;,
+        ],
+        &quot;rules&quot;: [ # A list of rules associated with this NAT.
+          {
+            &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+              &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+                &quot;A String&quot;,
+              ],
+              &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+                &quot;A String&quot;,
+              ],
+            },
+            &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+            &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+            &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+          },
         ],
         &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
         &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -1481,6 +1721,7 @@ Returns:
           },
         ],
         &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+        &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
         &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
         &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
       },
@@ -1563,19 +1804,23 @@ Args:
         },
       ],
       &quot;advertisedRoutePriority&quot;: 42, # The priority of routes advertised to this BGP peer. Where there is more than one matching route of maximum length, the routes with the lowest priority value win.
-      &quot;bfd&quot;: { # BFD configuration for the BGP peering. Not currently available publicly.
-        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. Not currently available publicly. If set, this value must be between 100 and 30000. The default is 300.
-        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. Not currently available publicly. If set, the value must be a value between 2 and 16. The default is 3.
-        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. Not currently available publicly. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is PASSIVE.
+      &quot;bfd&quot;: { # BFD configuration for the BGP peering.
+        &quot;minReceiveInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets received from the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the transmit interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;minTransmitInterval&quot;: 42, # The minimum interval, in milliseconds, between BFD control packets transmitted to the peer router. The actual value is negotiated between the two routers and is equal to the greater of this value and the corresponding receive interval of the other router. If set, this value must be between 1000 and 30000. The default is 1000.
+        &quot;multiplier&quot;: 42, # The number of consecutive BFD packets that must be missed before BFD declares that a peer is unavailable. If set, the value must be a value between 5 and 16. The default is 5.
+        &quot;sessionInitializationMode&quot;: &quot;A String&quot;, # The BFD session initialization mode for this BGP peer. If set to ACTIVE, the Cloud Router will initiate the BFD session for this BGP peer. If set to PASSIVE, the Cloud Router will wait for the peer router to initiate the BFD session for this BGP peer. If set to DISABLED, BFD is disabled for this BGP peer. The default is DISABLED.
       },
       &quot;enable&quot;: &quot;A String&quot;, # The status of the BGP peer connection. If set to FALSE, any active session with the peer is terminated and all associated routing information is removed. If set to TRUE, the peer connection can be established with routing information. The default is TRUE.
+      &quot;enableIpv6&quot;: True or False, # Enable IPv6 traffic over BGP Peer. If not specified, it is disabled by default.
       &quot;interfaceName&quot;: &quot;A String&quot;, # Name of the interface the BGP peer is associated with.
       &quot;ipAddress&quot;: &quot;A String&quot;, # IP address of the interface inside Google Cloud Platform. Only IPv4 is supported.
+      &quot;ipv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the interface inside Google Cloud Platform.
       &quot;managementType&quot;: &quot;A String&quot;, # [Output Only] The resource that configures and manages this BGP peer. - MANAGED_BY_USER is the default value and can be managed by you or other users - MANAGED_BY_ATTACHMENT is a BGP peer that is configured and managed by Cloud Interconnect, specifically by an InterconnectAttachment of type PARTNER. Google automatically creates, updates, and deletes this type of BGP peer when the PARTNER InterconnectAttachment is created, updated, or deleted.
+      &quot;md5AuthenticationKeyName&quot;: &quot;A String&quot;, # Present if MD5 authentication is enabled for the peering. Must be the name of one of the entries in the Router.md5_authentication_keys. The field must comply with RFC1035.
       &quot;name&quot;: &quot;A String&quot;, # Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;peerAsn&quot;: 42, # Peer BGP Autonomous System Number (ASN). Each BGP interface may use a different value.
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # IP address of the BGP interface outside Google Cloud Platform. Only IPv4 is supported.
+      &quot;peerIpv6NexthopAddress&quot;: &quot;A String&quot;, # IPv6 address of the BGP interface outside Google Cloud Platform.
       &quot;routerApplianceInstance&quot;: &quot;A String&quot;, # URI of the VM instance that is used as third-party router appliances such as Next Gen Firewalls, Virtual Routers, or Router Appliances. The VM instance must be located in zones contained in the same region as this Cloud Router. The VM instance is the peer side of the BGP session.
     },
   ],
@@ -1596,23 +1841,46 @@ Args:
     },
   ],
   &quot;kind&quot;: &quot;compute#router&quot;, # [Output Only] Type of resource. Always compute#router for routers.
+  &quot;md5AuthenticationKeys&quot;: [ # Keys used for MD5 authentication.
+    {
+      &quot;key&quot;: &quot;A String&quot;, # [Input only] Value of the key. For patch and update calls, it can be skipped to copy the value from the previous configuration. This is allowed if the key with the same name existed before the operation. Maximum length is 80 characters. Can only contain printable ASCII characters.
+      &quot;name&quot;: &quot;A String&quot;, # Name used to identify the key. Must be unique within a router. Must be referenced by at least one bgpPeer. Must comply with RFC1035.
+    },
+  ],
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;nats&quot;: [ # A list of NAT services created in this router.
     { # Represents a Nat resource. It enables the VMs within the specified subnetworks to access Internet without external IP addresses. It specifies a list of subnetworks (and the ranges within) that want to use NAT. Customers can also provide the external IPs that would be used for NAT. GCP would auto-allocate ephemeral IPs if no external IPs are provided.
       &quot;drainNatIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT only.
         &quot;A String&quot;,
       ],
+      &quot;enableDynamicPortAllocation&quot;: True or False, # Enable Dynamic Port Allocation. If not specified, it is disabled by default. If set to true, - Dynamic Port Allocation will be enabled on this NAT config. - enableEndpointIndependentMapping cannot be set to true. - If minPorts is set, minPortsPerVm must be set to a power of two greater than or equal to 32. If minPortsPerVm is not set, a minimum of 32 ports will be allocated to a VM from this NAT config.
       &quot;enableEndpointIndependentMapping&quot;: True or False,
       &quot;icmpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for ICMP connections. Defaults to 30s if not set.
       &quot;logConfig&quot;: { # Configuration of logging on a NAT. # Configure logging on this NAT.
         &quot;enable&quot;: True or False, # Indicates whether or not to export logs. This is false by default.
         &quot;filter&quot;: &quot;A String&quot;, # Specify the desired filtering of logs on this NAT. If unspecified, logs are exported for all connections handled by this NAT. This option can take one of the following values: - ERRORS_ONLY: Export logs only for connection failures. - TRANSLATIONS_ONLY: Export logs only for successful connections. - ALL: Export logs for all connections, successful and unsuccessful.
       },
+      &quot;maxPortsPerVm&quot;: 42, # Maximum number of ports allocated to a VM from this NAT config when Dynamic Port Allocation is enabled. If Dynamic Port Allocation is not enabled, this field has no effect. If Dynamic Port Allocation is enabled, and this field is set, it must be set to a power of two greater than minPortsPerVm, or 64 if minPortsPerVm is not set. If Dynamic Port Allocation is enabled and this field is not set, a maximum of 65536 ports will be allocated to a VM from this NAT config.
       &quot;minPortsPerVm&quot;: 42, # Minimum number of ports allocated to a VM from this NAT config. If not set, a default number of ports is allocated to a VM. This is rounded up to the nearest power of 2. For example, if the value of this field is 50, at least 64 ports are allocated to a VM.
       &quot;name&quot;: &quot;A String&quot;, # Unique name of this Nat service. The name must be 1-63 characters long and comply with RFC1035.
       &quot;natIpAllocateOption&quot;: &quot;A String&quot;, # Specify the NatIpAllocateOption, which can take one of the following values: - MANUAL_ONLY: Uses only Nat IP addresses provided by customers. When there are not enough specified Nat IPs, the Nat service fails for new VMs. - AUTO_ONLY: Nat IPs are allocated by Google Cloud Platform; customers can&#x27;t specify any Nat IPs. When choosing AUTO_ONLY, then nat_ip should be empty.
       &quot;natIps&quot;: [ # A list of URLs of the IP resources used for this Nat service. These IP addresses must be valid static external IP addresses assigned to the project.
         &quot;A String&quot;,
+      ],
+      &quot;rules&quot;: [ # A list of rules associated with this NAT.
+        {
+          &quot;action&quot;: { # The action to be enforced for traffic that matches this rule.
+            &quot;sourceNatActiveIps&quot;: [ # A list of URLs of the IP resources used for this NAT rule. These IP addresses must be valid static external IP addresses assigned to the project. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+            &quot;sourceNatDrainIps&quot;: [ # A list of URLs of the IP resources to be drained. These IPs must be valid static external IPs that have been assigned to the NAT. These IPs should be used for updating/patching a NAT rule only. This field is used for public NAT.
+              &quot;A String&quot;,
+            ],
+          },
+          &quot;description&quot;: &quot;A String&quot;, # An optional description of this rule.
+          &quot;match&quot;: &quot;A String&quot;, # CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: &quot;inIpRange(destination.ip, &#x27;1.1.0.0/16&#x27;) || inIpRange(destination.ip, &#x27;2.2.0.0/16&#x27;)&quot; &quot;destination.ip == &#x27;1.1.0.1&#x27; || destination.ip == &#x27;8.8.8.8&#x27;&quot; The following example is a valid match expression for private NAT: &quot;nexthop.hub == &#x27;https://networkconnectivity.googleapis.com/v1alpha1/projects/my-project/global/hub/hub-1&#x27;&quot;
+          &quot;ruleNumber&quot;: 42, # An integer uniquely identifying a rule in the list. The rule number must be a positive value between 0 and 65000, and must be unique among rules within a NAT.
+        },
       ],
       &quot;sourceSubnetworkIpRangesToNat&quot;: &quot;A String&quot;, # Specify the Nat option, which can take one of the following values: - ALL_SUBNETWORKS_ALL_IP_RANGES: All of the IP ranges in every Subnetwork are allowed to Nat. - ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES: All of the primary IP ranges in every Subnetwork are allowed to Nat. - LIST_OF_SUBNETWORKS: A list of Subnetworks are allowed to Nat (specified in the field subnetwork below) The default is SUBNETWORK_IP_RANGE_TO_NAT_OPTION_UNSPECIFIED. Note that if this field contains ALL_SUBNETWORKS_ALL_IP_RANGES or ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES, then there should not be any other Router.Nat section in any Router for this network in this region.
       &quot;subnetworks&quot;: [ # A list of Subnetwork resources whose traffic should be translated by NAT Gateway. It is used only when LIST_OF_SUBNETWORKS is selected for the SubnetworkIpRangeToNatOption above.
@@ -1627,6 +1895,7 @@ Args:
         },
       ],
       &quot;tcpEstablishedIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP established connections. Defaults to 1200s if not set.
+      &quot;tcpTimeWaitTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP connections that are in TIME_WAIT state. Defaults to 120s if not set.
       &quot;tcpTransitoryIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for TCP transitory connections. Defaults to 30s if not set.
       &quot;udpIdleTimeoutSec&quot;: 42, # Timeout (in seconds) for UDP connections. Defaults to 30s if not set.
     },

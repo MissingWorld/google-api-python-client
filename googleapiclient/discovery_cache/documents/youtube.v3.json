@@ -966,34 +966,6 @@
           "scopes": [
             "https://www.googleapis.com/auth/youtube.force-ssl"
           ]
-        },
-        "update": {
-          "description": "Updates an existing resource.",
-          "flatPath": "youtube/v3/commentThreads",
-          "httpMethod": "PUT",
-          "id": "youtube.commentThreads.update",
-          "parameterOrder": [
-            "part"
-          ],
-          "parameters": {
-            "part": {
-              "description": "The *part* parameter specifies a comma-separated list of commentThread resource properties that the API response will include. You must at least include the snippet part in the parameter value since that part contains all of the properties that the API request can update.",
-              "location": "query",
-              "repeated": true,
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "youtube/v3/commentThreads",
-          "request": {
-            "$ref": "CommentThread"
-          },
-          "response": {
-            "$ref": "CommentThread"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/youtube.force-ssl"
-          ]
         }
       }
     },
@@ -2672,7 +2644,6 @@
               "type": "string"
             },
             "type": {
-              "default": "video,channel,playlist",
               "description": "Restrict results to a particular set of resource types from One Platform.",
               "location": "query",
               "repeated": true,
@@ -3012,7 +2983,7 @@
               "type": "string"
             },
             "part": {
-              "description": "The *part* parameter specifies the superChatEvent resource parts that the API response will include. Supported values are id and snippet.",
+              "description": "The *part* parameter specifies the superChatEvent resource parts that the API response will include. This parameter is currently not supported.",
               "location": "query",
               "repeated": true,
               "required": true,
@@ -3042,6 +3013,10 @@
             "part"
           ],
           "parameters": {
+            "externalChannelId": {
+              "location": "query",
+              "type": "string"
+            },
             "part": {
               "location": "query",
               "repeated": true,
@@ -3074,6 +3049,11 @@
             "type"
           ],
           "parameters": {
+            "externalChannelId": {
+              "description": "Channel ID to which changes should be applied, for delegation.",
+              "location": "query",
+              "type": "string"
+            },
             "linkingToken": {
               "description": "Delete the partner links with the given linking token.",
               "location": "query",
@@ -3112,6 +3092,11 @@
             "part"
           ],
           "parameters": {
+            "externalChannelId": {
+              "description": "Channel ID to which changes should be applied, for delegation.",
+              "location": "query",
+              "type": "string"
+            },
             "part": {
               "description": "The *part* parameter specifies the thirdPartyLink resource parts that the API request and response will include. Supported values are linkingToken, status, and snippet.",
               "location": "query",
@@ -3137,6 +3122,11 @@
             "part"
           ],
           "parameters": {
+            "externalChannelId": {
+              "description": "Channel ID to which changes should be applied, for delegation.",
+              "location": "query",
+              "type": "string"
+            },
             "linkingToken": {
               "description": "Get a third party link with the given linking token.",
               "location": "query",
@@ -3177,6 +3167,11 @@
             "part"
           ],
           "parameters": {
+            "externalChannelId": {
+              "description": "Channel ID to which changes should be applied, for delegation.",
+              "location": "query",
+              "type": "string"
+            },
             "part": {
               "description": "The *part* parameter specifies the thirdPartyLink resource parts that the API request and response will include. Supported values are linkingToken, status, and snippet.",
               "location": "query",
@@ -3403,7 +3398,7 @@
               "video/*",
               "application/octet-stream"
             ],
-            "maxSize": "137438953472",
+            "maxSize": "274877906944",
             "protocols": {
               "resumable": {
                 "multipart": true,
@@ -3762,9 +3757,39 @@
           ]
         }
       }
+    },
+    "youtube": {
+      "resources": {
+        "v3": {
+          "methods": {
+            "updateCommentThreads": {
+              "description": "Updates an existing resource.",
+              "flatPath": "youtube/v3/commentThreads",
+              "httpMethod": "PUT",
+              "id": "youtube.youtube.v3.updateCommentThreads",
+              "parameterOrder": [],
+              "parameters": {
+                "part": {
+                  "description": "The *part* parameter specifies a comma-separated list of commentThread resource properties that the API response will include. You must at least include the snippet part in the parameter value since that part contains all of the properties that the API request can update.",
+                  "location": "query",
+                  "repeated": true,
+                  "type": "string"
+                }
+              },
+              "path": "youtube/v3/commentThreads",
+              "request": {
+                "$ref": "CommentThread"
+              },
+              "response": {
+                "$ref": "CommentThread"
+              }
+            }
+          }
+        }
+      }
     }
   },
-  "revision": "20210614",
+  "revision": "20220430",
   "rootUrl": "https://youtube.googleapis.com/",
   "schemas": {
     "AbuseReport": {
@@ -4456,9 +4481,11 @@
             "rtmp",
             "dash",
             "webrtc",
-            "hls"
+            "hls",
+            "srt"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -5187,6 +5214,11 @@
       "description": "Information specific to a store on a merchandising platform linked to a YouTube channel.",
       "id": "ChannelToStoreLinkDetails",
       "properties": {
+        "merchantId": {
+          "description": "Google Merchant Center id of the store.",
+          "format": "uint64",
+          "type": "string"
+        },
         "storeName": {
           "description": "Name of the store.",
           "type": "string"
@@ -5710,6 +5742,9 @@
             "cbfcUnspecified",
             "cbfcU",
             "cbfcUA",
+            "cbfcUA7plus",
+            "cbfcUA13plus",
+            "cbfcUA16plus",
             "cbfcA",
             "cbfcS",
             "cbfcUnrated"
@@ -5718,6 +5753,9 @@
             "",
             "U",
             "U/A",
+            "U/A 7+",
+            "U/A 13+",
+            "U/A 16+",
             "A",
             "S",
             ""
@@ -6696,12 +6734,16 @@
             "mibacUnspecified",
             "mibacT",
             "mibacVap",
+            "mibacVm6",
             "mibacVm12",
             "mibacVm14",
+            "mibacVm16",
             "mibacVm18",
             "mibacUnrated"
           ],
           "enumDescriptions": [
+            "",
+            "",
             "",
             "",
             "",
@@ -7509,7 +7551,7 @@
       "type": "object"
     },
     "IngestionInfo": {
-      "description": "Describes information necessary for ingesting an RTMP or an HTTP stream.",
+      "description": "Describes information necessary for ingesting an RTMP, HTTP, or SRT stream.",
       "id": "IngestionInfo",
       "properties": {
         "backupIngestionAddress": {
@@ -7529,7 +7571,7 @@
           "type": "string"
         },
         "streamName": {
-          "description": "The HTTP or RTMP stream name that YouTube assigns to the video stream.",
+          "description": "The stream name that YouTube assigns to the video stream.",
           "type": "string"
         }
       },
@@ -8131,6 +8173,58 @@
       },
       "type": "object"
     },
+    "LiveChatGiftMembershipReceivedDetails": {
+      "id": "LiveChatGiftMembershipReceivedDetails",
+      "properties": {
+        "associatedMembershipGiftingMessageId": {
+          "description": "The ID of the membership gifting message that is related to this gift membership. This ID will always refer to a message whose type is 'membershipGiftingEvent'.",
+          "type": "string"
+        },
+        "gifterChannelId": {
+          "description": "The ID of the user that made the membership gifting purchase. This matches the `snippet.authorChannelId` of the associated membership gifting message.",
+          "type": "string"
+        },
+        "memberLevelName": {
+          "description": "The name of the Level at which the viewer is a member. This matches the `snippet.membershipGiftingDetails.giftMembershipsLevelName` of the associated membership gifting message. The Level names are defined by the YouTube channel offering the Membership. In some situations this field isn't filled.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LiveChatMemberMilestoneChatDetails": {
+      "id": "LiveChatMemberMilestoneChatDetails",
+      "properties": {
+        "memberLevelName": {
+          "description": "The name of the Level at which the viever is a member. The Level names are defined by the YouTube channel offering the Membership. In some situations this field isn't filled.",
+          "type": "string"
+        },
+        "memberMonth": {
+          "description": "The total amount of months (rounded up) the viewer has been a member that granted them this Member Milestone Chat. This is the same number of months as is being displayed to YouTube users.",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "userComment": {
+          "description": "The comment added by the member to this Member Milestone Chat. This field is empty for messages without a comment from the member.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LiveChatMembershipGiftingDetails": {
+      "id": "LiveChatMembershipGiftingDetails",
+      "properties": {
+        "giftMembershipsCount": {
+          "description": "The number of gift memberships purchased by the user.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "giftMembershipsLevelName": {
+          "description": "The name of the level of the gift memberships purchased by the user. The Level names are defined by the YouTube channel offering the Membership. In some situations this field isn't filled.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "LiveChatMessage": {
       "description": "A *liveChatMessage* resource represents a chat message in a YouTube Live Chat.",
       "id": "LiveChatMessage",
@@ -8265,10 +8359,11 @@
       "type": "object"
     },
     "LiveChatMessageSnippet": {
+      "description": "Next ID: 33",
       "id": "LiveChatMessageSnippet",
       "properties": {
         "authorChannelId": {
-          "description": "The ID of the user that authored this message, this field is not always filled. textMessageEvent - the user that wrote the message fanFundingEvent - the user that funded the broadcast newSponsorEvent - the user that just became a sponsor messageDeletedEvent - the moderator that took the action messageRetractedEvent - the author that retracted their message userBannedEvent - the moderator that took the action superChatEvent - the user that made the purchase",
+          "description": "The ID of the user that authored this message, this field is not always filled. textMessageEvent - the user that wrote the message fanFundingEvent - the user that funded the broadcast newSponsorEvent - the user that just became a sponsor memberMilestoneChatEvent - the member that sent the message membershipGiftingEvent - the user that made the purchase giftMembershipReceivedEvent - the user that received the gift membership messageDeletedEvent - the moderator that took the action messageRetractedEvent - the author that retracted their message userBannedEvent - the moderator that took the action superChatEvent - the user that made the purchase superStickerEvent - the user that made the purchase",
           "type": "string"
         },
         "displayMessage": {
@@ -8279,6 +8374,10 @@
           "$ref": "LiveChatFanFundingEventDetails",
           "description": "Details about the funding event, this is only set if the type is 'fanFundingEvent'."
         },
+        "giftMembershipReceivedDetails": {
+          "$ref": "LiveChatGiftMembershipReceivedDetails",
+          "description": "Details about the Gift Membership Received event, this is only set if the type is 'giftMembershipReceivedEvent'."
+        },
         "hasDisplayContent": {
           "description": "Whether the message has display content that should be displayed to users.",
           "type": "boolean"
@@ -8286,11 +8385,23 @@
         "liveChatId": {
           "type": "string"
         },
+        "memberMilestoneChatDetails": {
+          "$ref": "LiveChatMemberMilestoneChatDetails",
+          "description": "Details about the Member Milestone Chat event, this is only set if the type is 'memberMilestoneChatEvent'."
+        },
+        "membershipGiftingDetails": {
+          "$ref": "LiveChatMembershipGiftingDetails",
+          "description": "Details about the Membership Gifting event, this is only set if the type is 'membershipGiftingEvent'."
+        },
         "messageDeletedDetails": {
           "$ref": "LiveChatMessageDeletedDetails"
         },
         "messageRetractedDetails": {
           "$ref": "LiveChatMessageRetractedDetails"
+        },
+        "newSponsorDetails": {
+          "$ref": "LiveChatNewSponsorDetails",
+          "description": "Details about the New Member Announcement event, this is only set if the type is 'newSponsorEvent'. Please note that \"member\" is the new term for \"sponsor\"."
         },
         "publishedAt": {
           "description": "The date and time when the message was orignally published.",
@@ -8320,6 +8431,9 @@
             "sponsorOnlyModeStartedEvent",
             "sponsorOnlyModeEndedEvent",
             "newSponsorEvent",
+            "memberMilestoneChatEvent",
+            "membershipGiftingEvent",
+            "giftMembershipReceivedEvent",
             "messageDeletedEvent",
             "messageRetractedEvent",
             "userBannedEvent",
@@ -8327,6 +8441,9 @@
             "superStickerEvent"
           ],
           "enumDescriptions": [
+            "",
+            "",
+            "",
             "",
             "",
             "",
@@ -8428,6 +8545,20 @@
         "moderatorDetails": {
           "$ref": "ChannelProfileDetails",
           "description": "Details about the moderator."
+        }
+      },
+      "type": "object"
+    },
+    "LiveChatNewSponsorDetails": {
+      "id": "LiveChatNewSponsorDetails",
+      "properties": {
+        "isUpgrade": {
+          "description": "If the viewer just had upgraded from a lower level. For viewers that were not members at the time of purchase, this field is false.",
+          "type": "boolean"
+        },
+        "memberLevelName": {
+          "description": "The name of the Level that the viewer just had joined. The Level names are defined by the YouTube channel offering the Membership. In some situations this field isn't filled.",
+          "type": "string"
         }
       },
       "type": "object"

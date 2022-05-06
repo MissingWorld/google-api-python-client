@@ -153,6 +153,8 @@ Args:
       REQUESTED_AD_TYPE_CODE - Requested ad type code (e.g. &quot;IMAGE&quot;, &quot;RADLINK&quot;, &quot;OTHER&quot;).
       SERVED_AD_TYPE_NAME - Localized served ad type name (e.g. &quot;Display&quot;, &quot;Link unit&quot;, &quot;Other&quot;).
       SERVED_AD_TYPE_CODE - Served ad type code (e.g. &quot;IMAGE&quot;, &quot;RADLINK&quot;, &quot;OTHER&quot;).
+      AD_FORMAT_NAME - Localized ad format name indicating the way an ad is shown to the users on your site (e.g. &quot;In-page&quot;, &quot;Anchor&quot;, &quot;Vignette&quot;).
+      AD_FORMAT_CODE - Ad format code indicating the way an ad is shown to the users on your site (e.g. &quot;ON_PAGE&quot;, &quot;ANCHOR&quot;, &quot;INTERSTITIAL&quot;).
       CUSTOM_SEARCH_STYLE_NAME - Custom search style name.
       CUSTOM_SEARCH_STYLE_ID - Custom search style id.
       DOMAIN_REGISTRANT - Domain registrants.
@@ -196,7 +198,7 @@ Args:
       INDIVIDUAL_AD_IMPRESSIONS_RPM - Revenue per thousand individual ad impressions. This is calculated by dividing estimated revenue by the number of individual ad impressions multiplied by 1000.
       COST_PER_CLICK - Amount the publisher earns each time a user clicks on an ad. CPC is calculated by dividing the estimated revenue by the number of clicks received.
       ADS_PER_IMPRESSION - Number of ad views per impression.
-      TOTAL_EARNINGS - Total earnings.
+      TOTAL_EARNINGS - Total earnings are the gross estimated earnings from revenue shared traffic before any parent and child account revenue share is applied.
       WEBSEARCH_RESULT_PAGES - Number of results pages.
   orderBy: string, The name of a dimension or metric to sort the resulting report on, can be prefixed with &quot;+&quot; to sort ascending or &quot;-&quot; to sort descending. If no prefix is specified, the column is sorted ascending. (repeated)
   reportingTimeZone: string, Timezone in which to generate the report. If unspecified, this defaults to the account timezone. For more information, see [changing the time zone of your reports](https://support.google.com/adsense/answer/9830725).
@@ -223,7 +225,7 @@ Returns:
       },
     ],
   },
-  &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values * A month and day value, with a zero year, such as an anniversary * A year on its own, with zero month and day values * A year and month value, with a zero day, such as a credit card expiration date Related types are google.type.TimeOfDay and `google.protobuf.Timestamp`. # Required. End date of the range (inclusive).
+  &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # Required. End date of the range (inclusive).
     &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
     &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
     &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -244,7 +246,7 @@ Returns:
       ],
     },
   ],
-  &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values * A month and day value, with a zero year, such as an anniversary * A year on its own, with zero month and day values * A year and month value, with a zero day, such as a credit card expiration date Related types are google.type.TimeOfDay and `google.protobuf.Timestamp`. # Required. Start date of the range (inclusive).
+  &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp # Required. Start date of the range (inclusive).
     &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
     &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
     &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -322,6 +324,8 @@ Args:
       REQUESTED_AD_TYPE_CODE - Requested ad type code (e.g. &quot;IMAGE&quot;, &quot;RADLINK&quot;, &quot;OTHER&quot;).
       SERVED_AD_TYPE_NAME - Localized served ad type name (e.g. &quot;Display&quot;, &quot;Link unit&quot;, &quot;Other&quot;).
       SERVED_AD_TYPE_CODE - Served ad type code (e.g. &quot;IMAGE&quot;, &quot;RADLINK&quot;, &quot;OTHER&quot;).
+      AD_FORMAT_NAME - Localized ad format name indicating the way an ad is shown to the users on your site (e.g. &quot;In-page&quot;, &quot;Anchor&quot;, &quot;Vignette&quot;).
+      AD_FORMAT_CODE - Ad format code indicating the way an ad is shown to the users on your site (e.g. &quot;ON_PAGE&quot;, &quot;ANCHOR&quot;, &quot;INTERSTITIAL&quot;).
       CUSTOM_SEARCH_STYLE_NAME - Custom search style name.
       CUSTOM_SEARCH_STYLE_ID - Custom search style id.
       DOMAIN_REGISTRANT - Domain registrants.
@@ -365,7 +369,7 @@ Args:
       INDIVIDUAL_AD_IMPRESSIONS_RPM - Revenue per thousand individual ad impressions. This is calculated by dividing estimated revenue by the number of individual ad impressions multiplied by 1000.
       COST_PER_CLICK - Amount the publisher earns each time a user clicks on an ad. CPC is calculated by dividing the estimated revenue by the number of clicks received.
       ADS_PER_IMPRESSION - Number of ad views per impression.
-      TOTAL_EARNINGS - Total earnings.
+      TOTAL_EARNINGS - Total earnings are the gross estimated earnings from revenue shared traffic before any parent and child account revenue share is applied.
       WEBSEARCH_RESULT_PAGES - Number of results pages.
   orderBy: string, The name of a dimension or metric to sort the resulting report on, can be prefixed with &quot;+&quot; to sort ascending or &quot;-&quot; to sort descending. If no prefix is specified, the column is sorted ascending. (repeated)
   reportingTimeZone: string, Timezone in which to generate the report. If unspecified, this defaults to the account timezone. For more information, see [changing the time zone of your reports](https://support.google.com/adsense/answer/9830725).

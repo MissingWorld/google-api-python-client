@@ -129,7 +129,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -348,19 +348,11 @@ Returns:
               &quot;regionCode&quot;: &quot;A String&quot;, # Country of business. Must be a Unicode CLDR region code.
               &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when account payload fields were last updated.
             },
-            &quot;androidAppDataStream&quot;: { # A resource message representing a Google Analytics Android app stream. # A snapshot of an AndroidAppDataStream resource in change history.
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. The max allowed display name length is 255 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding Android app in Firebase, if any. This ID can change if the Android app is deleted and recreated.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/androidAppDataStreams/{stream_id} Example: &quot;properties/1000/androidAppDataStreams/2000&quot;
-              &quot;packageName&quot;: &quot;A String&quot;, # Immutable. The package name for the app being measured. Example: &quot;com.example.myandroidapp&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
-            },
             &quot;conversionEvent&quot;: { # A conversion event in a Google Analytics property. # A snapshot of a ConversionEvent resource in change history.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this conversion event was created in the property.
               &quot;custom&quot;: True or False, # Output only. If set to true, this conversion event refers to a custom event. If set to false, this conversion event refers to a default event in GA. Default events typically have special meaning in GA. Default events are usually created for you by the GA system, but in some cases can be created by property admins. Custom events count towards the maximum number of custom conversion events that may be created per property.
+              &quot;deletable&quot;: True or False, # Output only. If set, this event can currently be deleted via DeleteConversionEvent.
               &quot;eventName&quot;: &quot;A String&quot;, # Immutable. The event name for this conversion event. Examples: &#x27;click&#x27;, &#x27;purchase&#x27;
-              &quot;isDeletable&quot;: True or False, # Output only. If set, this event can currently be deleted via DeleteConversionEvent.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this conversion event. Format: properties/{property}/conversionEvents/{conversion_event}
             },
             &quot;customDimension&quot;: { # A definition for a CustomDimension. # A snapshot of a CustomDimension resource in change history.
@@ -374,17 +366,67 @@ Returns:
             &quot;customMetric&quot;: { # A definition for a custom metric. # A snapshot of a CustomMetric resource in change history.
               &quot;description&quot;: &quot;A String&quot;, # Optional. Description for this custom dimension. Max length of 150 characters.
               &quot;displayName&quot;: &quot;A String&quot;, # Required. Display name for this custom metric as shown in the Analytics UI. Max length of 82 characters, alphanumeric plus space and underscore starting with a letter. Legacy system-generated display names may contain square brackets, but updates to this field will never permit square brackets.
-              &quot;measurementUnit&quot;: &quot;A String&quot;, # Required. Immutable. The type for the custom metric&#x27;s value.
+              &quot;measurementUnit&quot;: &quot;A String&quot;, # Required. The type for the custom metric&#x27;s value.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this CustomMetric resource. Format: properties/{property}/customMetrics/{customMetric}
               &quot;parameterName&quot;: &quot;A String&quot;, # Required. Immutable. Tagging name for this custom metric. If this is an event-scoped metric, then this is the event parameter name. May only contain alphanumeric and underscore charactes, starting with a letter. Max length of 40 characters for event-scoped metrics.
+              &quot;restrictedMetricType&quot;: [ # Optional. Types of restricted data that this metric may contain. Required for metrics with CURRENCY measurement unit. Must be empty for metrics with a non-CURRENCY measurement unit.
+                &quot;A String&quot;,
+              ],
               &quot;scope&quot;: &quot;A String&quot;, # Required. Immutable. The scope of this custom metric.
             },
-            &quot;firebaseLink&quot;: { # A link between an GA4 property and a Firebase project. # A snapshot of a FirebaseLink resource in change history.
+            &quot;dataRetentionSettings&quot;: { # Settings values for data retention. This is a singleton resource. # A snapshot of a data retention settings resource in change history.
+              &quot;eventDataRetention&quot;: &quot;A String&quot;, # The length of time that event-level data is retained.
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings
+              &quot;resetUserDataOnNewActivity&quot;: True or False, # If true, reset the retention period for the user identifier with every event from that user.
+            },
+            &quot;dataStream&quot;: { # A resource message representing a data stream. # A snapshot of a DataStream resource in change history.
+              &quot;androidAppStreamData&quot;: { # Data specific to Android app streams. # Data specific to Android app streams. Must be populated if type is ANDROID_APP_DATA_STREAM.
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding Android app in Firebase, if any. This ID can change if the Android app is deleted and recreated.
+                &quot;packageName&quot;: &quot;A String&quot;, # Immutable. The package name for the app being measured. Example: &quot;com.example.myandroidapp&quot;
+              },
+              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
+              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. Required for web data streams. The max allowed display name length is 255 UTF-16 code units.
+              &quot;iosAppStreamData&quot;: { # Data specific to iOS app streams. # Data specific to iOS app streams. Must be populated if type is IOS_APP_DATA_STREAM.
+                &quot;bundleId&quot;: &quot;A String&quot;, # Required. Immutable. The Apple App Store Bundle ID for the app Example: &quot;com.example.myiosapp&quot;
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding iOS app in Firebase, if any. This ID can change if the iOS app is deleted and recreated.
+              },
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/dataStreams/{stream_id} Example: &quot;properties/1000/dataStreams/2000&quot;
+              &quot;type&quot;: &quot;A String&quot;, # Required. Immutable. The type of this DataStream resource.
+              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
+              &quot;webStreamData&quot;: { # Data specific to web streams. # Data specific to web streams. Must be populated if type is WEB_DATA_STREAM.
+                &quot;defaultUri&quot;: &quot;A String&quot;, # Immutable. Domain name of the web app being measured, or empty. Example: &quot;http://www.google.com&quot;, &quot;https://www.google.com&quot;
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding web app in Firebase, if any. This ID can change if the web app is deleted and recreated.
+                &quot;measurementId&quot;: &quot;A String&quot;, # Output only. Analytics &quot;Measurement ID&quot;, without the &quot;G-&quot; prefix. Example: &quot;G-1A2BCD345E&quot; would just be &quot;1A2BCD345E&quot;
+              },
+            },
+            &quot;displayVideo360AdvertiserLink&quot;: { # A link between a GA4 property and a Display &amp; Video 360 advertiser. # A snapshot of a DisplayVideo360AdvertiserLink resource in change history.
+              &quot;adsPersonalizationEnabled&quot;: True or False, # Enables personalized advertising features with this integration. If this field is not set on create/update, it will be defaulted to true.
+              &quot;advertiserDisplayName&quot;: &quot;A String&quot;, # Output only. The display name of the Display &amp; Video 360 Advertiser.
+              &quot;advertiserId&quot;: &quot;A String&quot;, # Immutable. The Display &amp; Video 360 Advertiser&#x27;s advertiser ID.
+              &quot;campaignDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of campaign data from Display &amp; Video 360 into the GA4 property. After link creation, this can only be updated from the Display &amp; Video 360 product. If this field is not set on create, it will be defaulted to true.
+              &quot;costDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of cost data from Display &amp; Video 360 into the GA4 property. This can only be enabled if campaign_data_sharing_enabled is enabled. After link creation, this can only be updated from the Display &amp; Video 360 product. If this field is not set on create, it will be defaulted to true.
+              &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this DisplayVideo360AdvertiserLink resource. Format: properties/{propertyId}/displayVideo360AdvertiserLinks/{linkId} Note: linkId is not the Display &amp; Video 360 Advertiser ID
+            },
+            &quot;displayVideo360AdvertiserLinkProposal&quot;: { # A proposal for a link between a GA4 property and a Display &amp; Video 360 advertiser. A proposal is converted to a DisplayVideo360AdvertiserLink once approved. Google Analytics admins approve inbound proposals while Display &amp; Video 360 admins approve outbound proposals. # A snapshot of a DisplayVideo360AdvertiserLinkProposal resource in change history.
+              &quot;adsPersonalizationEnabled&quot;: True or False, # Immutable. Enables personalized advertising features with this integration. If this field is not set on create, it will be defaulted to true.
+              &quot;advertiserDisplayName&quot;: &quot;A String&quot;, # Output only. The display name of the Display &amp; Video Advertiser. Only populated for proposals that originated from Display &amp; Video 360.
+              &quot;advertiserId&quot;: &quot;A String&quot;, # Immutable. The Display &amp; Video 360 Advertiser&#x27;s advertiser ID.
+              &quot;campaignDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of campaign data from Display &amp; Video 360. If this field is not set on create, it will be defaulted to true.
+              &quot;costDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of cost data from Display &amp; Video 360. This can only be enabled if campaign_data_sharing_enabled is enabled. If this field is not set on create, it will be defaulted to true.
+              &quot;linkProposalStatusDetails&quot;: { # Status information for a link proposal. # Output only. The status information for this link proposal.
+                &quot;linkProposalInitiatingProduct&quot;: &quot;A String&quot;, # Output only. The source of this proposal.
+                &quot;linkProposalState&quot;: &quot;A String&quot;, # Output only. The state of this proposal.
+                &quot;requestorEmail&quot;: &quot;A String&quot;, # Output only. The email address of the user that proposed this linkage.
+              },
+              &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this DisplayVideo360AdvertiserLinkProposal resource. Format: properties/{propertyId}/displayVideo360AdvertiserLinkProposals/{proposalId} Note: proposalId is not the Display &amp; Video 360 Advertiser ID
+              &quot;validationEmail&quot;: &quot;A String&quot;, # Input only. On a proposal being sent to Display &amp; Video 360, this field must be set to the email address of an admin on the target advertiser. This is used to verify that the Google Analytics admin is aware of at least one admin on the Display &amp; Video 360 Advertiser. This does not restrict approval of the proposal to a single user. Any admin on the Display &amp; Video 360 Advertiser may approve the proposal.
+            },
+            &quot;firebaseLink&quot;: { # A link between a GA4 property and a Firebase project. # A snapshot of a FirebaseLink resource in change history.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this FirebaseLink was originally created.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Example format: properties/1234/firebaseLinks/5678
               &quot;project&quot;: &quot;A String&quot;, # Immutable. Firebase project resource name. When creating a FirebaseLink, you may provide this resource name using either a project number or project ID. Once this resource has been created, returned FirebaseLinks will always have a project_name that contains a project number. Format: &#x27;projects/{project number}&#x27; Example: &#x27;projects/1234&#x27;
             },
-            &quot;googleAdsLink&quot;: { # A link between an GA4 property and a Google Ads account. # A snapshot of a GoogleAdsLink resource in change history.
+            &quot;googleAdsLink&quot;: { # A link between a GA4 property and a Google Ads account. # A snapshot of a GoogleAdsLink resource in change history.
               &quot;adsPersonalizationEnabled&quot;: True or False, # Enable personalized advertising features with this integration. Automatically publish my Google Analytics audience lists and Google Analytics remarketing events/parameters to the linked Google Ads account. If this field is not set on create/update, it will be defaulted to true.
               &quot;canManageClients&quot;: True or False, # Output only. If true, this link is for a Google Ads manager account.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this link was originally created.
@@ -398,20 +440,13 @@ Returns:
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this setting. Format: properties/{property_id}/googleSignalsSettings Example: &quot;properties/1000/googleSignalsSettings&quot;
               &quot;state&quot;: &quot;A String&quot;, # Status of this setting.
             },
-            &quot;iosAppDataStream&quot;: { # A resource message representing a Google Analytics IOS app stream. # A snapshot of an IosAppDataStream resource in change history.
-              &quot;bundleId&quot;: &quot;A String&quot;, # Required. Immutable. The Apple App Store Bundle ID for the app Example: &quot;com.example.myiosapp&quot;
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. The max allowed display name length is 255 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding iOS app in Firebase, if any. This ID can change if the iOS app is deleted and recreated.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/iosAppDataStreams/{stream_id} Example: &quot;properties/1000/iosAppDataStreams/2000&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
-            },
             &quot;measurementProtocolSecret&quot;: { # A secret value used for sending hits to Measurement Protocol. # A snapshot of a MeasurementProtocolSecret resource in change history.
               &quot;displayName&quot;: &quot;A String&quot;, # Required. Human-readable display name for this secret.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this secret. This secret may be a child of any type of stream. Format: properties/{property}/webDataStreams/{webDataStream}/measurementProtocolSecrets/{measurementProtocolSecret}
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this secret. This secret may be a child of any type of stream. Format: properties/{property}/dataStreams/{dataStream}/measurementProtocolSecrets/{measurementProtocolSecret}
               &quot;secretValue&quot;: &quot;A String&quot;, # Output only. The measurement protocol secret value. Pass this value to the api_secret field of the Measurement Protocol API when sending hits to this secret&#x27;s parent property.
             },
             &quot;property&quot;: { # A resource message representing a Google Analytics GA4 property. # A snapshot of a Property resource in change history.
+              &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
               &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
               &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -419,18 +454,11 @@ Returns:
               &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
               &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-              &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+              &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+              &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+              &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
               &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
               &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
-            },
-            &quot;webDataStream&quot;: { # A resource message representing a Google Analytics web stream. # A snapshot of a WebDataStream resource in change history.
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;defaultUri&quot;: &quot;A String&quot;, # Immutable. Domain name of the web app being measured, or empty. Example: &quot;http://www.google.com&quot;, &quot;https://www.google.com&quot;
-              &quot;displayName&quot;: &quot;A String&quot;, # Required. Human-readable display name for the Data Stream. The max allowed display name length is 100 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding web app in Firebase, if any. This ID can change if the web app is deleted and recreated.
-              &quot;measurementId&quot;: &quot;A String&quot;, # Output only. Analytics &quot;Measurement ID&quot;, without the &quot;G-&quot; prefix. Example: &quot;G-1A2BCD345E&quot; would just be &quot;1A2BCD345E&quot;
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/webDataStreams/{stream_id} Example: &quot;properties/1000/webDataStreams/2000&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
             },
           },
           &quot;resourceBeforeChange&quot;: { # A snapshot of a resource as before or after the result of a change in change history. # Resource contents from before the change was made. If this resource was created in this change, this field will be missing.
@@ -442,19 +470,11 @@ Returns:
               &quot;regionCode&quot;: &quot;A String&quot;, # Country of business. Must be a Unicode CLDR region code.
               &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when account payload fields were last updated.
             },
-            &quot;androidAppDataStream&quot;: { # A resource message representing a Google Analytics Android app stream. # A snapshot of an AndroidAppDataStream resource in change history.
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. The max allowed display name length is 255 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding Android app in Firebase, if any. This ID can change if the Android app is deleted and recreated.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/androidAppDataStreams/{stream_id} Example: &quot;properties/1000/androidAppDataStreams/2000&quot;
-              &quot;packageName&quot;: &quot;A String&quot;, # Immutable. The package name for the app being measured. Example: &quot;com.example.myandroidapp&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
-            },
             &quot;conversionEvent&quot;: { # A conversion event in a Google Analytics property. # A snapshot of a ConversionEvent resource in change history.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this conversion event was created in the property.
               &quot;custom&quot;: True or False, # Output only. If set to true, this conversion event refers to a custom event. If set to false, this conversion event refers to a default event in GA. Default events typically have special meaning in GA. Default events are usually created for you by the GA system, but in some cases can be created by property admins. Custom events count towards the maximum number of custom conversion events that may be created per property.
+              &quot;deletable&quot;: True or False, # Output only. If set, this event can currently be deleted via DeleteConversionEvent.
               &quot;eventName&quot;: &quot;A String&quot;, # Immutable. The event name for this conversion event. Examples: &#x27;click&#x27;, &#x27;purchase&#x27;
-              &quot;isDeletable&quot;: True or False, # Output only. If set, this event can currently be deleted via DeleteConversionEvent.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this conversion event. Format: properties/{property}/conversionEvents/{conversion_event}
             },
             &quot;customDimension&quot;: { # A definition for a CustomDimension. # A snapshot of a CustomDimension resource in change history.
@@ -468,17 +488,67 @@ Returns:
             &quot;customMetric&quot;: { # A definition for a custom metric. # A snapshot of a CustomMetric resource in change history.
               &quot;description&quot;: &quot;A String&quot;, # Optional. Description for this custom dimension. Max length of 150 characters.
               &quot;displayName&quot;: &quot;A String&quot;, # Required. Display name for this custom metric as shown in the Analytics UI. Max length of 82 characters, alphanumeric plus space and underscore starting with a letter. Legacy system-generated display names may contain square brackets, but updates to this field will never permit square brackets.
-              &quot;measurementUnit&quot;: &quot;A String&quot;, # Required. Immutable. The type for the custom metric&#x27;s value.
+              &quot;measurementUnit&quot;: &quot;A String&quot;, # Required. The type for the custom metric&#x27;s value.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this CustomMetric resource. Format: properties/{property}/customMetrics/{customMetric}
               &quot;parameterName&quot;: &quot;A String&quot;, # Required. Immutable. Tagging name for this custom metric. If this is an event-scoped metric, then this is the event parameter name. May only contain alphanumeric and underscore charactes, starting with a letter. Max length of 40 characters for event-scoped metrics.
+              &quot;restrictedMetricType&quot;: [ # Optional. Types of restricted data that this metric may contain. Required for metrics with CURRENCY measurement unit. Must be empty for metrics with a non-CURRENCY measurement unit.
+                &quot;A String&quot;,
+              ],
               &quot;scope&quot;: &quot;A String&quot;, # Required. Immutable. The scope of this custom metric.
             },
-            &quot;firebaseLink&quot;: { # A link between an GA4 property and a Firebase project. # A snapshot of a FirebaseLink resource in change history.
+            &quot;dataRetentionSettings&quot;: { # Settings values for data retention. This is a singleton resource. # A snapshot of a data retention settings resource in change history.
+              &quot;eventDataRetention&quot;: &quot;A String&quot;, # The length of time that event-level data is retained.
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name for this DataRetentionSetting resource. Format: properties/{property}/dataRetentionSettings
+              &quot;resetUserDataOnNewActivity&quot;: True or False, # If true, reset the retention period for the user identifier with every event from that user.
+            },
+            &quot;dataStream&quot;: { # A resource message representing a data stream. # A snapshot of a DataStream resource in change history.
+              &quot;androidAppStreamData&quot;: { # Data specific to Android app streams. # Data specific to Android app streams. Must be populated if type is ANDROID_APP_DATA_STREAM.
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding Android app in Firebase, if any. This ID can change if the Android app is deleted and recreated.
+                &quot;packageName&quot;: &quot;A String&quot;, # Immutable. The package name for the app being measured. Example: &quot;com.example.myandroidapp&quot;
+              },
+              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
+              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. Required for web data streams. The max allowed display name length is 255 UTF-16 code units.
+              &quot;iosAppStreamData&quot;: { # Data specific to iOS app streams. # Data specific to iOS app streams. Must be populated if type is IOS_APP_DATA_STREAM.
+                &quot;bundleId&quot;: &quot;A String&quot;, # Required. Immutable. The Apple App Store Bundle ID for the app Example: &quot;com.example.myiosapp&quot;
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding iOS app in Firebase, if any. This ID can change if the iOS app is deleted and recreated.
+              },
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/dataStreams/{stream_id} Example: &quot;properties/1000/dataStreams/2000&quot;
+              &quot;type&quot;: &quot;A String&quot;, # Required. Immutable. The type of this DataStream resource.
+              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
+              &quot;webStreamData&quot;: { # Data specific to web streams. # Data specific to web streams. Must be populated if type is WEB_DATA_STREAM.
+                &quot;defaultUri&quot;: &quot;A String&quot;, # Immutable. Domain name of the web app being measured, or empty. Example: &quot;http://www.google.com&quot;, &quot;https://www.google.com&quot;
+                &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding web app in Firebase, if any. This ID can change if the web app is deleted and recreated.
+                &quot;measurementId&quot;: &quot;A String&quot;, # Output only. Analytics &quot;Measurement ID&quot;, without the &quot;G-&quot; prefix. Example: &quot;G-1A2BCD345E&quot; would just be &quot;1A2BCD345E&quot;
+              },
+            },
+            &quot;displayVideo360AdvertiserLink&quot;: { # A link between a GA4 property and a Display &amp; Video 360 advertiser. # A snapshot of a DisplayVideo360AdvertiserLink resource in change history.
+              &quot;adsPersonalizationEnabled&quot;: True or False, # Enables personalized advertising features with this integration. If this field is not set on create/update, it will be defaulted to true.
+              &quot;advertiserDisplayName&quot;: &quot;A String&quot;, # Output only. The display name of the Display &amp; Video 360 Advertiser.
+              &quot;advertiserId&quot;: &quot;A String&quot;, # Immutable. The Display &amp; Video 360 Advertiser&#x27;s advertiser ID.
+              &quot;campaignDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of campaign data from Display &amp; Video 360 into the GA4 property. After link creation, this can only be updated from the Display &amp; Video 360 product. If this field is not set on create, it will be defaulted to true.
+              &quot;costDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of cost data from Display &amp; Video 360 into the GA4 property. This can only be enabled if campaign_data_sharing_enabled is enabled. After link creation, this can only be updated from the Display &amp; Video 360 product. If this field is not set on create, it will be defaulted to true.
+              &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this DisplayVideo360AdvertiserLink resource. Format: properties/{propertyId}/displayVideo360AdvertiserLinks/{linkId} Note: linkId is not the Display &amp; Video 360 Advertiser ID
+            },
+            &quot;displayVideo360AdvertiserLinkProposal&quot;: { # A proposal for a link between a GA4 property and a Display &amp; Video 360 advertiser. A proposal is converted to a DisplayVideo360AdvertiserLink once approved. Google Analytics admins approve inbound proposals while Display &amp; Video 360 admins approve outbound proposals. # A snapshot of a DisplayVideo360AdvertiserLinkProposal resource in change history.
+              &quot;adsPersonalizationEnabled&quot;: True or False, # Immutable. Enables personalized advertising features with this integration. If this field is not set on create, it will be defaulted to true.
+              &quot;advertiserDisplayName&quot;: &quot;A String&quot;, # Output only. The display name of the Display &amp; Video Advertiser. Only populated for proposals that originated from Display &amp; Video 360.
+              &quot;advertiserId&quot;: &quot;A String&quot;, # Immutable. The Display &amp; Video 360 Advertiser&#x27;s advertiser ID.
+              &quot;campaignDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of campaign data from Display &amp; Video 360. If this field is not set on create, it will be defaulted to true.
+              &quot;costDataSharingEnabled&quot;: True or False, # Immutable. Enables the import of cost data from Display &amp; Video 360. This can only be enabled if campaign_data_sharing_enabled is enabled. If this field is not set on create, it will be defaulted to true.
+              &quot;linkProposalStatusDetails&quot;: { # Status information for a link proposal. # Output only. The status information for this link proposal.
+                &quot;linkProposalInitiatingProduct&quot;: &quot;A String&quot;, # Output only. The source of this proposal.
+                &quot;linkProposalState&quot;: &quot;A String&quot;, # Output only. The state of this proposal.
+                &quot;requestorEmail&quot;: &quot;A String&quot;, # Output only. The email address of the user that proposed this linkage.
+              },
+              &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name for this DisplayVideo360AdvertiserLinkProposal resource. Format: properties/{propertyId}/displayVideo360AdvertiserLinkProposals/{proposalId} Note: proposalId is not the Display &amp; Video 360 Advertiser ID
+              &quot;validationEmail&quot;: &quot;A String&quot;, # Input only. On a proposal being sent to Display &amp; Video 360, this field must be set to the email address of an admin on the target advertiser. This is used to verify that the Google Analytics admin is aware of at least one admin on the Display &amp; Video 360 Advertiser. This does not restrict approval of the proposal to a single user. Any admin on the Display &amp; Video 360 Advertiser may approve the proposal.
+            },
+            &quot;firebaseLink&quot;: { # A link between a GA4 property and a Firebase project. # A snapshot of a FirebaseLink resource in change history.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this FirebaseLink was originally created.
               &quot;name&quot;: &quot;A String&quot;, # Output only. Example format: properties/1234/firebaseLinks/5678
               &quot;project&quot;: &quot;A String&quot;, # Immutable. Firebase project resource name. When creating a FirebaseLink, you may provide this resource name using either a project number or project ID. Once this resource has been created, returned FirebaseLinks will always have a project_name that contains a project number. Format: &#x27;projects/{project number}&#x27; Example: &#x27;projects/1234&#x27;
             },
-            &quot;googleAdsLink&quot;: { # A link between an GA4 property and a Google Ads account. # A snapshot of a GoogleAdsLink resource in change history.
+            &quot;googleAdsLink&quot;: { # A link between a GA4 property and a Google Ads account. # A snapshot of a GoogleAdsLink resource in change history.
               &quot;adsPersonalizationEnabled&quot;: True or False, # Enable personalized advertising features with this integration. Automatically publish my Google Analytics audience lists and Google Analytics remarketing events/parameters to the linked Google Ads account. If this field is not set on create/update, it will be defaulted to true.
               &quot;canManageClients&quot;: True or False, # Output only. If true, this link is for a Google Ads manager account.
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this link was originally created.
@@ -492,20 +562,13 @@ Returns:
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this setting. Format: properties/{property_id}/googleSignalsSettings Example: &quot;properties/1000/googleSignalsSettings&quot;
               &quot;state&quot;: &quot;A String&quot;, # Status of this setting.
             },
-            &quot;iosAppDataStream&quot;: { # A resource message representing a Google Analytics IOS app stream. # A snapshot of an IosAppDataStream resource in change history.
-              &quot;bundleId&quot;: &quot;A String&quot;, # Required. Immutable. The Apple App Store Bundle ID for the app Example: &quot;com.example.myiosapp&quot;
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name for the Data Stream. The max allowed display name length is 255 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding iOS app in Firebase, if any. This ID can change if the iOS app is deleted and recreated.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/iosAppDataStreams/{stream_id} Example: &quot;properties/1000/iosAppDataStreams/2000&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
-            },
             &quot;measurementProtocolSecret&quot;: { # A secret value used for sending hits to Measurement Protocol. # A snapshot of a MeasurementProtocolSecret resource in change history.
               &quot;displayName&quot;: &quot;A String&quot;, # Required. Human-readable display name for this secret.
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this secret. This secret may be a child of any type of stream. Format: properties/{property}/webDataStreams/{webDataStream}/measurementProtocolSecrets/{measurementProtocolSecret}
+              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this secret. This secret may be a child of any type of stream. Format: properties/{property}/dataStreams/{dataStream}/measurementProtocolSecrets/{measurementProtocolSecret}
               &quot;secretValue&quot;: &quot;A String&quot;, # Output only. The measurement protocol secret value. Pass this value to the api_secret field of the Measurement Protocol API when sending hits to this secret&#x27;s parent property.
             },
             &quot;property&quot;: { # A resource message representing a Google Analytics GA4 property. # A snapshot of a Property resource in change history.
+              &quot;account&quot;: &quot;A String&quot;, # Immutable. The resource name of the parent account Format: accounts/{account_id} Example: &quot;accounts/123&quot;
               &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when the entity was originally created.
               &quot;currencyCode&quot;: &quot;A String&quot;, # The currency type used in reports involving monetary values. Format: https://en.wikipedia.org/wiki/ISO_4217 Examples: &quot;USD&quot;, &quot;EUR&quot;, &quot;JPY&quot;
               &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this property was trashed. If not set, then this property is not currently in the trash can.
@@ -513,18 +576,11 @@ Returns:
               &quot;expireTime&quot;: &quot;A String&quot;, # Output only. If set, the time at which this trashed property will be permanently deleted. If not set, then this property is not currently in the trash can and is not slated to be deleted.
               &quot;industryCategory&quot;: &quot;A String&quot;, # Industry associated with this property Example: AUTOMOTIVE, FOOD_AND_DRINK
               &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this property. Format: properties/{property_id} Example: &quot;properties/1000&quot;
-              &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account} Example: &quot;accounts/100&quot;
+              &quot;parent&quot;: &quot;A String&quot;, # Immutable. Resource name of this property&#x27;s logical parent. Note: The Property-Moving UI can be used to change the parent. Format: accounts/{account}, properties/{property} Example: &quot;accounts/100&quot;, &quot;properties/101&quot;
+              &quot;propertyType&quot;: &quot;A String&quot;, # Immutable. The property type for this Property resource. When creating a property, if the type is &quot;PROPERTY_TYPE_UNSPECIFIED&quot;, then &quot;ORDINARY_PROPERTY&quot; will be implied. &quot;SUBPROPERTY&quot; and &quot;ROLLUP_PROPERTY&quot; types cannot yet be created via Google Analytics Admin API.
+              &quot;serviceLevel&quot;: &quot;A String&quot;, # Output only. The Google Analytics service level that applies to this property.
               &quot;timeZone&quot;: &quot;A String&quot;, # Required. Reporting Time Zone, used as the day boundary for reports, regardless of where the data originates. If the time zone honors DST, Analytics will automatically adjust for the changes. NOTE: Changing the time zone only affects data going forward, and is not applied retroactively. Format: https://www.iana.org/time-zones Example: &quot;America/Los_Angeles&quot;
               &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when entity payload fields were last updated.
-            },
-            &quot;webDataStream&quot;: { # A resource message representing a Google Analytics web stream. # A snapshot of a WebDataStream resource in change history.
-              &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time when this stream was originally created.
-              &quot;defaultUri&quot;: &quot;A String&quot;, # Immutable. Domain name of the web app being measured, or empty. Example: &quot;http://www.google.com&quot;, &quot;https://www.google.com&quot;
-              &quot;displayName&quot;: &quot;A String&quot;, # Required. Human-readable display name for the Data Stream. The max allowed display name length is 100 UTF-16 code units.
-              &quot;firebaseAppId&quot;: &quot;A String&quot;, # Output only. ID of the corresponding web app in Firebase, if any. This ID can change if the web app is deleted and recreated.
-              &quot;measurementId&quot;: &quot;A String&quot;, # Output only. Analytics &quot;Measurement ID&quot;, without the &quot;G-&quot; prefix. Example: &quot;G-1A2BCD345E&quot; would just be &quot;1A2BCD345E&quot;
-              &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of this Data Stream. Format: properties/{property_id}/webDataStreams/{stream_id} Example: &quot;properties/1000/webDataStreams/2000&quot;
-              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Time when stream payload fields were last updated.
             },
           },
         },

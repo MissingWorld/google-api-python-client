@@ -126,7 +126,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for Empty is empty JSON object {}.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -244,6 +244,7 @@ Returns:
       3.14,
     ],
     &quot;deviceBasebandVersion&quot;: &quot;A String&quot;, # Baseband version. For example, MDM9625_104662.22.05.34p.
+    &quot;enterpriseSpecificId&quot;: &quot;A String&quot;, # Output only. ID that uniquely identifies a personally-owned device in a particular organization. On the same physical device when enrolled with the same organization, this ID persists across setups and even factory resets. This ID is available on personally-owned devices with a work profile on devices running Android 12 and above.
     &quot;gpuShutdownTemperatures&quot;: [ # GPU shutdown temperature thresholds in Celsius for each GPU on the device.
       3.14,
     ],
@@ -295,7 +296,7 @@ Returns:
       &quot;eventType&quot;: &quot;A String&quot;, # Event type.
     },
   ],
-  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information. This information is only available if memoryInfoEnabled is true in the device&#x27;s policy.
+  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information: contains information about device memory and storage.
     &quot;totalInternalStorage&quot;: &quot;A String&quot;, # Total internal storage on device in bytes.
     &quot;totalRam&quot;: &quot;A String&quot;, # Total RAM on device in bytes.
   },
@@ -546,6 +547,7 @@ Returns:
           3.14,
         ],
         &quot;deviceBasebandVersion&quot;: &quot;A String&quot;, # Baseband version. For example, MDM9625_104662.22.05.34p.
+        &quot;enterpriseSpecificId&quot;: &quot;A String&quot;, # Output only. ID that uniquely identifies a personally-owned device in a particular organization. On the same physical device when enrolled with the same organization, this ID persists across setups and even factory resets. This ID is available on personally-owned devices with a work profile on devices running Android 12 and above.
         &quot;gpuShutdownTemperatures&quot;: [ # GPU shutdown temperature thresholds in Celsius for each GPU on the device.
           3.14,
         ],
@@ -597,7 +599,7 @@ Returns:
           &quot;eventType&quot;: &quot;A String&quot;, # Event type.
         },
       ],
-      &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information. This information is only available if memoryInfoEnabled is true in the device&#x27;s policy.
+      &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information: contains information about device memory and storage.
         &quot;totalInternalStorage&quot;: &quot;A String&quot;, # Total internal storage on device in bytes.
         &quot;totalRam&quot;: &quot;A String&quot;, # Total RAM on device in bytes.
       },
@@ -806,6 +808,7 @@ Args:
       3.14,
     ],
     &quot;deviceBasebandVersion&quot;: &quot;A String&quot;, # Baseband version. For example, MDM9625_104662.22.05.34p.
+    &quot;enterpriseSpecificId&quot;: &quot;A String&quot;, # Output only. ID that uniquely identifies a personally-owned device in a particular organization. On the same physical device when enrolled with the same organization, this ID persists across setups and even factory resets. This ID is available on personally-owned devices with a work profile on devices running Android 12 and above.
     &quot;gpuShutdownTemperatures&quot;: [ # GPU shutdown temperature thresholds in Celsius for each GPU on the device.
       3.14,
     ],
@@ -857,7 +860,7 @@ Args:
       &quot;eventType&quot;: &quot;A String&quot;, # Event type.
     },
   ],
-  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information. This information is only available if memoryInfoEnabled is true in the device&#x27;s policy.
+  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information: contains information about device memory and storage.
     &quot;totalInternalStorage&quot;: &quot;A String&quot;, # Total internal storage on device in bytes.
     &quot;totalRam&quot;: &quot;A String&quot;, # Total RAM on device in bytes.
   },
@@ -1048,6 +1051,7 @@ Returns:
       3.14,
     ],
     &quot;deviceBasebandVersion&quot;: &quot;A String&quot;, # Baseband version. For example, MDM9625_104662.22.05.34p.
+    &quot;enterpriseSpecificId&quot;: &quot;A String&quot;, # Output only. ID that uniquely identifies a personally-owned device in a particular organization. On the same physical device when enrolled with the same organization, this ID persists across setups and even factory resets. This ID is available on personally-owned devices with a work profile on devices running Android 12 and above.
     &quot;gpuShutdownTemperatures&quot;: [ # GPU shutdown temperature thresholds in Celsius for each GPU on the device.
       3.14,
     ],
@@ -1099,7 +1103,7 @@ Returns:
       &quot;eventType&quot;: &quot;A String&quot;, # Event type.
     },
   ],
-  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information. This information is only available if memoryInfoEnabled is true in the device&#x27;s policy.
+  &quot;memoryInfo&quot;: { # Information about device memory and storage. # Memory information: contains information about device memory and storage.
     &quot;totalInternalStorage&quot;: &quot;A String&quot;, # Total internal storage on device in bytes.
     &quot;totalRam&quot;: &quot;A String&quot;, # Total RAM on device in bytes.
   },

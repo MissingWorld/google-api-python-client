@@ -79,10 +79,10 @@ h1, h2, h3 {
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
   <code><a href="#create">create(parent, body=None, languageCode=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Creates a page in the specified flow.</p>
+<p class="firstline">Creates a page in the specified flow. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).</p>
 <p class="toc_element">
   <code><a href="#delete">delete(name, force=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Deletes the specified page.</p>
+<p class="firstline">Deletes the specified page. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).</p>
 <p class="toc_element">
   <code><a href="#get">get(name, languageCode=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Retrieves the specified page.</p>
@@ -94,7 +94,7 @@ h1, h2, h3 {
 <p class="firstline">Retrieves the next page of results.</p>
 <p class="toc_element">
   <code><a href="#patch">patch(name, body=None, languageCode=None, updateMask=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Updates the specified page.</p>
+<p class="firstline">Updates the specified page. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).</p>
 <h3>Method Details</h3>
 <div class="method">
     <code class="details" id="close">close()</code>
@@ -103,7 +103,7 @@ h1, h2, h3 {
 
 <div class="method">
     <code class="details" id="create">create(parent, body=None, languageCode=None, x__xgafv=None)</code>
-  <pre>Creates a page in the specified flow.
+  <pre>Creates a page in the specified flow. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).
 
 Args:
   parent: string, Required. The flow to create a page for. Format: `projects//locations//agents//flows/`. (required)
@@ -111,7 +111,7 @@ Args:
     The object takes the form of:
 
 { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
   &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
     &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
       { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -153,6 +153,9 @@ Args:
                   &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                  },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                   },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -203,6 +206,9 @@ Args:
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
         },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+        },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -218,7 +224,7 @@ Args:
         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
       },
     ],
-    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
   },
   &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -269,6 +275,9 @@ Args:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -318,6 +327,9 @@ Args:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -333,7 +345,7 @@ Args:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -387,6 +399,9 @@ Args:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -436,6 +451,9 @@ Args:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -451,7 +469,7 @@ Args:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
           &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -502,6 +520,9 @@ Args:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -551,6 +572,9 @@ Args:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -566,7 +590,7 @@ Args:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
             },
@@ -631,6 +655,9 @@ Args:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -680,6 +707,9 @@ Args:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -695,7 +725,7 @@ Args:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -712,7 +742,7 @@ Returns:
   An object of the form:
 
     { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
   &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
     &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
       { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -754,6 +784,9 @@ Returns:
                   &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                  },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                   },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -804,6 +837,9 @@ Returns:
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
         },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+        },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -819,7 +855,7 @@ Returns:
         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
       },
     ],
-    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
   },
   &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -870,6 +906,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -919,6 +958,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -934,7 +976,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -988,6 +1030,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1037,6 +1082,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1052,7 +1100,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
           &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -1103,6 +1151,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1152,6 +1203,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1167,7 +1221,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
             },
@@ -1232,6 +1286,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1281,6 +1338,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1296,7 +1356,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -1306,7 +1366,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="delete">delete(name, force=None, x__xgafv=None)</code>
-  <pre>Deletes the specified page.
+  <pre>Deletes the specified page. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).
 
 Args:
   name: string, Required. The name of the page to delete. Format: `projects//locations//agents//Flows//pages/`. (required)
@@ -1319,7 +1379,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -1339,7 +1399,7 @@ Returns:
   An object of the form:
 
     { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
   &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
     &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
       { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -1381,6 +1441,9 @@ Returns:
                   &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                  },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                   },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -1431,6 +1494,9 @@ Returns:
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
         },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+        },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1446,7 +1512,7 @@ Returns:
         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
       },
     ],
-    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
   },
   &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -1497,6 +1563,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1546,6 +1615,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1561,7 +1633,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -1615,6 +1687,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1664,6 +1739,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1679,7 +1757,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
           &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -1730,6 +1808,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1779,6 +1860,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1794,7 +1878,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
             },
@@ -1859,6 +1943,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1908,6 +1995,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -1923,7 +2013,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -1952,7 +2042,7 @@ Returns:
   &quot;nextPageToken&quot;: &quot;A String&quot;, # Token to retrieve the next page of results, or empty if there are no more results in the list.
   &quot;pages&quot;: [ # The list of pages. There will be a maximum number of items returned based on the page_size field in the request.
     { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+      &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
       &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
         &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
           { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -1995,6 +2085,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2044,6 +2137,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2059,7 +2155,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
       &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -2110,6 +2206,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2159,6 +2258,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2174,7 +2276,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -2228,6 +2330,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2277,6 +2382,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2292,7 +2400,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
               &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -2343,6 +2451,9 @@ Returns:
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                                   },
+                                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                                  },
                                   &quot;text&quot;: { # The text response message. # Returns a text response.
                                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                     &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2392,6 +2503,9 @@ Returns:
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                         },
+                        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                        },
                         &quot;text&quot;: { # The text response message. # Returns a text response.
                           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2407,7 +2521,7 @@ Returns:
                         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                       },
                     ],
-                    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
                   },
                 },
@@ -2472,6 +2586,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2521,6 +2638,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2536,7 +2656,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
         },
@@ -2562,7 +2682,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="patch">patch(name, body=None, languageCode=None, updateMask=None, x__xgafv=None)</code>
-  <pre>Updates the specified page.
+  <pre>Updates the specified page. Note: You should always train a flow prior to sending it queries. See the [training documentation](https://cloud.google.com/dialogflow/cx/docs/concept/training).
 
 Args:
   name: string, The unique identifier of the page. Required for the Pages.UpdatePage method. Pages.CreatePage populates the name automatically. Format: `projects//locations//agents//flows//pages/`. (required)
@@ -2570,7 +2690,7 @@ Args:
     The object takes the form of:
 
 { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
   &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
     &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
       { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -2612,6 +2732,9 @@ Args:
                   &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                  },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                   },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -2662,6 +2785,9 @@ Args:
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
         },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+        },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2677,7 +2803,7 @@ Args:
         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
       },
     ],
-    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
   },
   &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -2728,6 +2854,9 @@ Args:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2777,6 +2906,9 @@ Args:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2792,7 +2924,7 @@ Args:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -2846,6 +2978,9 @@ Args:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2895,6 +3030,9 @@ Args:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -2910,7 +3048,7 @@ Args:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
           &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -2961,6 +3099,9 @@ Args:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3010,6 +3151,9 @@ Args:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3025,7 +3169,7 @@ Args:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
             },
@@ -3090,6 +3234,9 @@ Args:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3139,6 +3286,9 @@ Args:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3154,7 +3304,7 @@ Args:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -3172,7 +3322,7 @@ Returns:
   An object of the form:
 
     { # A Dialogflow CX conversation (session) can be described and visualized as a state machine. The states of a CX session are represented by pages. For each flow, you define many pages, where your combined pages can handle a complete conversation on the topics the flow is designed for. At any given moment, exactly one page is the current page, the current page is considered active, and the flow associated with that page is considered active. Every flow has a special start page. When a flow initially becomes active, the start page page becomes the current page. For each conversational turn, the current page will either stay the same or transition to another page. You configure each page to collect information from the end-user that is relevant for the conversational state represented by the page. For more information, see the [Page guide](https://cloud.google.com/dialogflow/cx/docs/concept/page).
-  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the agent.
+  &quot;displayName&quot;: &quot;A String&quot;, # Required. The human-readable name of the page, unique within the flow.
   &quot;entryFulfillment&quot;: { # A fulfillment can do one or more of the following actions at the same time: * Generate rich message responses. * Set parameter values. * Call the webhook. Fulfillments can be called at various stages in the Page or Form lifecycle. For example, when a DetectIntentRequest drives a session to enter a new page, the page&#x27;s entry fulfillment can add a static response to the QueryResult in the returning DetectIntentResponse, call the webhook (for example, to load user data from a database), or both. # The fulfillment to call when the session is entering the page.
     &quot;conditionalCases&quot;: [ # Conditional cases for this fulfillment.
       { # A list of cascading if-else conditions. Cases are mutually exclusive. The first one with a matching condition is selected, all the rest ignored.
@@ -3214,6 +3364,9 @@ Returns:
                   &quot;playAudio&quot;: { # Specifies an audio clip to be played by the client as part of the response. # Signal that the client should play an audio clip hosted at a client-specific URI. Dialogflow uses this to construct mixed_audio. However, Dialogflow itself does not try to read or process the URI in any way.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                     &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
+                  },
+                  &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                    &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
                   },
                   &quot;text&quot;: { # The text response message. # Returns a text response.
                     &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
@@ -3264,6 +3417,9 @@ Returns:
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
         },
+        &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+          &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+        },
         &quot;text&quot;: { # The text response message. # Returns a text response.
           &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
           &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3279,7 +3435,7 @@ Returns:
         &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
       },
     ],
-    &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+    &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
     &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
   },
   &quot;eventHandlers&quot;: [ # Handlers associated with the page to handle events such as webhook errors, no match or no input.
@@ -3330,6 +3486,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3379,6 +3538,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3394,7 +3556,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },
@@ -3448,6 +3610,9 @@ Returns:
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                           },
+                          &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                            &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                          },
                           &quot;text&quot;: { # The text response message. # Returns a text response.
                             &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                             &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3497,6 +3662,9 @@ Returns:
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                 },
+                &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                  &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                },
                 &quot;text&quot;: { # The text response message. # Returns a text response.
                   &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                   &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3512,7 +3680,7 @@ Returns:
                 &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
               },
             ],
-            &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+            &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
             &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
           },
           &quot;repromptEventHandlers&quot;: [ # The handlers for parameter-level events, used to provide reprompt for the parameter or transition to a different page/flow. The supported events are: * `sys.no-match-`, where N can be from 1 to 6 * `sys.no-match-default` * `sys.no-input-`, where N can be from 1 to 6 * `sys.no-input-default` * `sys.invalid-parameter` `initial_prompt_fulfillment` provides the first prompt for the parameter. If the user&#x27;s response does not fill the parameter, a no-match/no-input event will be triggered, and the fulfillment associated with the `sys.no-match-1`/`sys.no-input-1` handler (if defined) will be called to provide a prompt. The `sys.no-match-2`/`sys.no-input-2` handler (if defined) will respond to the next no-match/no-input event, and so on. A `sys.no-match-default` or `sys.no-input-default` handler will be used to handle all following no-match/no-input events after all numbered no-match/no-input handlers for the parameter are consumed. A `sys.invalid-parameter` handler can be defined to handle the case where the parameter values have been `invalidated` by webhook. For example, if the user&#x27;s response fill the parameter, however the parameter was invalidated by webhook, the fulfillment associated with the `sys.invalid-parameter` handler (if defined) will be called to provide a prompt. If the event handler for the corresponding event can&#x27;t be found on the parameter, `initial_prompt_fulfillment` will be re-prompted.
@@ -3563,6 +3731,9 @@ Returns:
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                               },
+                              &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                                &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                              },
                               &quot;text&quot;: { # The text response message. # Returns a text response.
                                 &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                                 &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3612,6 +3783,9 @@ Returns:
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                     },
+                    &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                      &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                    },
                     &quot;text&quot;: { # The text response message. # Returns a text response.
                       &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                       &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3627,7 +3801,7 @@ Returns:
                     &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
                   },
                 ],
-                &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+                &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
                 &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
               },
             },
@@ -3692,6 +3866,9 @@ Returns:
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
                       },
+                      &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+                        &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+                      },
                       &quot;text&quot;: { # The text response message. # Returns a text response.
                         &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
                         &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3741,6 +3918,9 @@ Returns:
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;audioUri&quot;: &quot;A String&quot;, # Required. URI of the audio clip. Dialogflow does not impose any validation on this value. It is specific to the client that reads it.
             },
+            &quot;telephonyTransferCall&quot;: { # Represents the signal that telles the client to transfer the phone call connected to the agent to a third-party endpoint. # A signal that the client should transfer the phone call connected to this agent to a third-party endpoint.
+              &quot;phoneNumber&quot;: &quot;A String&quot;, # Transfer the call to a phone number in [E.164 format](https://en.wikipedia.org/wiki/E.164).
+            },
             &quot;text&quot;: { # The text response message. # Returns a text response.
               &quot;allowPlaybackInterruption&quot;: True or False, # Output only. Whether the playback of this message can be interrupted by the end user&#x27;s speech and the client can then starts the next Dialogflow request.
               &quot;text&quot;: [ # Required. A collection of text responses.
@@ -3756,7 +3936,7 @@ Returns:
             &quot;value&quot;: &quot;&quot;, # The new value of the parameter. A null value clears the parameter.
           },
         ],
-        &quot;tag&quot;: &quot;A String&quot;, # The tag used by the webhook to identify which fulfillment is being called. This field is required if `webhook` is specified.
+        &quot;tag&quot;: &quot;A String&quot;, # The value of this field will be populated in the WebhookRequest `fulfillmentInfo.tag` field by Dialogflow when the associated webhook is called. The tag is typically used by the webhook service to identify which fulfillment is being called, but it could be used for other purposes. This field is required if `webhook` is specified.
         &quot;webhook&quot;: &quot;A String&quot;, # The webhook to call. Format: `projects//locations//agents//webhooks/`.
       },
     },

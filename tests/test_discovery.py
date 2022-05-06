@@ -21,92 +21,91 @@
 Unit tests for objects created from discovery documents.
 """
 from __future__ import absolute_import
-import six
 
 __author__ = "jcgregorio@google.com (Joe Gregorio)"
 
-from six import BytesIO, StringIO
-from six.moves.urllib.parse import urlparse, parse_qs
-
+from collections import defaultdict
 import copy
 import datetime
-import httplib2
+import io
 import itertools
 import json
 import os
 import pickle
 import re
 import sys
-import unittest2 as unittest
-from collections import defaultdict
+import unittest
+import urllib
 
-from parameterized import parameterized
-import mock
-
-import google.auth.credentials
-from google.auth.transport import mtls
-from google.auth.exceptions import MutualTLSChannelError
-import google_auth_httplib2
 import google.api_core.exceptions
-
-from googleapiclient.discovery import _fix_up_media_upload
-from googleapiclient.discovery import _fix_up_method_description
-from googleapiclient.discovery import _fix_up_parameters
-from googleapiclient.discovery import _urljoin
-from googleapiclient.discovery import build
-from googleapiclient.discovery import build_from_document
-from googleapiclient.discovery import DISCOVERY_URI
-from googleapiclient.discovery import key2param
-from googleapiclient.discovery import MEDIA_BODY_PARAMETER_DEFAULT_VALUE
-from googleapiclient.discovery import MEDIA_MIME_TYPE_PARAMETER_DEFAULT_VALUE
-from googleapiclient.discovery import ResourceMethodParameters
-from googleapiclient.discovery import STACK_QUERY_PARAMETERS
-from googleapiclient.discovery import STACK_QUERY_PARAMETER_DEFAULT_VALUE
-from googleapiclient.discovery import V1_DISCOVERY_URI
-from googleapiclient.discovery import V2_DISCOVERY_URI
-from googleapiclient.discovery_cache import DISCOVERY_DOC_MAX_AGE
-from googleapiclient.discovery_cache.base import Cache
-from googleapiclient.errors import HttpError
-from googleapiclient.errors import InvalidJsonError
-from googleapiclient.errors import MediaUploadSizeError
-from googleapiclient.errors import ResumableUploadError
-from googleapiclient.errors import UnacceptableMimeTypeError
-from googleapiclient.errors import UnknownApiNameOrVersion
-from googleapiclient.errors import UnknownFileType
-from googleapiclient.http import build_http
-from googleapiclient.http import BatchHttpRequest
-from googleapiclient.http import HttpMock
-from googleapiclient.http import HttpMockSequence
-from googleapiclient.http import MediaFileUpload
-from googleapiclient.http import MediaIoBaseUpload
-from googleapiclient.http import MediaUpload
-from googleapiclient.http import MediaUploadProgress
-from googleapiclient.http import tunnel_patch
-from googleapiclient.model import JsonModel
-from googleapiclient.schema import Schemas
+import google.auth.credentials
+from google.auth.exceptions import MutualTLSChannelError
+from google.auth.transport import mtls
+import google_auth_httplib2
+import httplib2
+import mock
 from oauth2client import GOOGLE_TOKEN_URI
-from oauth2client.client import OAuth2Credentials, GoogleCredentials
-
-
-from googleapiclient import _helpers as util
-
+from oauth2client.client import GoogleCredentials, OAuth2Credentials
+from parameterized import parameterized
 import uritemplate
 
+from googleapiclient import _helpers as util
+from googleapiclient.discovery import (
+    DISCOVERY_URI,
+    MEDIA_BODY_PARAMETER_DEFAULT_VALUE,
+    MEDIA_MIME_TYPE_PARAMETER_DEFAULT_VALUE,
+    STACK_QUERY_PARAMETER_DEFAULT_VALUE,
+    STACK_QUERY_PARAMETERS,
+    V1_DISCOVERY_URI,
+    V2_DISCOVERY_URI,
+    ResourceMethodParameters,
+    _fix_up_media_upload,
+    _fix_up_method_description,
+    _fix_up_parameters,
+    _urljoin,
+    build,
+    build_from_document,
+    key2param,
+)
+from googleapiclient.discovery_cache import DISCOVERY_DOC_MAX_AGE
+from googleapiclient.discovery_cache.base import Cache
+from googleapiclient.errors import (
+    HttpError,
+    InvalidJsonError,
+    MediaUploadSizeError,
+    ResumableUploadError,
+    UnacceptableMimeTypeError,
+    UnknownApiNameOrVersion,
+    UnknownFileType,
+)
+from googleapiclient.http import (
+    BatchHttpRequest,
+    HttpMock,
+    HttpMockSequence,
+    MediaFileUpload,
+    MediaIoBaseUpload,
+    MediaUpload,
+    MediaUploadProgress,
+    build_http,
+    tunnel_patch,
+)
+from googleapiclient.model import JsonModel
+from googleapiclient.schema import Schemas
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 
 def assertUrisEqual(testcase, expected, actual):
     """Test that URIs are the same, up to reordering of query parameters."""
-    expected = urlparse(expected)
-    actual = urlparse(actual)
+    expected = urllib.parse.urlparse(expected)
+    actual = urllib.parse.urlparse(actual)
     testcase.assertEqual(expected.scheme, actual.scheme)
     testcase.assertEqual(expected.netloc, actual.netloc)
     testcase.assertEqual(expected.path, actual.path)
     testcase.assertEqual(expected.params, actual.params)
     testcase.assertEqual(expected.fragment, actual.fragment)
-    expected_query = parse_qs(expected.query)
-    actual_query = parse_qs(actual.query)
+    expected_query = urllib.parse.parse_qs(expected.query)
+    actual_query = urllib.parse.parse_qs(actual.query)
     for name in list(expected_query.keys()):
         testcase.assertEqual(expected_query[name], actual_query[name])
     for name in list(actual_query.keys()):
@@ -175,7 +174,7 @@ class Utilities(unittest.TestCase):
                 STACK_QUERY_PARAMETER_DEFAULT_VALUE, parameters[param_name]
             )
 
-        for param_name, value in six.iteritems(root_desc.get("parameters", {})):
+        for param_name, value in root_desc.get("parameters", {}).items():
             self.assertEqual(value, parameters[param_name])
 
         return parameters
@@ -297,7 +296,7 @@ class Utilities(unittest.TestCase):
             "media_body": MEDIA_BODY_PARAMETER_DEFAULT_VALUE,
             "media_mime_type": MEDIA_MIME_TYPE_PARAMETER_DEFAULT_VALUE,
         }
-        ten_gb = 10 * 2 ** 30
+        ten_gb = 10 * 2**30
         self._base_fix_up_method_description_test(
             valid_method_desc,
             {},
@@ -339,7 +338,7 @@ class Utilities(unittest.TestCase):
             "media_body": MEDIA_BODY_PARAMETER_DEFAULT_VALUE,
             "media_mime_type": MEDIA_MIME_TYPE_PARAMETER_DEFAULT_VALUE,
         }
-        ten_gb = 10 * 2 ** 30
+        ten_gb = 10 * 2**30
         self._base_fix_up_method_description_test(
             valid_method_desc,
             initial_parameters,
@@ -456,7 +455,13 @@ class DiscoveryErrors(unittest.TestCase):
     def test_failed_to_parse_discovery_json(self):
         self.http = HttpMock(datafile("malformed.json"), {"status": "200"})
         try:
-            plus = build("plus", "v1", http=self.http, cache_discovery=False, static_discovery=False)
+            plus = build(
+                "plus",
+                "v1",
+                http=self.http,
+                cache_discovery=False,
+                static_discovery=False,
+            )
             self.fail("should have raised an exception over malformed JSON.")
         except InvalidJsonError:
             pass
@@ -474,7 +479,13 @@ class DiscoveryErrors(unittest.TestCase):
     def test_credentials_and_http_mutually_exclusive(self):
         http = HttpMock(datafile("plus.json"), {"status": "200"})
         with self.assertRaises(ValueError):
-            build("plus", "v1", http=http, credentials=mock.sentinel.credentials, static_discovery=False)
+            build(
+                "plus",
+                "v1",
+                http=http,
+                credentials=mock.sentinel.credentials,
+                static_discovery=False,
+            )
 
     def test_credentials_file_and_http_mutually_exclusive(self):
         http = HttpMock(datafile("plus.json"), {"status": "200"})
@@ -585,7 +596,11 @@ class DiscoveryFromDocument(unittest.TestCase):
     def test_building_with_context_manager(self):
         discovery = read_datafile("plus.json")
         with mock.patch("httplib2.Http") as http:
-            with build_from_document(discovery, base="https://www.googleapis.com/", credentials=self.MOCK_CREDENTIALS) as plus:
+            with build_from_document(
+                discovery,
+                base="https://www.googleapis.com/",
+                credentials=self.MOCK_CREDENTIALS,
+            ) as plus:
                 self.assertIsNotNone(plus)
                 self.assertTrue(hasattr(plus, "activities"))
             plus._http.http.close.assert_called_once()
@@ -654,7 +669,8 @@ class DiscoveryFromDocument(unittest.TestCase):
 
         with mock.patch("googleapiclient._auth.default_credentials") as default:
             plus = build_from_document(
-                discovery, client_options={"scopes": ["1", "2"]},
+                discovery,
+                client_options={"scopes": ["1", "2"]},
             )
 
         default.assert_called_once_with(scopes=["1", "2"], quota_project_id=None)
@@ -686,6 +702,43 @@ class DiscoveryFromDocument(unittest.TestCase):
         default.assert_called_once_with(
             "credentials.json", scopes=None, quota_project_id=None
         )
+
+    def test_self_signed_jwt_enabled(self):
+        service_account_file_path = os.path.join(DATA_DIR, "service_account.json")
+        creds = google.oauth2.service_account.Credentials.from_service_account_file(
+            service_account_file_path
+        )
+
+        discovery = read_datafile("logging.json")
+
+        with mock.patch(
+            "google.oauth2.service_account.Credentials._create_self_signed_jwt"
+        ) as _create_self_signed_jwt:
+            build_from_document(
+                discovery,
+                credentials=creds,
+                always_use_jwt_access=True,
+            )
+            _create_self_signed_jwt.assert_called_with(
+                "https://logging.googleapis.com/"
+            )
+
+    def test_self_signed_jwt_disabled(self):
+        service_account_file_path = os.path.join(DATA_DIR, "service_account.json")
+        creds = google.oauth2.service_account.Credentials.from_service_account_file(
+            service_account_file_path
+        )
+
+        discovery = read_datafile("logging.json")
+
+        with mock.patch(
+            "google.oauth2.service_account.Credentials._create_self_signed_jwt"
+        ) as _create_self_signed_jwt:
+            build_from_document(
+                discovery,
+                credentials=creds,
+            )
+            _create_self_signed_jwt.assert_not_called()
 
 
 REGULAR_ENDPOINT = "https://www.googleapis.com/plus/v1/"
@@ -929,7 +982,7 @@ class DiscoveryFromHttp(unittest.TestCase):
                 "v1",
                 http=http,
                 developerKey=None,
-                discoveryServiceUrl="http://example.com"
+                discoveryServiceUrl="http://example.com",
             )
             self.fail("Should have raised an exception.")
         except HttpError as e:
@@ -947,7 +1000,7 @@ class DiscoveryFromHttp(unittest.TestCase):
                 "v1",
                 http=http,
                 developerKey=None,
-                discoveryServiceUrl="http://example.com"
+                discoveryServiceUrl="http://example.com",
             )
             self.fail("Should have raised an exception.")
         except HttpError as e:
@@ -979,7 +1032,9 @@ class DiscoveryFromHttp(unittest.TestCase):
                 ({"status": "200"}, read_datafile("zoo.json", "rb")),
             ]
         )
-        zoo = build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+        zoo = build(
+            "zoo", "v1", http=http, cache_discovery=False, static_discovery=False
+        )
         self.assertTrue(hasattr(zoo, "animals"))
 
     def test_api_endpoint_override_from_client_options(self):
@@ -994,7 +1049,12 @@ class DiscoveryFromHttp(unittest.TestCase):
             api_endpoint=api_endpoint
         )
         zoo = build(
-            "zoo", "v1", http=http, cache_discovery=False, client_options=options, static_discovery=False
+            "zoo",
+            "v1",
+            http=http,
+            cache_discovery=False,
+            client_options=options,
+            static_discovery=False,
         )
         self.assertEqual(zoo._baseUrl, api_endpoint)
 
@@ -1017,12 +1077,26 @@ class DiscoveryFromHttp(unittest.TestCase):
         self.assertEqual(zoo._baseUrl, api_endpoint)
 
     def test_discovery_with_empty_version_uses_v2(self):
-        http = HttpMockSequence([({"status": "200"}, read_datafile("zoo.json", "rb")),])
-        build("zoo", version=None, http=http, cache_discovery=False, static_discovery=False)
+        http = HttpMockSequence(
+            [
+                ({"status": "200"}, read_datafile("zoo.json", "rb")),
+            ]
+        )
+        build(
+            "zoo",
+            version=None,
+            http=http,
+            cache_discovery=False,
+            static_discovery=False,
+        )
         validate_discovery_requests(self, http, "zoo", None, V2_DISCOVERY_URI)
 
     def test_discovery_with_empty_version_preserves_custom_uri(self):
-        http = HttpMockSequence([({"status": "200"}, read_datafile("zoo.json", "rb")),])
+        http = HttpMockSequence(
+            [
+                ({"status": "200"}, read_datafile("zoo.json", "rb")),
+            ]
+        )
         custom_discovery_uri = "https://foo.bar/$discovery"
         build(
             "zoo",
@@ -1035,8 +1109,18 @@ class DiscoveryFromHttp(unittest.TestCase):
         validate_discovery_requests(self, http, "zoo", None, custom_discovery_uri)
 
     def test_discovery_with_valid_version_uses_v1(self):
-        http = HttpMockSequence([({"status": "200"}, read_datafile("zoo.json", "rb")),])
-        build("zoo", version="v123", http=http, cache_discovery=False, static_discovery=False)
+        http = HttpMockSequence(
+            [
+                ({"status": "200"}, read_datafile("zoo.json", "rb")),
+            ]
+        )
+        build(
+            "zoo",
+            version="v123",
+            http=http,
+            cache_discovery=False,
+            static_discovery=False,
+        )
         validate_discovery_requests(self, http, "zoo", "v123", V1_DISCOVERY_URI)
 
 
@@ -1050,7 +1134,13 @@ class DiscoveryRetryFromHttp(unittest.TestCase):
         )
         with self.assertRaises(HttpError):
             with mock.patch("time.sleep") as mocked_sleep:
-                build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+                build(
+                    "zoo",
+                    "v1",
+                    http=http,
+                    cache_discovery=False,
+                    static_discovery=False,
+                )
 
         mocked_sleep.assert_called_once()
         # We also want to verify that we stayed with v1 discovery
@@ -1066,7 +1156,13 @@ class DiscoveryRetryFromHttp(unittest.TestCase):
         )
         with self.assertRaises(HttpError):
             with mock.patch("time.sleep") as mocked_sleep:
-                build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+                build(
+                    "zoo",
+                    "v1",
+                    http=http,
+                    cache_discovery=False,
+                    static_discovery=False,
+                )
 
         mocked_sleep.assert_called_once()
         # We also want to verify that we switched to v2 discovery
@@ -1080,7 +1176,9 @@ class DiscoveryRetryFromHttp(unittest.TestCase):
             ]
         )
         with mock.patch("time.sleep") as mocked_sleep:
-            zoo = build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+            zoo = build(
+                "zoo", "v1", http=http, cache_discovery=False, static_discovery=False
+            )
 
         self.assertTrue(hasattr(zoo, "animals"))
         mocked_sleep.assert_called_once()
@@ -1096,7 +1194,9 @@ class DiscoveryRetryFromHttp(unittest.TestCase):
             ]
         )
         with mock.patch("time.sleep") as mocked_sleep:
-            zoo = build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+            zoo = build(
+                "zoo", "v1", http=http, cache_discovery=False, static_discovery=False
+            )
 
         self.assertTrue(hasattr(zoo, "animals"))
         mocked_sleep.assert_called_once()
@@ -1172,21 +1272,22 @@ class DiscoveryFromAppEngineCache(unittest.TestCase):
 class DiscoveryFromStaticDocument(unittest.TestCase):
     def test_retrieve_from_local_when_static_discovery_true(self):
         http = HttpMockSequence([({"status": "400"}, "")])
-        drive = build("drive", "v3", http=http, cache_discovery=False,
-                          static_discovery=True)
+        drive = build(
+            "drive", "v3", http=http, cache_discovery=False, static_discovery=True
+        )
         self.assertIsNotNone(drive)
         self.assertTrue(hasattr(drive, "files"))
 
     def test_retrieve_from_internet_when_static_discovery_false(self):
         http = HttpMockSequence([({"status": "400"}, "")])
         with self.assertRaises(HttpError):
-            build("drive", "v3", http=http, cache_discovery=False,
-                      static_discovery=False)
+            build(
+                "drive", "v3", http=http, cache_discovery=False, static_discovery=False
+            )
 
     def test_unknown_api_when_static_discovery_true(self):
         with self.assertRaises(UnknownApiNameOrVersion):
-            build("doesnotexist", "v3", cache_discovery=False,
-                      static_discovery=True)
+            build("doesnotexist", "v3", cache_discovery=False, static_discovery=True)
 
 
 class DictCache(Cache):
@@ -1271,8 +1372,8 @@ class Discovery(unittest.TestCase):
             self.assertTrue("unexpected" in str(e))
 
     def _check_query_types(self, request):
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["q"], ["foo"])
         self.assertEqual(q["i"], ["1"])
         self.assertEqual(q["n"], ["1.0"])
@@ -1319,8 +1420,8 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         request = zoo.query(trace="html", fields="description")
 
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["trace"], ["html"])
         self.assertEqual(q["fields"], ["description"])
 
@@ -1329,8 +1430,8 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         request = zoo.query(trace=None, fields="description")
 
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertFalse("trace" in q)
 
     def test_model_added_query_parameters(self):
@@ -1338,8 +1439,8 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         request = zoo.animals().get(name="Lion")
 
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["alt"], ["json"])
         self.assertEqual(request.headers["accept"], "application/json")
 
@@ -1348,8 +1449,8 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         request = zoo.animals().getmedia(name="Lion")
 
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertTrue("alt" not in q)
         self.assertEqual(request.headers["accept"], "*/*")
 
@@ -1372,7 +1473,9 @@ class Discovery(unittest.TestCase):
     def test_batch_request_from_default(self):
         self.http = HttpMock(datafile("plus.json"), {"status": "200"})
         # plus does not define a batchPath
-        plus = build("plus", "v1", http=self.http, cache_discovery=False, static_discovery=False)
+        plus = build(
+            "plus", "v1", http=self.http, cache_discovery=False, static_discovery=False
+        )
         batch_request = plus.new_batch_http_request()
         self.assertEqual(batch_request._batch_uri, "https://www.googleapis.com/batch")
 
@@ -1384,7 +1487,9 @@ class Discovery(unittest.TestCase):
             ]
         )
         http = tunnel_patch(http)
-        zoo = build("zoo", "v1", http=http, cache_discovery=False, static_discovery=False)
+        zoo = build(
+            "zoo", "v1", http=http, cache_discovery=False, static_discovery=False
+        )
         resp = zoo.animals().patch(name="lion", body='{"description": "foo"}').execute()
 
         self.assertTrue("x-http-method-override" in resp)
@@ -1426,8 +1531,8 @@ class Discovery(unittest.TestCase):
         self.assertTrue(getattr(zoo, "animals"))
 
         request = zoo.animals().list(name="bat", projection="full")
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["name"], ["bat"])
         self.assertEqual(q["projection"], ["full"])
 
@@ -1436,26 +1541,17 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
         self.assertTrue(getattr(zoo, "animals"))
         request = zoo.my().favorites().list(max_results="5")
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["max-results"], ["5"])
-
-    @unittest.skipIf(six.PY3, "print is not a reserved name in Python 3")
-    def test_methods_with_reserved_names(self):
-        self.http = HttpMock(datafile("zoo.json"), {"status": "200"})
-        zoo = build("zoo", "v1", http=self.http)
-        self.assertTrue(getattr(zoo, "animals"))
-        request = zoo.global_().print_().assert_(max_results="5")
-        parsed = urlparse(request.uri)
-        self.assertEqual(parsed[2], "/zoo/v1/global/print/assert")
 
     def test_top_level_functions(self):
         self.http = HttpMock(datafile("zoo.json"), {"status": "200"})
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
         self.assertTrue(getattr(zoo, "query"))
         request = zoo.query(q="foo")
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["q"], ["foo"])
 
     def test_simple_media_uploads(self):
@@ -1808,7 +1904,7 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
 
         # Set up a seekable stream and try to upload in single chunk.
-        fd = BytesIO(b'01234"56789"')
+        fd = io.BytesIO(b'01234"56789"')
         media_upload = MediaIoBaseUpload(
             fd=fd, mimetype="text/plain", chunksize=-1, resumable=True
         )
@@ -1839,7 +1935,7 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
 
         # Set up a seekable stream and try to upload in chunks.
-        fd = BytesIO(b"0123456789")
+        fd = io.BytesIO(b"0123456789")
         media_upload = MediaIoBaseUpload(
             fd=fd, mimetype="text/plain", chunksize=5, resumable=True
         )
@@ -1950,7 +2046,7 @@ class Discovery(unittest.TestCase):
         self.http = HttpMock(datafile("zoo.json"), {"status": "200"})
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
 
-        fd = BytesIO(b"data goes here")
+        fd = io.BytesIO(b"data goes here")
 
         # Create an upload that doesn't know the full size of the media.
         upload = MediaIoBaseUpload(
@@ -1975,7 +2071,7 @@ class Discovery(unittest.TestCase):
         zoo = build("zoo", "v1", http=self.http, static_discovery=False)
 
         # Create an upload that doesn't know the full size of the media.
-        fd = BytesIO(b"data goes here")
+        fd = io.BytesIO(b"data goes here")
 
         upload = MediaIoBaseUpload(
             fd=fd, mimetype="image/png", chunksize=500, resumable=True
@@ -2152,8 +2248,8 @@ class Next(unittest.TestCase):
         tasks = build("tasks", "v1", http=self.http)
         request = tasks.tasklists().list()
         next_request = tasks.tasklists().list_next(request, {"nextPageToken": "123abc"})
-        parsed = list(urlparse(next_request.uri))
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(next_request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["pageToken"][0], "123abc")
 
     def test_next_successful_with_next_page_token_alternate_name(self):
@@ -2161,8 +2257,8 @@ class Next(unittest.TestCase):
         bigquery = build("bigquery", "v2", http=self.http)
         request = bigquery.tabledata().list(datasetId="", projectId="", tableId="")
         next_request = bigquery.tabledata().list_next(request, {"pageToken": "123abc"})
-        parsed = list(urlparse(next_request.uri))
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(next_request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["pageToken"][0], "123abc")
 
     def test_next_successful_with_next_page_token_in_body(self):
@@ -2192,8 +2288,8 @@ class Next(unittest.TestCase):
         drive = build("drive", "v3", http=self.http)
         request = drive.changes().list(pageToken="startPageToken")
         next_request = drive.changes().list_next(request, {"nextPageToken": "123abc"})
-        parsed = list(urlparse(next_request.uri))
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(next_request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["pageToken"][0], "123abc")
 
 
@@ -2203,8 +2299,8 @@ class MediaGet(unittest.TestCase):
         zoo = build("zoo", "v1", http=http, static_discovery=False)
         request = zoo.animals().get_media(name="Lion")
 
-        parsed = urlparse(request.uri)
-        q = parse_qs(parsed[4])
+        parsed = urllib.parse.urlparse(request.uri)
+        q = urllib.parse.parse_qs(parsed.query)
         self.assertEqual(q["alt"], ["media"])
         self.assertEqual(request.headers["accept"], "*/*")
 

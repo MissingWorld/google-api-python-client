@@ -111,12 +111,14 @@ Args:
     The object takes the form of:
 
 { # An Workload object for managing highly regulated workloads of cloud customers.
-  &quot;billingAccount&quot;: &quot;A String&quot;, # Required. Input only. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
+  &quot;billingAccount&quot;: &quot;A String&quot;, # Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
   &quot;complianceRegime&quot;: &quot;A String&quot;, # Required. Immutable. Compliance Regime associated with this workload.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Immutable. The Workload creation timestamp.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload
+  &quot;enableSovereignControls&quot;: True or False, # Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.
   &quot;etag&quot;: &quot;A String&quot;, # Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update &amp; Delete operations.
-  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set a project with a KMS CMEK key is provisioned. This field is mandatory for a subset of Compliance Regimes.
+  &quot;kajEnrollmentState&quot;: &quot;A String&quot;, # Output only. Represents the KAJ enrollment state of the given workload.
+  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field.
     &quot;nextRotationTime&quot;: &quot;A String&quot;, # Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary.
     &quot;rotationPeriod&quot;: &quot;A String&quot;, # Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.
   },
@@ -124,11 +126,11 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Optional. The resource name of the workload. Format: organizations/{organization}/locations/{location}/workloads/{workload} Read-only.
-  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either an organization or a folder. Must be the same or a child of the Workload parent. If not specified all resources are created under the Workload parent. Formats: folders/{folder_id} organizations/{organization_id}
+  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}
   &quot;resourceSettings&quot;: [ # Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.
     { # Represent the custom settings for the resources to be created.
       &quot;displayName&quot;: &quot;A String&quot;, # User-assigned resource display name. If not empty it will be used to create a resource with the specified name.
-      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail.
+      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don&#x27;t set this value as folder_id is assigned by Google.
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource. This field should be specified to correspond the id to the right project type (CONSUMER_PROJECT or ENCRYPTION_KEYS_PROJECT)
     },
   ],
@@ -138,6 +140,12 @@ Args:
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource.
     },
   ],
+  &quot;saaEnrollmentResponse&quot;: { # Signed Access Approvals (SAA) enrollment response. # Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.
+    &quot;setupErrors&quot;: [ # Indicates SAA enrollment setup error if any.
+      &quot;A String&quot;,
+    ],
+    &quot;setupStatus&quot;: &quot;A String&quot;, # Indicates SAA enrollment status of a given workload.
+  },
 }
 
   externalId: string, Optional. A identifier associated with the workload and underlying projects which allows for the break down of billing costs for a workload. The value provided for the identifier will add a label to the workload and contained projects with the identifier as the value.
@@ -185,7 +193,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for `Empty` is empty JSON object `{}`.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -204,12 +212,14 @@ Returns:
   An object of the form:
 
     { # An Workload object for managing highly regulated workloads of cloud customers.
-  &quot;billingAccount&quot;: &quot;A String&quot;, # Required. Input only. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
+  &quot;billingAccount&quot;: &quot;A String&quot;, # Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
   &quot;complianceRegime&quot;: &quot;A String&quot;, # Required. Immutable. Compliance Regime associated with this workload.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Immutable. The Workload creation timestamp.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload
+  &quot;enableSovereignControls&quot;: True or False, # Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.
   &quot;etag&quot;: &quot;A String&quot;, # Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update &amp; Delete operations.
-  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set a project with a KMS CMEK key is provisioned. This field is mandatory for a subset of Compliance Regimes.
+  &quot;kajEnrollmentState&quot;: &quot;A String&quot;, # Output only. Represents the KAJ enrollment state of the given workload.
+  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field.
     &quot;nextRotationTime&quot;: &quot;A String&quot;, # Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary.
     &quot;rotationPeriod&quot;: &quot;A String&quot;, # Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.
   },
@@ -217,11 +227,11 @@ Returns:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Optional. The resource name of the workload. Format: organizations/{organization}/locations/{location}/workloads/{workload} Read-only.
-  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either an organization or a folder. Must be the same or a child of the Workload parent. If not specified all resources are created under the Workload parent. Formats: folders/{folder_id} organizations/{organization_id}
+  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}
   &quot;resourceSettings&quot;: [ # Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.
     { # Represent the custom settings for the resources to be created.
       &quot;displayName&quot;: &quot;A String&quot;, # User-assigned resource display name. If not empty it will be used to create a resource with the specified name.
-      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail.
+      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don&#x27;t set this value as folder_id is assigned by Google.
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource. This field should be specified to correspond the id to the right project type (CONSUMER_PROJECT or ENCRYPTION_KEYS_PROJECT)
     },
   ],
@@ -231,6 +241,12 @@ Returns:
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource.
     },
   ],
+  &quot;saaEnrollmentResponse&quot;: { # Signed Access Approvals (SAA) enrollment response. # Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.
+    &quot;setupErrors&quot;: [ # Indicates SAA enrollment setup error if any.
+      &quot;A String&quot;,
+    ],
+    &quot;setupStatus&quot;: &quot;A String&quot;, # Indicates SAA enrollment status of a given workload.
+  },
 }</pre>
 </div>
 
@@ -255,12 +271,14 @@ Returns:
   &quot;nextPageToken&quot;: &quot;A String&quot;, # The next page token. Return empty if reached the last page.
   &quot;workloads&quot;: [ # List of Workloads under a given parent.
     { # An Workload object for managing highly regulated workloads of cloud customers.
-      &quot;billingAccount&quot;: &quot;A String&quot;, # Required. Input only. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
+      &quot;billingAccount&quot;: &quot;A String&quot;, # Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
       &quot;complianceRegime&quot;: &quot;A String&quot;, # Required. Immutable. Compliance Regime associated with this workload.
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Immutable. The Workload creation timestamp.
       &quot;displayName&quot;: &quot;A String&quot;, # Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload
+      &quot;enableSovereignControls&quot;: True or False, # Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.
       &quot;etag&quot;: &quot;A String&quot;, # Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update &amp; Delete operations.
-      &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set a project with a KMS CMEK key is provisioned. This field is mandatory for a subset of Compliance Regimes.
+      &quot;kajEnrollmentState&quot;: &quot;A String&quot;, # Output only. Represents the KAJ enrollment state of the given workload.
+      &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field.
         &quot;nextRotationTime&quot;: &quot;A String&quot;, # Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary.
         &quot;rotationPeriod&quot;: &quot;A String&quot;, # Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.
       },
@@ -268,11 +286,11 @@ Returns:
         &quot;a_key&quot;: &quot;A String&quot;,
       },
       &quot;name&quot;: &quot;A String&quot;, # Optional. The resource name of the workload. Format: organizations/{organization}/locations/{location}/workloads/{workload} Read-only.
-      &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either an organization or a folder. Must be the same or a child of the Workload parent. If not specified all resources are created under the Workload parent. Formats: folders/{folder_id} organizations/{organization_id}
+      &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}
       &quot;resourceSettings&quot;: [ # Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.
         { # Represent the custom settings for the resources to be created.
           &quot;displayName&quot;: &quot;A String&quot;, # User-assigned resource display name. If not empty it will be used to create a resource with the specified name.
-          &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail.
+          &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don&#x27;t set this value as folder_id is assigned by Google.
           &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource. This field should be specified to correspond the id to the right project type (CONSUMER_PROJECT or ENCRYPTION_KEYS_PROJECT)
         },
       ],
@@ -282,6 +300,12 @@ Returns:
           &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource.
         },
       ],
+      &quot;saaEnrollmentResponse&quot;: { # Signed Access Approvals (SAA) enrollment response. # Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.
+        &quot;setupErrors&quot;: [ # Indicates SAA enrollment setup error if any.
+          &quot;A String&quot;,
+        ],
+        &quot;setupStatus&quot;: &quot;A String&quot;, # Indicates SAA enrollment status of a given workload.
+      },
     },
   ],
 }</pre>
@@ -311,12 +335,14 @@ Args:
     The object takes the form of:
 
 { # An Workload object for managing highly regulated workloads of cloud customers.
-  &quot;billingAccount&quot;: &quot;A String&quot;, # Required. Input only. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
+  &quot;billingAccount&quot;: &quot;A String&quot;, # Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
   &quot;complianceRegime&quot;: &quot;A String&quot;, # Required. Immutable. Compliance Regime associated with this workload.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Immutable. The Workload creation timestamp.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload
+  &quot;enableSovereignControls&quot;: True or False, # Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.
   &quot;etag&quot;: &quot;A String&quot;, # Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update &amp; Delete operations.
-  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set a project with a KMS CMEK key is provisioned. This field is mandatory for a subset of Compliance Regimes.
+  &quot;kajEnrollmentState&quot;: &quot;A String&quot;, # Output only. Represents the KAJ enrollment state of the given workload.
+  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field.
     &quot;nextRotationTime&quot;: &quot;A String&quot;, # Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary.
     &quot;rotationPeriod&quot;: &quot;A String&quot;, # Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.
   },
@@ -324,11 +350,11 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Optional. The resource name of the workload. Format: organizations/{organization}/locations/{location}/workloads/{workload} Read-only.
-  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either an organization or a folder. Must be the same or a child of the Workload parent. If not specified all resources are created under the Workload parent. Formats: folders/{folder_id} organizations/{organization_id}
+  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}
   &quot;resourceSettings&quot;: [ # Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.
     { # Represent the custom settings for the resources to be created.
       &quot;displayName&quot;: &quot;A String&quot;, # User-assigned resource display name. If not empty it will be used to create a resource with the specified name.
-      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail.
+      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don&#x27;t set this value as folder_id is assigned by Google.
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource. This field should be specified to correspond the id to the right project type (CONSUMER_PROJECT or ENCRYPTION_KEYS_PROJECT)
     },
   ],
@@ -338,6 +364,12 @@ Args:
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource.
     },
   ],
+  &quot;saaEnrollmentResponse&quot;: { # Signed Access Approvals (SAA) enrollment response. # Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.
+    &quot;setupErrors&quot;: [ # Indicates SAA enrollment setup error if any.
+      &quot;A String&quot;,
+    ],
+    &quot;setupStatus&quot;: &quot;A String&quot;, # Indicates SAA enrollment status of a given workload.
+  },
 }
 
   updateMask: string, Required. The list of fields to be updated.
@@ -350,12 +382,14 @@ Returns:
   An object of the form:
 
     { # An Workload object for managing highly regulated workloads of cloud customers.
-  &quot;billingAccount&quot;: &quot;A String&quot;, # Required. Input only. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
+  &quot;billingAccount&quot;: &quot;A String&quot;, # Optional. The billing account used for the resources which are direct children of workload. This billing account is initially associated with the resources created as part of Workload creation. After the initial creation of these resources, the customer can change the assigned billing account. The resource name has the form `billingAccounts/{billing_account_id}`. For example, `billingAccounts/012345-567890-ABCDEF`.
   &quot;complianceRegime&quot;: &quot;A String&quot;, # Required. Immutable. Compliance Regime associated with this workload.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Immutable. The Workload creation timestamp.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload
+  &quot;enableSovereignControls&quot;: True or False, # Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.
   &quot;etag&quot;: &quot;A String&quot;, # Optional. ETag of the workload, it is calculated on the basis of the Workload contents. It will be used in Update &amp; Delete operations.
-  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set a project with a KMS CMEK key is provisioned. This field is mandatory for a subset of Compliance Regimes.
+  &quot;kajEnrollmentState&quot;: &quot;A String&quot;, # Output only. Represents the KAJ enrollment state of the given workload.
+  &quot;kmsSettings&quot;: { # Settings specific to the Key Management Service. # Input only. Settings used to create a CMEK crypto key. When set, a project with a KMS CMEK key is provisioned. This field is deprecated as of Feb 28, 2022. In order to create a Keyring, callers should specify, ENCRYPTION_KEYS_PROJECT or KEYRING in ResourceSettings.resource_type field.
     &quot;nextRotationTime&quot;: &quot;A String&quot;, # Required. Input only. Immutable. The time at which the Key Management Service will automatically create a new version of the crypto key and mark it as the primary.
     &quot;rotationPeriod&quot;: &quot;A String&quot;, # Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.
   },
@@ -363,11 +397,11 @@ Returns:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Optional. The resource name of the workload. Format: organizations/{organization}/locations/{location}/workloads/{workload} Read-only.
-  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either an organization or a folder. Must be the same or a child of the Workload parent. If not specified all resources are created under the Workload parent. Formats: folders/{folder_id} organizations/{organization_id}
+  &quot;provisionedResourcesParent&quot;: &quot;A String&quot;, # Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}
   &quot;resourceSettings&quot;: [ # Input only. Resource properties that are used to customize workload resources. These properties (such as custom project id) will be used to create workload resources if possible. This field is optional.
     { # Represent the custom settings for the resources to be created.
       &quot;displayName&quot;: &quot;A String&quot;, # User-assigned resource display name. If not empty it will be used to create a resource with the specified name.
-      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail.
+      &quot;resourceId&quot;: &quot;A String&quot;, # Resource identifier. For a project this represents project_id. If the project is already taken, the workload creation will fail. For KeyRing, this represents the keyring_id. For a folder, don&#x27;t set this value as folder_id is assigned by Google.
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource. This field should be specified to correspond the id to the right project type (CONSUMER_PROJECT or ENCRYPTION_KEYS_PROJECT)
     },
   ],
@@ -377,6 +411,12 @@ Returns:
       &quot;resourceType&quot;: &quot;A String&quot;, # Indicates the type of resource.
     },
   ],
+  &quot;saaEnrollmentResponse&quot;: { # Signed Access Approvals (SAA) enrollment response. # Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.
+    &quot;setupErrors&quot;: [ # Indicates SAA enrollment setup error if any.
+      &quot;A String&quot;,
+    ],
+    &quot;setupStatus&quot;: &quot;A String&quot;, # Indicates SAA enrollment status of a given workload.
+  },
 }</pre>
 </div>
 

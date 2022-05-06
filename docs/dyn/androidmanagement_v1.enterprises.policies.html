@@ -112,7 +112,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); } The JSON representation for Empty is empty JSON object {}.
+    { # A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }
 }</pre>
 </div>
 
@@ -136,10 +136,13 @@ Returns:
   ],
   &quot;addUserDisabled&quot;: True or False, # Whether adding new users and profiles is disabled.
   &quot;adjustVolumeDisabled&quot;: True or False, # Whether adjusting the master volume is disabled. Also mutes the device.
-  &quot;advancedSecurityOverrides&quot;: { # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
+  &quot;advancedSecurityOverrides&quot;: { # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
     &quot;commonCriteriaMode&quot;: &quot;A String&quot;, # Controls Common Criteria Mode—security standards defined in the Common Criteria for Information Technology Security Evaluation (https://www.commoncriteriaportal.org/) (CC). Enabling Common Criteria Mode increases certain security components on a device, including AES-GCM encryption of Bluetooth Long Term Keys, and Wi-Fi configuration stores.Warning: Common Criteria Mode enforces a strict security model typically only required for IT products used in national security systems and other highly sensitive organizations. Standard device use may be affected. Only enabled if required.
     &quot;developerSettings&quot;: &quot;A String&quot;, # Controls access to developer settings: developer options and safe boot. Replaces safeBootDisabled (deprecated) and debuggingFeaturesAllowed (deprecated).
     &quot;googlePlayProtectVerifyApps&quot;: &quot;A String&quot;, # Whether Google Play Protect verification (https://support.google.com/accounts/answer/2812853) is enforced. Replaces ensureVerifyAppsEnabled (deprecated).
+    &quot;personalAppsThatCanReadWorkNotifications&quot;: [ # Personal apps that can read work profile notifications using a NotificationListenerService (https://developer.android.com/reference/android/service/notification/NotificationListenerService). By default, no personal apps (aside from system apps) can read work notifications. Each value in the list must be a package name.
+      &quot;A String&quot;,
+    ],
     &quot;untrustedAppsPolicy&quot;: &quot;A String&quot;, # The policy for untrusted apps (apps from unknown sources) enforced on the device. Replaces install_unknown_sources_allowed (deprecated).
   },
   &quot;alwaysOnVpnPackage&quot;: { # Configuration for an always-on VPN connection. # Configuration for an always-on VPN connection. Use with vpn_config_disabled to prevent modification of this setting.
@@ -155,6 +158,7 @@ Returns:
       &quot;accessibleTrackIds&quot;: [ # List of the app’s track IDs that a device belonging to the enterprise can access. If the list contains multiple track IDs, devices receive the latest version among all accessible tracks. If the list contains no track IDs, devices only have access to the app’s production track. More details about each track are available in AppTrackInfo.
         &quot;A String&quot;,
       ],
+      &quot;alwaysOnVpnLockdownExemption&quot;: &quot;A String&quot;, # Specifies whether the app is allowed networking when the VPN is not connected and alwaysOnVpnPackage.lockdownEnabled is enabled. If set to VPN_LOCKDOWN_ENFORCED, the app is not allowed networking, and if set to VPN_LOCKDOWN_EXEMPTION, the app is allowed networking. Only supported on devices running Android 10 and above. If this is not supported by the device, the device will contain a NonComplianceDetail with non_compliance_reason set to API_LEVEL and a fieldPath. If this is not applicable to the app, the device will contain a NonComplianceDetail with non_compliance_reason set to UNSUPPORTED and a fieldPath. The fieldPath is set to applications[i].alwaysOnVpnLockdownExemption, where i is the index of the package in the applications policy.
       &quot;autoUpdateMode&quot;: &quot;A String&quot;, # Controls the auto-update mode for the app.
       &quot;connectedWorkAndPersonalApp&quot;: &quot;A String&quot;, # Controls whether the app can communicate with itself across a device’s work and personal profiles, subject to user consent.
       &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default policy for all permissions requested by the app. If specified, this overrides the policy-level default_permission_policy which applies to all apps. It does not override the permission_grants which applies to all apps.
@@ -162,6 +166,12 @@ Returns:
         &quot;A String&quot;,
       ],
       &quot;disabled&quot;: True or False, # Whether the app is disabled. When disabled, the app data is still preserved.
+      &quot;extensionConfig&quot;: { # Configuration to enable an app as an extension app, with the capability of interacting with Android Device Policy offline. # Configuration to enable this app as an extension app, with the capability of interacting with Android Device Policy offline.This field can be set for at most one app.
+        &quot;notificationReceiver&quot;: &quot;A String&quot;, # Fully qualified class name of the receiver service class for Android Device Policy to notify the extension app of any local command status updates.
+        &quot;signingKeyFingerprintsSha256&quot;: [ # Hex-encoded SHA-256 hash of the signing certificate of the extension app. Only hexadecimal string representations of 64 characters are valid.If not specified, the signature for the corresponding package name is obtained from the Play Store instead.If this list is empty, the signature of the extension app on the device must match the signature obtained from the Play Store for the app to be able to communicate with Android Device Policy.If this list is not empty, the signature of the extension app on the device must match one of the entries in this list for the app to be able to communicate with Android Device Policy.In production use cases, it is recommended to leave this empty.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;installType&quot;: &quot;A String&quot;, # The type of installation to perform.
       &quot;lockTaskAllowed&quot;: True or False, # Whether the app is allowed to lock itself in full-screen mode. DEPRECATED. Use InstallType KIOSK or kioskCustomLauncherEnabled to to configure a dedicated device.
       &quot;managedConfiguration&quot;: { # Managed configuration applied to the app. The format for the configuration is dictated by the ManagedProperty values supported by the app. Each field name in the managed configuration must match the key field of the ManagedProperty. The field value must be compatible with the type of the ManagedProperty: *type* *JSON value* BOOL true or false STRING string INTEGER number CHOICE string MULTISELECT array of strings HIDDEN string BUNDLE_ARRAY array of objects
@@ -189,7 +199,8 @@ Returns:
   &quot;bluetoothConfigDisabled&quot;: True or False, # Whether configuring bluetooth is disabled.
   &quot;bluetoothContactSharingDisabled&quot;: True or False, # Whether bluetooth contact sharing is disabled.
   &quot;bluetoothDisabled&quot;: True or False, # Whether bluetooth is disabled. Prefer this setting over bluetooth_config_disabled because bluetooth_config_disabled can be bypassed by the user.
-  &quot;cameraDisabled&quot;: True or False, # Whether all cameras on the device are disabled.
+  &quot;cameraAccess&quot;: &quot;A String&quot;, # Controls the use of the camera and whether the user has access to the camera access toggle.
+  &quot;cameraDisabled&quot;: True or False, # If camera_access is set to any value other than CAMERA_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether cameras are disabled: If true, all cameras are disabled, otherwise they are available. For fully managed devices this field applies for all apps on the device. For work profiles, this field applies only to apps in the work profile, and the camera access of apps outside the work profile is unaffected.
   &quot;cellBroadcastsConfigDisabled&quot;: True or False, # Whether configuring cell broadcast is disabled.
   &quot;choosePrivateKeyRules&quot;: [ # Rules for determining apps&#x27; access to private keys. See ChoosePrivateKeyRule for details.
     { # Controls apps&#x27; access to private keys. The rule determines which private key, if any, Android Device Policy grants to the specified app. Access is granted either when the app calls KeyChain.choosePrivateKeyAlias (https://developer.android.com/reference/android/security/KeyChain#choosePrivateKeyAlias%28android.app.Activity,%20android.security.KeyChainAliasCallback,%20java.lang.String[],%20java.security.Principal[],%20java.lang.String,%20int,%20java.lang.String%29) (or any overloads) to request a private key alias for a given URL, or for rules that are not URL-specific (that is, if urlPattern is not set, or set to the empty string or .*) on Android 11 and above, directly so that the app can call KeyChain.getPrivateKey (https://developer.android.com/reference/android/security/KeyChain#getPrivateKey%28android.content.Context,%20java.lang.String%29), without first having to call KeyChain.choosePrivateKeyAlias.When an app calls KeyChain.choosePrivateKeyAlias if more than one choosePrivateKeyRules matches, the last matching rule defines which key alias to return.
@@ -218,6 +229,11 @@ Returns:
   ],
   &quot;createWindowsDisabled&quot;: True or False, # Whether creating windows besides app windows is disabled.
   &quot;credentialsConfigDisabled&quot;: True or False, # Whether configuring user credentials is disabled.
+  &quot;crossProfilePolicies&quot;: { # Cross-profile policies applied on the device. # Cross-profile policies applied on the device.
+    &quot;crossProfileCopyPaste&quot;: &quot;A String&quot;, # Whether text copied from one profile (personal or work) can be pasted in the other profile.
+    &quot;crossProfileDataSharing&quot;: &quot;A String&quot;, # Whether data from one profile (personal or work) can be shared with apps in the other profile. Specifically controls simple data sharing via intents. Management of other cross-profile communication channels, such as contact search, copy/paste, or connected work &amp; personal apps, are configured separately.
+    &quot;showWorkContactsInPersonalProfile&quot;: &quot;A String&quot;, # Whether contacts stored in the work profile can be shown in personal profile contact searches and incoming calls.
+  },
   &quot;dataRoamingDisabled&quot;: True or False, # Whether roaming data services are disabled.
   &quot;debuggingFeaturesAllowed&quot;: True or False, # Whether the user is allowed to enable debugging features.
   &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default permission policy for runtime permission requests.
@@ -256,6 +272,7 @@ Returns:
     },
   },
   &quot;maximumTimeToLock&quot;: &quot;A String&quot;, # Maximum time in milliseconds for user activity until the device locks. A value of 0 means there is no restriction.
+  &quot;microphoneAccess&quot;: &quot;A String&quot;, # Controls the use of the microphone and whether the user has access to the microphone access toggle. This applies only on fully managed devices.
   &quot;minimumApiLevel&quot;: 42, # The minimum allowed Android API level.
   &quot;mobileNetworksConfigDisabled&quot;: True or False, # Whether configuring mobile networks is disabled.
   &quot;modifyAccountsDisabled&quot;: True or False, # Whether adding or removing accounts is disabled.
@@ -299,7 +316,7 @@ Returns:
       &quot;requirePasswordUnlock&quot;: &quot;A String&quot;, # The length of time after a device or work profile is unlocked using a strong form of authentication (password, PIN, pattern) that it can be unlocked using any other authentication method (e.g. fingerprint, trust agents, face). After the specified time period elapses, only strong forms of authentication can be used to unlock the device or work profile.
     },
   ],
-  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use password_policies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
+  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use passwordPolicies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
     &quot;maximumFailedPasswordsForWipe&quot;: 42, # Number of incorrect device-unlock passwords that can be entered before a device is wiped. A value of 0 means there is no restriction.
     &quot;passwordExpirationTimeout&quot;: &quot;A String&quot;, # Password expiration timeout.
     &quot;passwordHistoryLength&quot;: 42, # The length of the password history. After setting this field, the user won&#x27;t be able to enter a new password that is the same as any password in the history. A value of 0 means there is no restriction.
@@ -320,7 +337,7 @@ Returns:
       &quot;policy&quot;: &quot;A String&quot;, # The policy for granting the permission.
     },
   ],
-  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used.
+  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used. This can be set on fully managed devices and on work profiles. When applied to a work profile, this affects both the personal profile and the work profile.
     &quot;packageNames&quot;: [ # A list of package names.
       &quot;A String&quot;,
     ],
@@ -370,6 +387,7 @@ Returns:
       },
     },
   ],
+  &quot;preferentialNetworkService&quot;: &quot;A String&quot;, # Controls whether preferential network service is enabled on the work profile. For example, an organization may have an agreement with a carrier that all of the work data from its employees&#x27; devices will be sent via a network service dedicated for enterprise use. An example of a supported preferential network service is the enterprise slice on 5G networks. This has no effect on fully managed devices.
   &quot;privateKeySelectionEnabled&quot;: True or False, # Allows showing UI on a device for a user to choose a private key alias if there are no matching rules in ChoosePrivateKeyRules. For devices below Android P, setting this may leave enterprise keys vulnerable.
   &quot;recommendedGlobalProxy&quot;: { # Configuration info for an HTTP proxy. For a direct proxy, set the host, port, and excluded_hosts fields. For a PAC script proxy, set the pac_uri field. # The network-independent global HTTP proxy. Typically proxies should be configured per-network in open_network_configuration. However for unusual configurations like general internal filtering a global HTTP proxy may be useful. If the proxy is not accessible, network access may break. The global proxy is only a recommendation and some apps may ignore it.
     &quot;excludedHosts&quot;: [ # For a direct proxy, the hosts for which the proxy is bypassed. The host names may contain wildcards such as *.example.com.
@@ -384,7 +402,7 @@ Returns:
   &quot;screenCaptureDisabled&quot;: True or False, # Whether screen capture is disabled.
   &quot;setUserIconDisabled&quot;: True or False, # Whether changing the user icon is disabled.
   &quot;setWallpaperDisabled&quot;: True or False, # Whether changing the wallpaper is disabled.
-  &quot;setupActions&quot;: [ # Actions to take during the setup process.
+  &quot;setupActions&quot;: [ # Action to take during the setup process. At most one action may be specified.
     { # An action executed during setup.
       &quot;description&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Description of this action.
         &quot;defaultMessage&quot;: &quot;A String&quot;, # The default message displayed if no localized message is specified or the user&#x27;s locale doesn&#x27;t match with any of the localized messages. A default message must be provided if any localized messages are provided.
@@ -392,7 +410,7 @@ Returns:
           &quot;a_key&quot;: &quot;A String&quot;,
         },
       },
-      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app.
+      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app. The app will be launched with an intent containing an extra with key com.google.android.apps.work.clouddpc.EXTRA_LAUNCHED_AS_SETUP_ACTION set to the boolean value true to indicate that this is a setup action flow.
         &quot;packageName&quot;: &quot;A String&quot;, # Package name of app to be launched
       },
       &quot;title&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Title of this action.
@@ -422,7 +440,7 @@ Returns:
     &quot;deviceSettingsEnabled&quot;: True or False, # Whether device settings reporting is enabled.
     &quot;displayInfoEnabled&quot;: True or False, # Whether displays reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;hardwareStatusEnabled&quot;: True or False, # Whether hardware status reporting is enabled. Report data is not available for personally owned devices with work profiles.
-    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory reporting is enabled.
+    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory event reporting is enabled.
     &quot;networkInfoEnabled&quot;: True or False, # Whether network info reporting is enabled.
     &quot;powerManagementEventsEnabled&quot;: True or False, # Whether power management event reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;softwareInfoEnabled&quot;: True or False, # Whether software info reporting is enabled.
@@ -435,12 +453,12 @@ Returns:
     &quot;endMinutes&quot;: 42, # If the type is WINDOWED, the end of the maintenance window, measured as the number of minutes after midnight in device&#x27;s local time. This value must be between 0 and 1439, inclusive. If this value is less than start_minutes, then the maintenance window spans midnight. If the maintenance window specified is smaller than 30 minutes, the actual window is extended to 30 minutes beyond the start time.
     &quot;freezePeriods&quot;: [ # An annually repeating time period in which over-the-air (OTA) system updates are postponed to freeze the OS version running on a device. To prevent freezing the device indefinitely, each freeze period must be separated by at least 60 days.
       { # A system freeze period. When a device’s clock is within the freeze period, all incoming system updates (including security patches) are blocked and won’t be installed. When a device is outside the freeze period, normal update behavior applies. Leap years are ignored in freeze period calculations, in particular: * If Feb. 29th is set as the start or end date of a freeze period, the freeze period will start or end on Feb. 28th instead. * When a device’s system clock reads Feb. 29th, it’s treated as Feb. 28th. * When calculating the number of days in a freeze period or the time between two freeze periods, Feb. 29th is ignored and not counted as a day.
-        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
         },
-        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -452,7 +470,15 @@ Returns:
   },
   &quot;tetheringConfigDisabled&quot;: True or False, # Whether configuring tethering and portable hotspots is disabled.
   &quot;uninstallAppsDisabled&quot;: True or False, # Whether user uninstallation of applications is disabled.
-  &quot;unmuteMicrophoneDisabled&quot;: True or False, # Whether the microphone is muted and adjusting microphone volume is disabled.
+  &quot;unmuteMicrophoneDisabled&quot;: True or False, # If microphone_access is set to any value other than MICROPHONE_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether microphones are disabled: If true, all microphones are disabled, otherwise they are available. This is available only on fully managed devices.
+  &quot;usageLog&quot;: { # Controls types of device activity logs collected from the device and reported via Pub/Sub notification (https://developers.google.com/android/management/notifications). # Configuration of device activity logging.
+    &quot;enabledLogTypes&quot;: [ # Specifies which log types are enabled. Note that users will receive on-device messaging when usage logging is enabled.
+      &quot;A String&quot;,
+    ],
+    &quot;uploadOnCellularAllowed&quot;: [ # Specifies which of the enabled log types can be uploaded over mobile data. By default logs are queued for upload when the device connects to WiFi.
+      &quot;A String&quot;,
+    ],
+  },
   &quot;usbFileTransferDisabled&quot;: True or False, # Whether transferring files over USB is disabled.
   &quot;usbMassStorageEnabled&quot;: True or False, # Whether USB storage is enabled. Deprecated.
   &quot;version&quot;: &quot;A String&quot;, # The version of the policy. This is a read-only field. The version is incremented each time the policy is updated.
@@ -487,10 +513,13 @@ Returns:
       ],
       &quot;addUserDisabled&quot;: True or False, # Whether adding new users and profiles is disabled.
       &quot;adjustVolumeDisabled&quot;: True or False, # Whether adjusting the master volume is disabled. Also mutes the device.
-      &quot;advancedSecurityOverrides&quot;: { # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
+      &quot;advancedSecurityOverrides&quot;: { # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
         &quot;commonCriteriaMode&quot;: &quot;A String&quot;, # Controls Common Criteria Mode—security standards defined in the Common Criteria for Information Technology Security Evaluation (https://www.commoncriteriaportal.org/) (CC). Enabling Common Criteria Mode increases certain security components on a device, including AES-GCM encryption of Bluetooth Long Term Keys, and Wi-Fi configuration stores.Warning: Common Criteria Mode enforces a strict security model typically only required for IT products used in national security systems and other highly sensitive organizations. Standard device use may be affected. Only enabled if required.
         &quot;developerSettings&quot;: &quot;A String&quot;, # Controls access to developer settings: developer options and safe boot. Replaces safeBootDisabled (deprecated) and debuggingFeaturesAllowed (deprecated).
         &quot;googlePlayProtectVerifyApps&quot;: &quot;A String&quot;, # Whether Google Play Protect verification (https://support.google.com/accounts/answer/2812853) is enforced. Replaces ensureVerifyAppsEnabled (deprecated).
+        &quot;personalAppsThatCanReadWorkNotifications&quot;: [ # Personal apps that can read work profile notifications using a NotificationListenerService (https://developer.android.com/reference/android/service/notification/NotificationListenerService). By default, no personal apps (aside from system apps) can read work notifications. Each value in the list must be a package name.
+          &quot;A String&quot;,
+        ],
         &quot;untrustedAppsPolicy&quot;: &quot;A String&quot;, # The policy for untrusted apps (apps from unknown sources) enforced on the device. Replaces install_unknown_sources_allowed (deprecated).
       },
       &quot;alwaysOnVpnPackage&quot;: { # Configuration for an always-on VPN connection. # Configuration for an always-on VPN connection. Use with vpn_config_disabled to prevent modification of this setting.
@@ -506,6 +535,7 @@ Returns:
           &quot;accessibleTrackIds&quot;: [ # List of the app’s track IDs that a device belonging to the enterprise can access. If the list contains multiple track IDs, devices receive the latest version among all accessible tracks. If the list contains no track IDs, devices only have access to the app’s production track. More details about each track are available in AppTrackInfo.
             &quot;A String&quot;,
           ],
+          &quot;alwaysOnVpnLockdownExemption&quot;: &quot;A String&quot;, # Specifies whether the app is allowed networking when the VPN is not connected and alwaysOnVpnPackage.lockdownEnabled is enabled. If set to VPN_LOCKDOWN_ENFORCED, the app is not allowed networking, and if set to VPN_LOCKDOWN_EXEMPTION, the app is allowed networking. Only supported on devices running Android 10 and above. If this is not supported by the device, the device will contain a NonComplianceDetail with non_compliance_reason set to API_LEVEL and a fieldPath. If this is not applicable to the app, the device will contain a NonComplianceDetail with non_compliance_reason set to UNSUPPORTED and a fieldPath. The fieldPath is set to applications[i].alwaysOnVpnLockdownExemption, where i is the index of the package in the applications policy.
           &quot;autoUpdateMode&quot;: &quot;A String&quot;, # Controls the auto-update mode for the app.
           &quot;connectedWorkAndPersonalApp&quot;: &quot;A String&quot;, # Controls whether the app can communicate with itself across a device’s work and personal profiles, subject to user consent.
           &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default policy for all permissions requested by the app. If specified, this overrides the policy-level default_permission_policy which applies to all apps. It does not override the permission_grants which applies to all apps.
@@ -513,6 +543,12 @@ Returns:
             &quot;A String&quot;,
           ],
           &quot;disabled&quot;: True or False, # Whether the app is disabled. When disabled, the app data is still preserved.
+          &quot;extensionConfig&quot;: { # Configuration to enable an app as an extension app, with the capability of interacting with Android Device Policy offline. # Configuration to enable this app as an extension app, with the capability of interacting with Android Device Policy offline.This field can be set for at most one app.
+            &quot;notificationReceiver&quot;: &quot;A String&quot;, # Fully qualified class name of the receiver service class for Android Device Policy to notify the extension app of any local command status updates.
+            &quot;signingKeyFingerprintsSha256&quot;: [ # Hex-encoded SHA-256 hash of the signing certificate of the extension app. Only hexadecimal string representations of 64 characters are valid.If not specified, the signature for the corresponding package name is obtained from the Play Store instead.If this list is empty, the signature of the extension app on the device must match the signature obtained from the Play Store for the app to be able to communicate with Android Device Policy.If this list is not empty, the signature of the extension app on the device must match one of the entries in this list for the app to be able to communicate with Android Device Policy.In production use cases, it is recommended to leave this empty.
+              &quot;A String&quot;,
+            ],
+          },
           &quot;installType&quot;: &quot;A String&quot;, # The type of installation to perform.
           &quot;lockTaskAllowed&quot;: True or False, # Whether the app is allowed to lock itself in full-screen mode. DEPRECATED. Use InstallType KIOSK or kioskCustomLauncherEnabled to to configure a dedicated device.
           &quot;managedConfiguration&quot;: { # Managed configuration applied to the app. The format for the configuration is dictated by the ManagedProperty values supported by the app. Each field name in the managed configuration must match the key field of the ManagedProperty. The field value must be compatible with the type of the ManagedProperty: *type* *JSON value* BOOL true or false STRING string INTEGER number CHOICE string MULTISELECT array of strings HIDDEN string BUNDLE_ARRAY array of objects
@@ -540,7 +576,8 @@ Returns:
       &quot;bluetoothConfigDisabled&quot;: True or False, # Whether configuring bluetooth is disabled.
       &quot;bluetoothContactSharingDisabled&quot;: True or False, # Whether bluetooth contact sharing is disabled.
       &quot;bluetoothDisabled&quot;: True or False, # Whether bluetooth is disabled. Prefer this setting over bluetooth_config_disabled because bluetooth_config_disabled can be bypassed by the user.
-      &quot;cameraDisabled&quot;: True or False, # Whether all cameras on the device are disabled.
+      &quot;cameraAccess&quot;: &quot;A String&quot;, # Controls the use of the camera and whether the user has access to the camera access toggle.
+      &quot;cameraDisabled&quot;: True or False, # If camera_access is set to any value other than CAMERA_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether cameras are disabled: If true, all cameras are disabled, otherwise they are available. For fully managed devices this field applies for all apps on the device. For work profiles, this field applies only to apps in the work profile, and the camera access of apps outside the work profile is unaffected.
       &quot;cellBroadcastsConfigDisabled&quot;: True or False, # Whether configuring cell broadcast is disabled.
       &quot;choosePrivateKeyRules&quot;: [ # Rules for determining apps&#x27; access to private keys. See ChoosePrivateKeyRule for details.
         { # Controls apps&#x27; access to private keys. The rule determines which private key, if any, Android Device Policy grants to the specified app. Access is granted either when the app calls KeyChain.choosePrivateKeyAlias (https://developer.android.com/reference/android/security/KeyChain#choosePrivateKeyAlias%28android.app.Activity,%20android.security.KeyChainAliasCallback,%20java.lang.String[],%20java.security.Principal[],%20java.lang.String,%20int,%20java.lang.String%29) (or any overloads) to request a private key alias for a given URL, or for rules that are not URL-specific (that is, if urlPattern is not set, or set to the empty string or .*) on Android 11 and above, directly so that the app can call KeyChain.getPrivateKey (https://developer.android.com/reference/android/security/KeyChain#getPrivateKey%28android.content.Context,%20java.lang.String%29), without first having to call KeyChain.choosePrivateKeyAlias.When an app calls KeyChain.choosePrivateKeyAlias if more than one choosePrivateKeyRules matches, the last matching rule defines which key alias to return.
@@ -569,6 +606,11 @@ Returns:
       ],
       &quot;createWindowsDisabled&quot;: True or False, # Whether creating windows besides app windows is disabled.
       &quot;credentialsConfigDisabled&quot;: True or False, # Whether configuring user credentials is disabled.
+      &quot;crossProfilePolicies&quot;: { # Cross-profile policies applied on the device. # Cross-profile policies applied on the device.
+        &quot;crossProfileCopyPaste&quot;: &quot;A String&quot;, # Whether text copied from one profile (personal or work) can be pasted in the other profile.
+        &quot;crossProfileDataSharing&quot;: &quot;A String&quot;, # Whether data from one profile (personal or work) can be shared with apps in the other profile. Specifically controls simple data sharing via intents. Management of other cross-profile communication channels, such as contact search, copy/paste, or connected work &amp; personal apps, are configured separately.
+        &quot;showWorkContactsInPersonalProfile&quot;: &quot;A String&quot;, # Whether contacts stored in the work profile can be shown in personal profile contact searches and incoming calls.
+      },
       &quot;dataRoamingDisabled&quot;: True or False, # Whether roaming data services are disabled.
       &quot;debuggingFeaturesAllowed&quot;: True or False, # Whether the user is allowed to enable debugging features.
       &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default permission policy for runtime permission requests.
@@ -607,6 +649,7 @@ Returns:
         },
       },
       &quot;maximumTimeToLock&quot;: &quot;A String&quot;, # Maximum time in milliseconds for user activity until the device locks. A value of 0 means there is no restriction.
+      &quot;microphoneAccess&quot;: &quot;A String&quot;, # Controls the use of the microphone and whether the user has access to the microphone access toggle. This applies only on fully managed devices.
       &quot;minimumApiLevel&quot;: 42, # The minimum allowed Android API level.
       &quot;mobileNetworksConfigDisabled&quot;: True or False, # Whether configuring mobile networks is disabled.
       &quot;modifyAccountsDisabled&quot;: True or False, # Whether adding or removing accounts is disabled.
@@ -650,7 +693,7 @@ Returns:
           &quot;requirePasswordUnlock&quot;: &quot;A String&quot;, # The length of time after a device or work profile is unlocked using a strong form of authentication (password, PIN, pattern) that it can be unlocked using any other authentication method (e.g. fingerprint, trust agents, face). After the specified time period elapses, only strong forms of authentication can be used to unlock the device or work profile.
         },
       ],
-      &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use password_policies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
+      &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use passwordPolicies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
         &quot;maximumFailedPasswordsForWipe&quot;: 42, # Number of incorrect device-unlock passwords that can be entered before a device is wiped. A value of 0 means there is no restriction.
         &quot;passwordExpirationTimeout&quot;: &quot;A String&quot;, # Password expiration timeout.
         &quot;passwordHistoryLength&quot;: 42, # The length of the password history. After setting this field, the user won&#x27;t be able to enter a new password that is the same as any password in the history. A value of 0 means there is no restriction.
@@ -671,7 +714,7 @@ Returns:
           &quot;policy&quot;: &quot;A String&quot;, # The policy for granting the permission.
         },
       ],
-      &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used.
+      &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used. This can be set on fully managed devices and on work profiles. When applied to a work profile, this affects both the personal profile and the work profile.
         &quot;packageNames&quot;: [ # A list of package names.
           &quot;A String&quot;,
         ],
@@ -721,6 +764,7 @@ Returns:
           },
         },
       ],
+      &quot;preferentialNetworkService&quot;: &quot;A String&quot;, # Controls whether preferential network service is enabled on the work profile. For example, an organization may have an agreement with a carrier that all of the work data from its employees&#x27; devices will be sent via a network service dedicated for enterprise use. An example of a supported preferential network service is the enterprise slice on 5G networks. This has no effect on fully managed devices.
       &quot;privateKeySelectionEnabled&quot;: True or False, # Allows showing UI on a device for a user to choose a private key alias if there are no matching rules in ChoosePrivateKeyRules. For devices below Android P, setting this may leave enterprise keys vulnerable.
       &quot;recommendedGlobalProxy&quot;: { # Configuration info for an HTTP proxy. For a direct proxy, set the host, port, and excluded_hosts fields. For a PAC script proxy, set the pac_uri field. # The network-independent global HTTP proxy. Typically proxies should be configured per-network in open_network_configuration. However for unusual configurations like general internal filtering a global HTTP proxy may be useful. If the proxy is not accessible, network access may break. The global proxy is only a recommendation and some apps may ignore it.
         &quot;excludedHosts&quot;: [ # For a direct proxy, the hosts for which the proxy is bypassed. The host names may contain wildcards such as *.example.com.
@@ -735,7 +779,7 @@ Returns:
       &quot;screenCaptureDisabled&quot;: True or False, # Whether screen capture is disabled.
       &quot;setUserIconDisabled&quot;: True or False, # Whether changing the user icon is disabled.
       &quot;setWallpaperDisabled&quot;: True or False, # Whether changing the wallpaper is disabled.
-      &quot;setupActions&quot;: [ # Actions to take during the setup process.
+      &quot;setupActions&quot;: [ # Action to take during the setup process. At most one action may be specified.
         { # An action executed during setup.
           &quot;description&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Description of this action.
             &quot;defaultMessage&quot;: &quot;A String&quot;, # The default message displayed if no localized message is specified or the user&#x27;s locale doesn&#x27;t match with any of the localized messages. A default message must be provided if any localized messages are provided.
@@ -743,7 +787,7 @@ Returns:
               &quot;a_key&quot;: &quot;A String&quot;,
             },
           },
-          &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app.
+          &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app. The app will be launched with an intent containing an extra with key com.google.android.apps.work.clouddpc.EXTRA_LAUNCHED_AS_SETUP_ACTION set to the boolean value true to indicate that this is a setup action flow.
             &quot;packageName&quot;: &quot;A String&quot;, # Package name of app to be launched
           },
           &quot;title&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Title of this action.
@@ -773,7 +817,7 @@ Returns:
         &quot;deviceSettingsEnabled&quot;: True or False, # Whether device settings reporting is enabled.
         &quot;displayInfoEnabled&quot;: True or False, # Whether displays reporting is enabled. Report data is not available for personally owned devices with work profiles.
         &quot;hardwareStatusEnabled&quot;: True or False, # Whether hardware status reporting is enabled. Report data is not available for personally owned devices with work profiles.
-        &quot;memoryInfoEnabled&quot;: True or False, # Whether memory reporting is enabled.
+        &quot;memoryInfoEnabled&quot;: True or False, # Whether memory event reporting is enabled.
         &quot;networkInfoEnabled&quot;: True or False, # Whether network info reporting is enabled.
         &quot;powerManagementEventsEnabled&quot;: True or False, # Whether power management event reporting is enabled. Report data is not available for personally owned devices with work profiles.
         &quot;softwareInfoEnabled&quot;: True or False, # Whether software info reporting is enabled.
@@ -786,12 +830,12 @@ Returns:
         &quot;endMinutes&quot;: 42, # If the type is WINDOWED, the end of the maintenance window, measured as the number of minutes after midnight in device&#x27;s local time. This value must be between 0 and 1439, inclusive. If this value is less than start_minutes, then the maintenance window spans midnight. If the maintenance window specified is smaller than 30 minutes, the actual window is extended to 30 minutes beyond the start time.
         &quot;freezePeriods&quot;: [ # An annually repeating time period in which over-the-air (OTA) system updates are postponed to freeze the OS version running on a device. To prevent freezing the device indefinitely, each freeze period must be separated by at least 60 days.
           { # A system freeze period. When a device’s clock is within the freeze period, all incoming system updates (including security patches) are blocked and won’t be installed. When a device is outside the freeze period, normal update behavior applies. Leap years are ignored in freeze period calculations, in particular: * If Feb. 29th is set as the start or end date of a freeze period, the freeze period will start or end on Feb. 28th instead. * When a device’s system clock reads Feb. 29th, it’s treated as Feb. 28th. * When calculating the number of days in a freeze period or the time between two freeze periods, Feb. 29th is ignored and not counted as a day.
-            &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+            &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
               &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
               &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
               &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
             },
-            &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+            &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
               &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
               &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
               &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -803,7 +847,15 @@ Returns:
       },
       &quot;tetheringConfigDisabled&quot;: True or False, # Whether configuring tethering and portable hotspots is disabled.
       &quot;uninstallAppsDisabled&quot;: True or False, # Whether user uninstallation of applications is disabled.
-      &quot;unmuteMicrophoneDisabled&quot;: True or False, # Whether the microphone is muted and adjusting microphone volume is disabled.
+      &quot;unmuteMicrophoneDisabled&quot;: True or False, # If microphone_access is set to any value other than MICROPHONE_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether microphones are disabled: If true, all microphones are disabled, otherwise they are available. This is available only on fully managed devices.
+      &quot;usageLog&quot;: { # Controls types of device activity logs collected from the device and reported via Pub/Sub notification (https://developers.google.com/android/management/notifications). # Configuration of device activity logging.
+        &quot;enabledLogTypes&quot;: [ # Specifies which log types are enabled. Note that users will receive on-device messaging when usage logging is enabled.
+          &quot;A String&quot;,
+        ],
+        &quot;uploadOnCellularAllowed&quot;: [ # Specifies which of the enabled log types can be uploaded over mobile data. By default logs are queued for upload when the device connects to WiFi.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;usbFileTransferDisabled&quot;: True or False, # Whether transferring files over USB is disabled.
       &quot;usbMassStorageEnabled&quot;: True or False, # Whether USB storage is enabled. Deprecated.
       &quot;version&quot;: &quot;A String&quot;, # The version of the policy. This is a read-only field. The version is incremented each time the policy is updated.
@@ -844,10 +896,13 @@ Args:
   ],
   &quot;addUserDisabled&quot;: True or False, # Whether adding new users and profiles is disabled.
   &quot;adjustVolumeDisabled&quot;: True or False, # Whether adjusting the master volume is disabled. Also mutes the device.
-  &quot;advancedSecurityOverrides&quot;: { # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
+  &quot;advancedSecurityOverrides&quot;: { # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
     &quot;commonCriteriaMode&quot;: &quot;A String&quot;, # Controls Common Criteria Mode—security standards defined in the Common Criteria for Information Technology Security Evaluation (https://www.commoncriteriaportal.org/) (CC). Enabling Common Criteria Mode increases certain security components on a device, including AES-GCM encryption of Bluetooth Long Term Keys, and Wi-Fi configuration stores.Warning: Common Criteria Mode enforces a strict security model typically only required for IT products used in national security systems and other highly sensitive organizations. Standard device use may be affected. Only enabled if required.
     &quot;developerSettings&quot;: &quot;A String&quot;, # Controls access to developer settings: developer options and safe boot. Replaces safeBootDisabled (deprecated) and debuggingFeaturesAllowed (deprecated).
     &quot;googlePlayProtectVerifyApps&quot;: &quot;A String&quot;, # Whether Google Play Protect verification (https://support.google.com/accounts/answer/2812853) is enforced. Replaces ensureVerifyAppsEnabled (deprecated).
+    &quot;personalAppsThatCanReadWorkNotifications&quot;: [ # Personal apps that can read work profile notifications using a NotificationListenerService (https://developer.android.com/reference/android/service/notification/NotificationListenerService). By default, no personal apps (aside from system apps) can read work notifications. Each value in the list must be a package name.
+      &quot;A String&quot;,
+    ],
     &quot;untrustedAppsPolicy&quot;: &quot;A String&quot;, # The policy for untrusted apps (apps from unknown sources) enforced on the device. Replaces install_unknown_sources_allowed (deprecated).
   },
   &quot;alwaysOnVpnPackage&quot;: { # Configuration for an always-on VPN connection. # Configuration for an always-on VPN connection. Use with vpn_config_disabled to prevent modification of this setting.
@@ -863,6 +918,7 @@ Args:
       &quot;accessibleTrackIds&quot;: [ # List of the app’s track IDs that a device belonging to the enterprise can access. If the list contains multiple track IDs, devices receive the latest version among all accessible tracks. If the list contains no track IDs, devices only have access to the app’s production track. More details about each track are available in AppTrackInfo.
         &quot;A String&quot;,
       ],
+      &quot;alwaysOnVpnLockdownExemption&quot;: &quot;A String&quot;, # Specifies whether the app is allowed networking when the VPN is not connected and alwaysOnVpnPackage.lockdownEnabled is enabled. If set to VPN_LOCKDOWN_ENFORCED, the app is not allowed networking, and if set to VPN_LOCKDOWN_EXEMPTION, the app is allowed networking. Only supported on devices running Android 10 and above. If this is not supported by the device, the device will contain a NonComplianceDetail with non_compliance_reason set to API_LEVEL and a fieldPath. If this is not applicable to the app, the device will contain a NonComplianceDetail with non_compliance_reason set to UNSUPPORTED and a fieldPath. The fieldPath is set to applications[i].alwaysOnVpnLockdownExemption, where i is the index of the package in the applications policy.
       &quot;autoUpdateMode&quot;: &quot;A String&quot;, # Controls the auto-update mode for the app.
       &quot;connectedWorkAndPersonalApp&quot;: &quot;A String&quot;, # Controls whether the app can communicate with itself across a device’s work and personal profiles, subject to user consent.
       &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default policy for all permissions requested by the app. If specified, this overrides the policy-level default_permission_policy which applies to all apps. It does not override the permission_grants which applies to all apps.
@@ -870,6 +926,12 @@ Args:
         &quot;A String&quot;,
       ],
       &quot;disabled&quot;: True or False, # Whether the app is disabled. When disabled, the app data is still preserved.
+      &quot;extensionConfig&quot;: { # Configuration to enable an app as an extension app, with the capability of interacting with Android Device Policy offline. # Configuration to enable this app as an extension app, with the capability of interacting with Android Device Policy offline.This field can be set for at most one app.
+        &quot;notificationReceiver&quot;: &quot;A String&quot;, # Fully qualified class name of the receiver service class for Android Device Policy to notify the extension app of any local command status updates.
+        &quot;signingKeyFingerprintsSha256&quot;: [ # Hex-encoded SHA-256 hash of the signing certificate of the extension app. Only hexadecimal string representations of 64 characters are valid.If not specified, the signature for the corresponding package name is obtained from the Play Store instead.If this list is empty, the signature of the extension app on the device must match the signature obtained from the Play Store for the app to be able to communicate with Android Device Policy.If this list is not empty, the signature of the extension app on the device must match one of the entries in this list for the app to be able to communicate with Android Device Policy.In production use cases, it is recommended to leave this empty.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;installType&quot;: &quot;A String&quot;, # The type of installation to perform.
       &quot;lockTaskAllowed&quot;: True or False, # Whether the app is allowed to lock itself in full-screen mode. DEPRECATED. Use InstallType KIOSK or kioskCustomLauncherEnabled to to configure a dedicated device.
       &quot;managedConfiguration&quot;: { # Managed configuration applied to the app. The format for the configuration is dictated by the ManagedProperty values supported by the app. Each field name in the managed configuration must match the key field of the ManagedProperty. The field value must be compatible with the type of the ManagedProperty: *type* *JSON value* BOOL true or false STRING string INTEGER number CHOICE string MULTISELECT array of strings HIDDEN string BUNDLE_ARRAY array of objects
@@ -897,7 +959,8 @@ Args:
   &quot;bluetoothConfigDisabled&quot;: True or False, # Whether configuring bluetooth is disabled.
   &quot;bluetoothContactSharingDisabled&quot;: True or False, # Whether bluetooth contact sharing is disabled.
   &quot;bluetoothDisabled&quot;: True or False, # Whether bluetooth is disabled. Prefer this setting over bluetooth_config_disabled because bluetooth_config_disabled can be bypassed by the user.
-  &quot;cameraDisabled&quot;: True or False, # Whether all cameras on the device are disabled.
+  &quot;cameraAccess&quot;: &quot;A String&quot;, # Controls the use of the camera and whether the user has access to the camera access toggle.
+  &quot;cameraDisabled&quot;: True or False, # If camera_access is set to any value other than CAMERA_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether cameras are disabled: If true, all cameras are disabled, otherwise they are available. For fully managed devices this field applies for all apps on the device. For work profiles, this field applies only to apps in the work profile, and the camera access of apps outside the work profile is unaffected.
   &quot;cellBroadcastsConfigDisabled&quot;: True or False, # Whether configuring cell broadcast is disabled.
   &quot;choosePrivateKeyRules&quot;: [ # Rules for determining apps&#x27; access to private keys. See ChoosePrivateKeyRule for details.
     { # Controls apps&#x27; access to private keys. The rule determines which private key, if any, Android Device Policy grants to the specified app. Access is granted either when the app calls KeyChain.choosePrivateKeyAlias (https://developer.android.com/reference/android/security/KeyChain#choosePrivateKeyAlias%28android.app.Activity,%20android.security.KeyChainAliasCallback,%20java.lang.String[],%20java.security.Principal[],%20java.lang.String,%20int,%20java.lang.String%29) (or any overloads) to request a private key alias for a given URL, or for rules that are not URL-specific (that is, if urlPattern is not set, or set to the empty string or .*) on Android 11 and above, directly so that the app can call KeyChain.getPrivateKey (https://developer.android.com/reference/android/security/KeyChain#getPrivateKey%28android.content.Context,%20java.lang.String%29), without first having to call KeyChain.choosePrivateKeyAlias.When an app calls KeyChain.choosePrivateKeyAlias if more than one choosePrivateKeyRules matches, the last matching rule defines which key alias to return.
@@ -926,6 +989,11 @@ Args:
   ],
   &quot;createWindowsDisabled&quot;: True or False, # Whether creating windows besides app windows is disabled.
   &quot;credentialsConfigDisabled&quot;: True or False, # Whether configuring user credentials is disabled.
+  &quot;crossProfilePolicies&quot;: { # Cross-profile policies applied on the device. # Cross-profile policies applied on the device.
+    &quot;crossProfileCopyPaste&quot;: &quot;A String&quot;, # Whether text copied from one profile (personal or work) can be pasted in the other profile.
+    &quot;crossProfileDataSharing&quot;: &quot;A String&quot;, # Whether data from one profile (personal or work) can be shared with apps in the other profile. Specifically controls simple data sharing via intents. Management of other cross-profile communication channels, such as contact search, copy/paste, or connected work &amp; personal apps, are configured separately.
+    &quot;showWorkContactsInPersonalProfile&quot;: &quot;A String&quot;, # Whether contacts stored in the work profile can be shown in personal profile contact searches and incoming calls.
+  },
   &quot;dataRoamingDisabled&quot;: True or False, # Whether roaming data services are disabled.
   &quot;debuggingFeaturesAllowed&quot;: True or False, # Whether the user is allowed to enable debugging features.
   &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default permission policy for runtime permission requests.
@@ -964,6 +1032,7 @@ Args:
     },
   },
   &quot;maximumTimeToLock&quot;: &quot;A String&quot;, # Maximum time in milliseconds for user activity until the device locks. A value of 0 means there is no restriction.
+  &quot;microphoneAccess&quot;: &quot;A String&quot;, # Controls the use of the microphone and whether the user has access to the microphone access toggle. This applies only on fully managed devices.
   &quot;minimumApiLevel&quot;: 42, # The minimum allowed Android API level.
   &quot;mobileNetworksConfigDisabled&quot;: True or False, # Whether configuring mobile networks is disabled.
   &quot;modifyAccountsDisabled&quot;: True or False, # Whether adding or removing accounts is disabled.
@@ -1007,7 +1076,7 @@ Args:
       &quot;requirePasswordUnlock&quot;: &quot;A String&quot;, # The length of time after a device or work profile is unlocked using a strong form of authentication (password, PIN, pattern) that it can be unlocked using any other authentication method (e.g. fingerprint, trust agents, face). After the specified time period elapses, only strong forms of authentication can be used to unlock the device or work profile.
     },
   ],
-  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use password_policies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
+  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use passwordPolicies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
     &quot;maximumFailedPasswordsForWipe&quot;: 42, # Number of incorrect device-unlock passwords that can be entered before a device is wiped. A value of 0 means there is no restriction.
     &quot;passwordExpirationTimeout&quot;: &quot;A String&quot;, # Password expiration timeout.
     &quot;passwordHistoryLength&quot;: 42, # The length of the password history. After setting this field, the user won&#x27;t be able to enter a new password that is the same as any password in the history. A value of 0 means there is no restriction.
@@ -1028,7 +1097,7 @@ Args:
       &quot;policy&quot;: &quot;A String&quot;, # The policy for granting the permission.
     },
   ],
-  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used.
+  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used. This can be set on fully managed devices and on work profiles. When applied to a work profile, this affects both the personal profile and the work profile.
     &quot;packageNames&quot;: [ # A list of package names.
       &quot;A String&quot;,
     ],
@@ -1078,6 +1147,7 @@ Args:
       },
     },
   ],
+  &quot;preferentialNetworkService&quot;: &quot;A String&quot;, # Controls whether preferential network service is enabled on the work profile. For example, an organization may have an agreement with a carrier that all of the work data from its employees&#x27; devices will be sent via a network service dedicated for enterprise use. An example of a supported preferential network service is the enterprise slice on 5G networks. This has no effect on fully managed devices.
   &quot;privateKeySelectionEnabled&quot;: True or False, # Allows showing UI on a device for a user to choose a private key alias if there are no matching rules in ChoosePrivateKeyRules. For devices below Android P, setting this may leave enterprise keys vulnerable.
   &quot;recommendedGlobalProxy&quot;: { # Configuration info for an HTTP proxy. For a direct proxy, set the host, port, and excluded_hosts fields. For a PAC script proxy, set the pac_uri field. # The network-independent global HTTP proxy. Typically proxies should be configured per-network in open_network_configuration. However for unusual configurations like general internal filtering a global HTTP proxy may be useful. If the proxy is not accessible, network access may break. The global proxy is only a recommendation and some apps may ignore it.
     &quot;excludedHosts&quot;: [ # For a direct proxy, the hosts for which the proxy is bypassed. The host names may contain wildcards such as *.example.com.
@@ -1092,7 +1162,7 @@ Args:
   &quot;screenCaptureDisabled&quot;: True or False, # Whether screen capture is disabled.
   &quot;setUserIconDisabled&quot;: True or False, # Whether changing the user icon is disabled.
   &quot;setWallpaperDisabled&quot;: True or False, # Whether changing the wallpaper is disabled.
-  &quot;setupActions&quot;: [ # Actions to take during the setup process.
+  &quot;setupActions&quot;: [ # Action to take during the setup process. At most one action may be specified.
     { # An action executed during setup.
       &quot;description&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Description of this action.
         &quot;defaultMessage&quot;: &quot;A String&quot;, # The default message displayed if no localized message is specified or the user&#x27;s locale doesn&#x27;t match with any of the localized messages. A default message must be provided if any localized messages are provided.
@@ -1100,7 +1170,7 @@ Args:
           &quot;a_key&quot;: &quot;A String&quot;,
         },
       },
-      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app.
+      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app. The app will be launched with an intent containing an extra with key com.google.android.apps.work.clouddpc.EXTRA_LAUNCHED_AS_SETUP_ACTION set to the boolean value true to indicate that this is a setup action flow.
         &quot;packageName&quot;: &quot;A String&quot;, # Package name of app to be launched
       },
       &quot;title&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Title of this action.
@@ -1130,7 +1200,7 @@ Args:
     &quot;deviceSettingsEnabled&quot;: True or False, # Whether device settings reporting is enabled.
     &quot;displayInfoEnabled&quot;: True or False, # Whether displays reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;hardwareStatusEnabled&quot;: True or False, # Whether hardware status reporting is enabled. Report data is not available for personally owned devices with work profiles.
-    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory reporting is enabled.
+    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory event reporting is enabled.
     &quot;networkInfoEnabled&quot;: True or False, # Whether network info reporting is enabled.
     &quot;powerManagementEventsEnabled&quot;: True or False, # Whether power management event reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;softwareInfoEnabled&quot;: True or False, # Whether software info reporting is enabled.
@@ -1143,12 +1213,12 @@ Args:
     &quot;endMinutes&quot;: 42, # If the type is WINDOWED, the end of the maintenance window, measured as the number of minutes after midnight in device&#x27;s local time. This value must be between 0 and 1439, inclusive. If this value is less than start_minutes, then the maintenance window spans midnight. If the maintenance window specified is smaller than 30 minutes, the actual window is extended to 30 minutes beyond the start time.
     &quot;freezePeriods&quot;: [ # An annually repeating time period in which over-the-air (OTA) system updates are postponed to freeze the OS version running on a device. To prevent freezing the device indefinitely, each freeze period must be separated by at least 60 days.
       { # A system freeze period. When a device’s clock is within the freeze period, all incoming system updates (including security patches) are blocked and won’t be installed. When a device is outside the freeze period, normal update behavior applies. Leap years are ignored in freeze period calculations, in particular: * If Feb. 29th is set as the start or end date of a freeze period, the freeze period will start or end on Feb. 28th instead. * When a device’s system clock reads Feb. 29th, it’s treated as Feb. 28th. * When calculating the number of days in a freeze period or the time between two freeze periods, Feb. 29th is ignored and not counted as a day.
-        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
         },
-        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -1160,7 +1230,15 @@ Args:
   },
   &quot;tetheringConfigDisabled&quot;: True or False, # Whether configuring tethering and portable hotspots is disabled.
   &quot;uninstallAppsDisabled&quot;: True or False, # Whether user uninstallation of applications is disabled.
-  &quot;unmuteMicrophoneDisabled&quot;: True or False, # Whether the microphone is muted and adjusting microphone volume is disabled.
+  &quot;unmuteMicrophoneDisabled&quot;: True or False, # If microphone_access is set to any value other than MICROPHONE_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether microphones are disabled: If true, all microphones are disabled, otherwise they are available. This is available only on fully managed devices.
+  &quot;usageLog&quot;: { # Controls types of device activity logs collected from the device and reported via Pub/Sub notification (https://developers.google.com/android/management/notifications). # Configuration of device activity logging.
+    &quot;enabledLogTypes&quot;: [ # Specifies which log types are enabled. Note that users will receive on-device messaging when usage logging is enabled.
+      &quot;A String&quot;,
+    ],
+    &quot;uploadOnCellularAllowed&quot;: [ # Specifies which of the enabled log types can be uploaded over mobile data. By default logs are queued for upload when the device connects to WiFi.
+      &quot;A String&quot;,
+    ],
+  },
   &quot;usbFileTransferDisabled&quot;: True or False, # Whether transferring files over USB is disabled.
   &quot;usbMassStorageEnabled&quot;: True or False, # Whether USB storage is enabled. Deprecated.
   &quot;version&quot;: &quot;A String&quot;, # The version of the policy. This is a read-only field. The version is incremented each time the policy is updated.
@@ -1184,10 +1262,13 @@ Returns:
   ],
   &quot;addUserDisabled&quot;: True or False, # Whether adding new users and profiles is disabled.
   &quot;adjustVolumeDisabled&quot;: True or False, # Whether adjusting the master volume is disabled. Also mutes the device.
-  &quot;advancedSecurityOverrides&quot;: { # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to the most secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
+  &quot;advancedSecurityOverrides&quot;: { # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values. # Security policies set to secure values by default. To maintain the security posture of a device, we don&#x27;t recommend overriding any of the default values.
     &quot;commonCriteriaMode&quot;: &quot;A String&quot;, # Controls Common Criteria Mode—security standards defined in the Common Criteria for Information Technology Security Evaluation (https://www.commoncriteriaportal.org/) (CC). Enabling Common Criteria Mode increases certain security components on a device, including AES-GCM encryption of Bluetooth Long Term Keys, and Wi-Fi configuration stores.Warning: Common Criteria Mode enforces a strict security model typically only required for IT products used in national security systems and other highly sensitive organizations. Standard device use may be affected. Only enabled if required.
     &quot;developerSettings&quot;: &quot;A String&quot;, # Controls access to developer settings: developer options and safe boot. Replaces safeBootDisabled (deprecated) and debuggingFeaturesAllowed (deprecated).
     &quot;googlePlayProtectVerifyApps&quot;: &quot;A String&quot;, # Whether Google Play Protect verification (https://support.google.com/accounts/answer/2812853) is enforced. Replaces ensureVerifyAppsEnabled (deprecated).
+    &quot;personalAppsThatCanReadWorkNotifications&quot;: [ # Personal apps that can read work profile notifications using a NotificationListenerService (https://developer.android.com/reference/android/service/notification/NotificationListenerService). By default, no personal apps (aside from system apps) can read work notifications. Each value in the list must be a package name.
+      &quot;A String&quot;,
+    ],
     &quot;untrustedAppsPolicy&quot;: &quot;A String&quot;, # The policy for untrusted apps (apps from unknown sources) enforced on the device. Replaces install_unknown_sources_allowed (deprecated).
   },
   &quot;alwaysOnVpnPackage&quot;: { # Configuration for an always-on VPN connection. # Configuration for an always-on VPN connection. Use with vpn_config_disabled to prevent modification of this setting.
@@ -1203,6 +1284,7 @@ Returns:
       &quot;accessibleTrackIds&quot;: [ # List of the app’s track IDs that a device belonging to the enterprise can access. If the list contains multiple track IDs, devices receive the latest version among all accessible tracks. If the list contains no track IDs, devices only have access to the app’s production track. More details about each track are available in AppTrackInfo.
         &quot;A String&quot;,
       ],
+      &quot;alwaysOnVpnLockdownExemption&quot;: &quot;A String&quot;, # Specifies whether the app is allowed networking when the VPN is not connected and alwaysOnVpnPackage.lockdownEnabled is enabled. If set to VPN_LOCKDOWN_ENFORCED, the app is not allowed networking, and if set to VPN_LOCKDOWN_EXEMPTION, the app is allowed networking. Only supported on devices running Android 10 and above. If this is not supported by the device, the device will contain a NonComplianceDetail with non_compliance_reason set to API_LEVEL and a fieldPath. If this is not applicable to the app, the device will contain a NonComplianceDetail with non_compliance_reason set to UNSUPPORTED and a fieldPath. The fieldPath is set to applications[i].alwaysOnVpnLockdownExemption, where i is the index of the package in the applications policy.
       &quot;autoUpdateMode&quot;: &quot;A String&quot;, # Controls the auto-update mode for the app.
       &quot;connectedWorkAndPersonalApp&quot;: &quot;A String&quot;, # Controls whether the app can communicate with itself across a device’s work and personal profiles, subject to user consent.
       &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default policy for all permissions requested by the app. If specified, this overrides the policy-level default_permission_policy which applies to all apps. It does not override the permission_grants which applies to all apps.
@@ -1210,6 +1292,12 @@ Returns:
         &quot;A String&quot;,
       ],
       &quot;disabled&quot;: True or False, # Whether the app is disabled. When disabled, the app data is still preserved.
+      &quot;extensionConfig&quot;: { # Configuration to enable an app as an extension app, with the capability of interacting with Android Device Policy offline. # Configuration to enable this app as an extension app, with the capability of interacting with Android Device Policy offline.This field can be set for at most one app.
+        &quot;notificationReceiver&quot;: &quot;A String&quot;, # Fully qualified class name of the receiver service class for Android Device Policy to notify the extension app of any local command status updates.
+        &quot;signingKeyFingerprintsSha256&quot;: [ # Hex-encoded SHA-256 hash of the signing certificate of the extension app. Only hexadecimal string representations of 64 characters are valid.If not specified, the signature for the corresponding package name is obtained from the Play Store instead.If this list is empty, the signature of the extension app on the device must match the signature obtained from the Play Store for the app to be able to communicate with Android Device Policy.If this list is not empty, the signature of the extension app on the device must match one of the entries in this list for the app to be able to communicate with Android Device Policy.In production use cases, it is recommended to leave this empty.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;installType&quot;: &quot;A String&quot;, # The type of installation to perform.
       &quot;lockTaskAllowed&quot;: True or False, # Whether the app is allowed to lock itself in full-screen mode. DEPRECATED. Use InstallType KIOSK or kioskCustomLauncherEnabled to to configure a dedicated device.
       &quot;managedConfiguration&quot;: { # Managed configuration applied to the app. The format for the configuration is dictated by the ManagedProperty values supported by the app. Each field name in the managed configuration must match the key field of the ManagedProperty. The field value must be compatible with the type of the ManagedProperty: *type* *JSON value* BOOL true or false STRING string INTEGER number CHOICE string MULTISELECT array of strings HIDDEN string BUNDLE_ARRAY array of objects
@@ -1237,7 +1325,8 @@ Returns:
   &quot;bluetoothConfigDisabled&quot;: True or False, # Whether configuring bluetooth is disabled.
   &quot;bluetoothContactSharingDisabled&quot;: True or False, # Whether bluetooth contact sharing is disabled.
   &quot;bluetoothDisabled&quot;: True or False, # Whether bluetooth is disabled. Prefer this setting over bluetooth_config_disabled because bluetooth_config_disabled can be bypassed by the user.
-  &quot;cameraDisabled&quot;: True or False, # Whether all cameras on the device are disabled.
+  &quot;cameraAccess&quot;: &quot;A String&quot;, # Controls the use of the camera and whether the user has access to the camera access toggle.
+  &quot;cameraDisabled&quot;: True or False, # If camera_access is set to any value other than CAMERA_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether cameras are disabled: If true, all cameras are disabled, otherwise they are available. For fully managed devices this field applies for all apps on the device. For work profiles, this field applies only to apps in the work profile, and the camera access of apps outside the work profile is unaffected.
   &quot;cellBroadcastsConfigDisabled&quot;: True or False, # Whether configuring cell broadcast is disabled.
   &quot;choosePrivateKeyRules&quot;: [ # Rules for determining apps&#x27; access to private keys. See ChoosePrivateKeyRule for details.
     { # Controls apps&#x27; access to private keys. The rule determines which private key, if any, Android Device Policy grants to the specified app. Access is granted either when the app calls KeyChain.choosePrivateKeyAlias (https://developer.android.com/reference/android/security/KeyChain#choosePrivateKeyAlias%28android.app.Activity,%20android.security.KeyChainAliasCallback,%20java.lang.String[],%20java.security.Principal[],%20java.lang.String,%20int,%20java.lang.String%29) (or any overloads) to request a private key alias for a given URL, or for rules that are not URL-specific (that is, if urlPattern is not set, or set to the empty string or .*) on Android 11 and above, directly so that the app can call KeyChain.getPrivateKey (https://developer.android.com/reference/android/security/KeyChain#getPrivateKey%28android.content.Context,%20java.lang.String%29), without first having to call KeyChain.choosePrivateKeyAlias.When an app calls KeyChain.choosePrivateKeyAlias if more than one choosePrivateKeyRules matches, the last matching rule defines which key alias to return.
@@ -1266,6 +1355,11 @@ Returns:
   ],
   &quot;createWindowsDisabled&quot;: True or False, # Whether creating windows besides app windows is disabled.
   &quot;credentialsConfigDisabled&quot;: True or False, # Whether configuring user credentials is disabled.
+  &quot;crossProfilePolicies&quot;: { # Cross-profile policies applied on the device. # Cross-profile policies applied on the device.
+    &quot;crossProfileCopyPaste&quot;: &quot;A String&quot;, # Whether text copied from one profile (personal or work) can be pasted in the other profile.
+    &quot;crossProfileDataSharing&quot;: &quot;A String&quot;, # Whether data from one profile (personal or work) can be shared with apps in the other profile. Specifically controls simple data sharing via intents. Management of other cross-profile communication channels, such as contact search, copy/paste, or connected work &amp; personal apps, are configured separately.
+    &quot;showWorkContactsInPersonalProfile&quot;: &quot;A String&quot;, # Whether contacts stored in the work profile can be shown in personal profile contact searches and incoming calls.
+  },
   &quot;dataRoamingDisabled&quot;: True or False, # Whether roaming data services are disabled.
   &quot;debuggingFeaturesAllowed&quot;: True or False, # Whether the user is allowed to enable debugging features.
   &quot;defaultPermissionPolicy&quot;: &quot;A String&quot;, # The default permission policy for runtime permission requests.
@@ -1304,6 +1398,7 @@ Returns:
     },
   },
   &quot;maximumTimeToLock&quot;: &quot;A String&quot;, # Maximum time in milliseconds for user activity until the device locks. A value of 0 means there is no restriction.
+  &quot;microphoneAccess&quot;: &quot;A String&quot;, # Controls the use of the microphone and whether the user has access to the microphone access toggle. This applies only on fully managed devices.
   &quot;minimumApiLevel&quot;: 42, # The minimum allowed Android API level.
   &quot;mobileNetworksConfigDisabled&quot;: True or False, # Whether configuring mobile networks is disabled.
   &quot;modifyAccountsDisabled&quot;: True or False, # Whether adding or removing accounts is disabled.
@@ -1347,7 +1442,7 @@ Returns:
       &quot;requirePasswordUnlock&quot;: &quot;A String&quot;, # The length of time after a device or work profile is unlocked using a strong form of authentication (password, PIN, pattern) that it can be unlocked using any other authentication method (e.g. fingerprint, trust agents, face). After the specified time period elapses, only strong forms of authentication can be used to unlock the device or work profile.
     },
   ],
-  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use password_policies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
+  &quot;passwordRequirements&quot;: { # Requirements for the password used to unlock a device. # Password requirements. The field password_requirements.require_password_unlock must not be set. DEPRECATED - Use passwordPolicies.Note:Complexity-based values of PasswordQuality, that is, COMPLEXITY_LOW, COMPLEXITY_MEDIUM, and COMPLEXITY_HIGH, cannot be used here.
     &quot;maximumFailedPasswordsForWipe&quot;: 42, # Number of incorrect device-unlock passwords that can be entered before a device is wiped. A value of 0 means there is no restriction.
     &quot;passwordExpirationTimeout&quot;: &quot;A String&quot;, # Password expiration timeout.
     &quot;passwordHistoryLength&quot;: 42, # The length of the password history. After setting this field, the user won&#x27;t be able to enter a new password that is the same as any password in the history. A value of 0 means there is no restriction.
@@ -1368,7 +1463,7 @@ Returns:
       &quot;policy&quot;: &quot;A String&quot;, # The policy for granting the permission.
     },
   ],
-  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used.
+  &quot;permittedAccessibilityServices&quot;: { # A list of package names. # Specifies permitted accessibility services. If the field is not set, any accessibility service can be used. If the field is set, only the accessibility services in this list and the system&#x27;s built-in accessibility service can be used. In particular, if the field is set to empty, only the system&#x27;s built-in accessibility servicess can be used. This can be set on fully managed devices and on work profiles. When applied to a work profile, this affects both the personal profile and the work profile.
     &quot;packageNames&quot;: [ # A list of package names.
       &quot;A String&quot;,
     ],
@@ -1418,6 +1513,7 @@ Returns:
       },
     },
   ],
+  &quot;preferentialNetworkService&quot;: &quot;A String&quot;, # Controls whether preferential network service is enabled on the work profile. For example, an organization may have an agreement with a carrier that all of the work data from its employees&#x27; devices will be sent via a network service dedicated for enterprise use. An example of a supported preferential network service is the enterprise slice on 5G networks. This has no effect on fully managed devices.
   &quot;privateKeySelectionEnabled&quot;: True or False, # Allows showing UI on a device for a user to choose a private key alias if there are no matching rules in ChoosePrivateKeyRules. For devices below Android P, setting this may leave enterprise keys vulnerable.
   &quot;recommendedGlobalProxy&quot;: { # Configuration info for an HTTP proxy. For a direct proxy, set the host, port, and excluded_hosts fields. For a PAC script proxy, set the pac_uri field. # The network-independent global HTTP proxy. Typically proxies should be configured per-network in open_network_configuration. However for unusual configurations like general internal filtering a global HTTP proxy may be useful. If the proxy is not accessible, network access may break. The global proxy is only a recommendation and some apps may ignore it.
     &quot;excludedHosts&quot;: [ # For a direct proxy, the hosts for which the proxy is bypassed. The host names may contain wildcards such as *.example.com.
@@ -1432,7 +1528,7 @@ Returns:
   &quot;screenCaptureDisabled&quot;: True or False, # Whether screen capture is disabled.
   &quot;setUserIconDisabled&quot;: True or False, # Whether changing the user icon is disabled.
   &quot;setWallpaperDisabled&quot;: True or False, # Whether changing the wallpaper is disabled.
-  &quot;setupActions&quot;: [ # Actions to take during the setup process.
+  &quot;setupActions&quot;: [ # Action to take during the setup process. At most one action may be specified.
     { # An action executed during setup.
       &quot;description&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Description of this action.
         &quot;defaultMessage&quot;: &quot;A String&quot;, # The default message displayed if no localized message is specified or the user&#x27;s locale doesn&#x27;t match with any of the localized messages. A default message must be provided if any localized messages are provided.
@@ -1440,7 +1536,7 @@ Returns:
           &quot;a_key&quot;: &quot;A String&quot;,
         },
       },
-      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app.
+      &quot;launchApp&quot;: { # An action to launch an app. # An action to launch an app. The app will be launched with an intent containing an extra with key com.google.android.apps.work.clouddpc.EXTRA_LAUNCHED_AS_SETUP_ACTION set to the boolean value true to indicate that this is a setup action flow.
         &quot;packageName&quot;: &quot;A String&quot;, # Package name of app to be launched
       },
       &quot;title&quot;: { # Provides a user-facing message with locale info. The maximum message length is 4096 characters. # Title of this action.
@@ -1470,7 +1566,7 @@ Returns:
     &quot;deviceSettingsEnabled&quot;: True or False, # Whether device settings reporting is enabled.
     &quot;displayInfoEnabled&quot;: True or False, # Whether displays reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;hardwareStatusEnabled&quot;: True or False, # Whether hardware status reporting is enabled. Report data is not available for personally owned devices with work profiles.
-    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory reporting is enabled.
+    &quot;memoryInfoEnabled&quot;: True or False, # Whether memory event reporting is enabled.
     &quot;networkInfoEnabled&quot;: True or False, # Whether network info reporting is enabled.
     &quot;powerManagementEventsEnabled&quot;: True or False, # Whether power management event reporting is enabled. Report data is not available for personally owned devices with work profiles.
     &quot;softwareInfoEnabled&quot;: True or False, # Whether software info reporting is enabled.
@@ -1483,12 +1579,12 @@ Returns:
     &quot;endMinutes&quot;: 42, # If the type is WINDOWED, the end of the maintenance window, measured as the number of minutes after midnight in device&#x27;s local time. This value must be between 0 and 1439, inclusive. If this value is less than start_minutes, then the maintenance window spans midnight. If the maintenance window specified is smaller than 30 minutes, the actual window is extended to 30 minutes beyond the start time.
     &quot;freezePeriods&quot;: [ # An annually repeating time period in which over-the-air (OTA) system updates are postponed to freeze the OS version running on a device. To prevent freezing the device indefinitely, each freeze period must be separated by at least 60 days.
       { # A system freeze period. When a device’s clock is within the freeze period, all incoming system updates (including security patches) are blocked and won’t be installed. When a device is outside the freeze period, normal update behavior applies. Leap years are ignored in freeze period calculations, in particular: * If Feb. 29th is set as the start or end date of a freeze period, the freeze period will start or end on Feb. 28th instead. * When a device’s system clock reads Feb. 29th, it’s treated as Feb. 28th. * When calculating the number of days in a freeze period or the time between two freeze periods, Feb. 29th is ignored and not counted as a day.
-        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;endDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The end date (inclusive) of the freeze period. Must be no later than 90 days from the start date. If the end date is earlier than the start date, the freeze period is considered wrapping year-end. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
         },
-        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values A month and day value, with a zero year, such as an anniversary A year on its own, with zero month and day values A year and month value, with a zero day, such as a credit card expiration dateRelated types are google.type.TimeOfDay and google.protobuf.Timestamp. # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
+        &quot;startDate&quot;: { # Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: A full date, with non-zero year, month, and day values. A month and day, with a zero year (for example, an anniversary). A year on its own, with a zero month and a zero day. A year and month, with a zero day (for example, a credit card expiration date).Related types: google.type.TimeOfDay google.type.DateTime google.protobuf.Timestamp # The start date (inclusive) of the freeze period. Note: year must not be set. For example, {&quot;month&quot;: 1,&quot;date&quot;: 30}.
           &quot;day&quot;: 42, # Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn&#x27;t significant.
           &quot;month&quot;: 42, # Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.
           &quot;year&quot;: 42, # Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.
@@ -1500,7 +1596,15 @@ Returns:
   },
   &quot;tetheringConfigDisabled&quot;: True or False, # Whether configuring tethering and portable hotspots is disabled.
   &quot;uninstallAppsDisabled&quot;: True or False, # Whether user uninstallation of applications is disabled.
-  &quot;unmuteMicrophoneDisabled&quot;: True or False, # Whether the microphone is muted and adjusting microphone volume is disabled.
+  &quot;unmuteMicrophoneDisabled&quot;: True or False, # If microphone_access is set to any value other than MICROPHONE_ACCESS_UNSPECIFIED, this has no effect. Otherwise this field controls whether microphones are disabled: If true, all microphones are disabled, otherwise they are available. This is available only on fully managed devices.
+  &quot;usageLog&quot;: { # Controls types of device activity logs collected from the device and reported via Pub/Sub notification (https://developers.google.com/android/management/notifications). # Configuration of device activity logging.
+    &quot;enabledLogTypes&quot;: [ # Specifies which log types are enabled. Note that users will receive on-device messaging when usage logging is enabled.
+      &quot;A String&quot;,
+    ],
+    &quot;uploadOnCellularAllowed&quot;: [ # Specifies which of the enabled log types can be uploaded over mobile data. By default logs are queued for upload when the device connects to WiFi.
+      &quot;A String&quot;,
+    ],
+  },
   &quot;usbFileTransferDisabled&quot;: True or False, # Whether transferring files over USB is disabled.
   &quot;usbMassStorageEnabled&quot;: True or False, # Whether USB storage is enabled. Deprecated.
   &quot;version&quot;: &quot;A String&quot;, # The version of the policy. This is a read-only field. The version is incremented each time the policy is updated.
